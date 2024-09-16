@@ -19,3 +19,4 @@
 /langchain_intro/__pycache__
 /chatbot_api/src/chains/__pycache__
 *.pyc
+/my_venv
