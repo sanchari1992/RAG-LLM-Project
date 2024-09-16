@@ -1,42 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask Question</title>
+    <script>
+        function sendRequest() {
+            const question = document.getElementById('question').value;
+
+            fetch('http://127.0.0.1:5000/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question: question })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Extract and display only the "answer" field
+                const answer = data.answer || 'No answer received';
+                document.getElementById('response').innerText = answer;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('response').innerText = 'Error occurred: ' + error;
+            });
+
+            // Prevent form submission
+            return false;
+        }
+    </script>
 </head>
 <body>
     <h1>Ask a Question</h1>
-    <form id="question-form">
-        <label for="question">Question:</label>
-        <input type="text" id="question" name="question" required>
-        <button type="submit">Submit</button>
+    <form onsubmit="return sendRequest()">
+        <label for="question">Question:</label><br>
+        <input type="text" id="question" name="question" required><br><br>
+        <input type="submit" value="Submit">
     </form>
-    <p id="response"></p>
-
-    <script>
-        document.getElementById('question-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const question = document.getElementById('question').value;
-            const responseElement = document.getElementById('response');
-
-            try {
-                const response = await fetch('http://127.0.0.1:5000/ask', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ question })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                responseElement.textContent = 'Answer: ' + (data.answer || data.error);
-            } catch (error) {
-                responseElement.textContent = 'Error: ' + error.message;
-            }
-        });
-    </script>
+    <h2>Response:</h2>
+    <pre id="response"></pre>
 </body>
 </html>
