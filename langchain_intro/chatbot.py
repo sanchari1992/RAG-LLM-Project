@@ -17,7 +17,7 @@ from langchain.agents import (
     AgentExecutor,
 )
 from langchain import hub
-from langchain_intro.tools import get_current_wait_time
+from tools import get_current_wait_time
 
 REVIEWS_CHROMA_PATH = "chroma_data/"
 
