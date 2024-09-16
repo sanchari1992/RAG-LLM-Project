@@ -1,3 +1,4 @@
+from flask import Flask, request, jsonify
 import dotenv
 from langchain_openai import ChatOpenAI
 from langchain.prompts import (
@@ -16,13 +17,17 @@ from langchain.agents import (
     Tool,
     AgentExecutor,
 )
-from langchain import hub
 from tools import get_current_wait_time
+import os
+
+# Load environment variables
+dotenv.load_dotenv()
+
+app = Flask(__name__)
 
 REVIEWS_CHROMA_PATH = "chroma_data/"
 
-dotenv.load_dotenv()
-
+# Define the review templates
 review_template_str = """Your job is to use patient
 reviews to answer questions about their experience at
 a hospital. Use the following context to answer questions.
@@ -54,19 +59,18 @@ review_prompt_template = ChatPromptTemplate(
 )
 
 chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
-
-
-
 output_parser = StrOutputParser()
 
+# Initialize Chroma vector DB for reviews
 reviews_vector_db = Chroma(
     persist_directory=REVIEWS_CHROMA_PATH,
     embedding_function=OpenAIEmbeddings()
 )
 
-reviews_retriever  = reviews_vector_db.as_retriever(k=10)
+reviews_retriever = reviews_vector_db.as_retriever(k=10)
 
-review_chain =  (   {"context": reviews_retriever, "question": RunnablePassthrough()}
+review_chain = (
+    {"context": reviews_retriever, "question": RunnablePassthrough()}
     | review_prompt_template
     | chat_model
     | output_parser
@@ -100,15 +104,18 @@ tools = [
     ),
 ]
 
-hospital_agent_prompt = hub.pull("hwchase17/openai-functions-agent")
-
-agent_chat_model = ChatOpenAI(
-    model="gpt-3.5-turbo-0125",
-    temperature=0,
+# Correct hospital_agent_prompt
+hospital_agent_prompt = PromptTemplate(
+    input_variables=["input", "agent_scratchpad"],
+    template="""You are a helpful assistant. Your job is to answer questions 
+    about hospital services, patient reviews, and current wait times.
+    
+    Question: {input}
+    Agent Scratchpad: {agent_scratchpad}"""
 )
 
 hospital_agent = create_openai_functions_agent(
-    llm=agent_chat_model,
+    llm=chat_model,
     prompt=hospital_agent_prompt,
     tools=tools,
 )
@@ -119,3 +126,16 @@ hospital_agent_executor = AgentExecutor(
     return_intermediate_steps=True,
     verbose=True,
 )
+
+@app.route("/ask", methods=["POST"])
+def ask_question():
+    try:
+        data = request.json
+        question = data.get("question", "")
+        result = hospital_agent_executor({"input": question})
+        return jsonify({"answer": result["output"]})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True)
