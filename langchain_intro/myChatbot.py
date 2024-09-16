@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import CORS
 import dotenv
 from langchain_openai import ChatOpenAI
 from langchain.prompts import (
@@ -11,19 +12,18 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain.schema.runnable import RunnablePassthrough
-
 from langchain.agents import (
     create_openai_functions_agent,
     Tool,
     AgentExecutor,
 )
 from tools import get_current_wait_time
-import os
 
 # Load environment variables
 dotenv.load_dotenv()
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 REVIEWS_CHROMA_PATH = "chroma_data/"
 
@@ -123,7 +123,7 @@ hospital_agent = create_openai_functions_agent(
 hospital_agent_executor = AgentExecutor(
     agent=hospital_agent,
     tools=tools,
-    return_intermediate_steps=True,
+    return_intermediate_steps=False,
     verbose=True,
 )
 
