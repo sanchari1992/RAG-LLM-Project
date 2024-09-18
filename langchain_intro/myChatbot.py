@@ -28,9 +28,7 @@ CORS(app)  # Enable CORS for all routes
 REVIEWS_CHROMA_PATH = "chroma_data/"
 
 # Define the review templates
-review_template_str = """Your job is to use patient
-reviews to answer questions about their experience at
-a hospital. Use the following context to answer questions.
+review_template_str = """Your job is to use ONLY the database data to answer questions. Use the following context to answer questions.
 Be as detailed as possible, but don't make up any information
 that's not from the context. If you don't know an answer, say
 you don't know.
@@ -81,8 +79,8 @@ tools = [
         name="Reviews",
         func=review_chain.invoke,
         description="""Useful when you need to answer questions
-        about patient reviews or experiences at the hospital.
-        Not useful for answering questions about specific visit
+        about the hospital from the data in the database.
+        Useful for answering questions about specific visit
         details such as payer, billing, treatment, diagnosis,
         chief complaint, hospital, or physician information.
         Pass the entire question as input to the tool. For instance,
