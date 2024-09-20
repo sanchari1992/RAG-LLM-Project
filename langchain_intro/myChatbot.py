@@ -28,10 +28,12 @@ CORS(app)  # Enable CORS for all routes
 REVIEWS_CHROMA_PATH = "chroma_data/"
 
 # Define the review templates
-review_template_str = """Your job is to use ONLY the database data to answer questions. Use the following context to answer questions.
-Be as detailed as possible, but don't make up any information
-that's not from the context. If you don't know an answer, say
-you don't know.
+review_template_str = """You are restricted to using ONLY the database entries provided to you.
+Do not answer any questions based on your own knowledge or any external sources. 
+You must base your answer entirely on the provided context. 
+
+If the context does not contain the information needed to answer the question, 
+respond with 'I don't know'. 
 
 {context}
 """
@@ -105,9 +107,10 @@ tools = [
 # Correct hospital_agent_prompt
 hospital_agent_prompt = PromptTemplate(
     input_variables=["input", "agent_scratchpad"],
-    template="""You are a helpful assistant. Your job is to answer questions 
-    about hospital services, patient reviews, and current wait times.
-    
+    template="""You are a helpful assistant. You must only answer questions based on the existing database information.
+
+    Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.'
+
     Question: {input}
     Agent Scratchpad: {agent_scratchpad}"""
 )
