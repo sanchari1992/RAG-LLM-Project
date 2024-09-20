@@ -81,25 +81,13 @@ tools = [
         name="Reviews",
         func=review_chain.invoke,
         description="""Useful when you need to answer questions
-        about the hospital from the data in the database.
-        Useful for answering questions about specific visit
-        details such as payer, billing, treatment, diagnosis,
-        chief complaint, hospital, or physician information.
+        about IOT medical devices from the data in the database.
+        Useful for answering questions about device
+        details such as specifications, price, reviews. Also useful to frame 
+        answers gathered from the information within the reviews, such as feedback.
         Pass the entire question as input to the tool. For instance,
-        if the question is "What do patients think about the triage system?",
-        the input should be "What do patients think about the triage system?"
-        """,
-    ),
-    Tool(
-        name="Waits",
-        func=get_current_wait_time,
-        description="""Use when asked about current wait times
-        at a specific hospital. This tool can only get the current
-        wait time at a hospital and does not have any information about
-        aggregate or historical wait times. This tool returns wait times in
-        minutes. Do not pass the word "hospital" as input,
-        only the hospital name itself. For instance, if the question is
-        "What is the wait time at hospital A?", the input should be "A".
+        if the question is "Which blood pressure monitor is the best?",
+        the input should be "Which blood pressure monitor is the best?"
         """,
     ),
 ]

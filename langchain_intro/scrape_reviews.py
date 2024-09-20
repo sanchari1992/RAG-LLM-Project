@@ -146,11 +146,11 @@ for url in product_urls:
 
 # Convert reviews to DataFrame and save as CSV
 df_reviews = pd.DataFrame(all_reviews)
-df_reviews.to_csv('data/amazon_multiple_product_reviews.csv', index=False)
+df_reviews.to_csv('data/reviews.csv', index=False)
 
 # Convert specs to DataFrame and save as CSV
 df_specs = pd.DataFrame(all_specs)
-df_specs.to_csv('data/amazon_multiple_product_specs.csv', index=False)
+df_specs.to_csv('data/specs.csv', index=False)
 
 # Close the driver
 driver.quit()
