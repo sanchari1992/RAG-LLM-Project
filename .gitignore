@@ -27,3 +27,4 @@
 *.pyc
 langchain_intro/__pycache__/chatbot.cpython-312.pyc
 chatbot_api/src/chains/__pycache__/hospital_review_chain.cpython-312.pyc
+.env
