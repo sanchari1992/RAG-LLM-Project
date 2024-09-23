@@ -44,7 +44,7 @@ def load_csv_to_table(csv_file, connection):
         # Create table if it doesn't exist
         create_table_query = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
-            {', '.join([f'{col} TEXT' for col in df.columns])}
+            {', '.join([f'{col} LONGTEXT' if col == 'body' else f'{col} TEXT' for col in df.columns])}
         )
         """
         cursor.execute(create_table_query)
