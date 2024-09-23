@@ -46,15 +46,15 @@ mysql_connection = connect_to_mysql()
 def fetch_reviews_from_db(question):
     cursor = mysql_connection.cursor(dictionary=True)
     query = """
-        SELECT review_body FROM reviews
-        WHERE MATCH(review_body) AGAINST (%s IN NATURAL LANGUAGE MODE)
+        SELECT body FROM reviews
+        WHERE MATCH(body) AGAINST (%s IN NATURAL LANGUAGE MODE)
         LIMIT 10
     """
     cursor.execute(query, (question,))
     reviews = cursor.fetchall()
     cursor.close()
 
-    context = " ".join([review['review_body'] for review in reviews])
+    context = " ".join([review['body'] for review in reviews])  # Updated to 'body'
     return context
 
 # Define the review templates
