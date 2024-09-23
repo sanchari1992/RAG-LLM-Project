@@ -75,7 +75,7 @@ if __name__ == "__main__":
     
     if connection:
         # Define the folder containing your CSV files
-        csv_folder = './csv_files/'
+        csv_folder = './data/'
         
         # Load all CSV files into MySQL tables
         load_all_csvs_to_db(csv_folder, connection)
