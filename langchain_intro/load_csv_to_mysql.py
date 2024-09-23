@@ -30,6 +30,22 @@ def connect_to_mysql():
         print(f"Error while connecting to MySQL: {e}")
         return None
 
+def drop_all_tables(connection):
+    """Drop all tables in the current database"""
+    cursor = connection.cursor()
+    try:
+        cursor.execute("SHOW TABLES")
+        tables = cursor.fetchall()
+        for table in tables:
+            drop_query = f"DROP TABLE IF EXISTS {table[0]}"
+            cursor.execute(drop_query)
+            print(f"Table {table[0]} dropped successfully.")
+        connection.commit()
+    except Error as e:
+        print(f"Error while dropping tables: {e}")
+    finally:
+        cursor.close()
+
 def load_csv_to_table(csv_file, connection):
     """Load a single CSV file into a MySQL table"""
     # Get table name from the CSV file name (without extension)
@@ -74,6 +90,9 @@ if __name__ == "__main__":
     connection = connect_to_mysql()
     
     if connection:
+        # Drop all existing tables in the database
+        drop_all_tables(connection)
+
         # Define the folder containing your CSV files
         csv_folder = './data/'
         
