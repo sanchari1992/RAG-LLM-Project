@@ -33,3 +33,7 @@ chatbot_api/src/chains/__pycache__/hospital_review_chain.cpython-312.pyc
 /chroma_data
 /.venv
 /.venv
+/.venv
+*.pyc
+*.pyc
+/.venv
