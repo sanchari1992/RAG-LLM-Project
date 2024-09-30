@@ -46,9 +46,8 @@ mysql_connection = connect_to_mysql()
 def fetch_reviews_from_db(question):
     cursor = mysql_connection.cursor(dictionary=True)
     query = """
-        SELECT content FROM reviews
+        SELECT content FROM cleaned_random_2000_rows
         WHERE MATCH(content) AGAINST (%s IN NATURAL LANGUAGE MODE)
-        LIMIT 10
     """
     cursor.execute(query, (question,))
     reviews = cursor.fetchall()
