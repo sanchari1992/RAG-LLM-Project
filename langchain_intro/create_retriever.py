@@ -9,25 +9,24 @@ from langchain_openai import OpenAIEmbeddings
 dotenv.load_dotenv()
 
 # Paths for CSV files and Chroma persistence directory
-REVIEWS_CSV_PATH = "data/reviews.csv"
-SPECS_CSV_PATH = "data/specs.csv"
+# REVIEWS_CSV_PATH = "data/reviews.csv"
+# SPECS_CSV_PATH = "data/specs.csv"
+CSV_FILE = os.getenv('CSV_FILE')
 CHROMA_PERSIST_PATH = "chroma_data"
 
 # Step 1: Delete the existing Chroma data to clear all prior documents
 if os.path.exists(CHROMA_PERSIST_PATH):
     shutil.rmtree(CHROMA_PERSIST_PATH)  # Deletes the persistence directory and its contents
 
-# Step 2: Load the CSV files using CSVLoader
-loader_reviews = CSVLoader(file_path=REVIEWS_CSV_PATH)
-loader_specs = CSVLoader(file_path=SPECS_CSV_PATH)
+# Step 2: Load the CSV file using CSVLoader
+loader_file = CSVLoader(file_path=CSV_FILE)
 
-# Step 3: Load documents from both CSV files
-reviews = loader_reviews.load()
-specs = loader_specs.load()
+# Step 3: Load documents from the CSV file
+data_file = loader_file.load()
 
 # Step 4: Initialize Chroma DB with OpenAI Embeddings and save both documents
 reviews_vector_db = Chroma.from_documents(
-    reviews + specs,  # Combine reviews and specs documents
+    data_file,  # Combine reviews and specs documents
     OpenAIEmbeddings(),
     persist_directory=CHROMA_PERSIST_PATH
 )
