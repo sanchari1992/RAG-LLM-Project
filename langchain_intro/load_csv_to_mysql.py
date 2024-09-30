@@ -3,7 +3,6 @@ import pandas as pd
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
-import glob
 
 # Load environment variables from .env file
 load_dotenv()
@@ -51,8 +50,8 @@ def load_csv_to_table(csv_file, connection):
     # Get table name from the CSV file name (without extension)
     table_name = os.path.splitext(os.path.basename(csv_file))[0]
 
-    # Load CSV file into a pandas DataFrame
-    df = pd.read_csv(csv_file)
+    # Load CSV file into a pandas DataFrame and drop NaN values
+    df = pd.read_csv(csv_file).dropna()  # Drop rows with NaN values
 
     # Create MySQL table and insert data
     cursor = connection.cursor()
@@ -60,7 +59,11 @@ def load_csv_to_table(csv_file, connection):
         # Create table if it doesn't exist
         create_table_query = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
-            {', '.join([f'{col} LONGTEXT' if col == 'body' else f'{col} TEXT' for col in df.columns])}
+            reviewId VARCHAR(255) NOT NULL,
+            content TEXT,
+            score INT,
+            app TEXT,
+            PRIMARY KEY (reviewId)
         )
         """
         cursor.execute(create_table_query)
@@ -73,17 +76,21 @@ def load_csv_to_table(csv_file, connection):
         connection.commit()
         print(f"Data from {csv_file} successfully loaded into {table_name} table")
 
+        # Create a full-text index on 'content' column
+        cursor.execute(f"CREATE FULLTEXT INDEX idx_content ON {table_name} (content);")
+        print(f"Fulltext index on 'content' column created for {table_name}.")
+
+        # Add index on 'app' column for faster queries if it exists
+        if 'app' in df.columns:
+            add_index_query = f"CREATE INDEX idx_app ON {table_name} (app(255));"
+            cursor.execute(add_index_query)
+            print(f"Index on 'app' column (first 255 characters) created for {table_name}.")
+
     except Error as e:
         print(f"Error while loading data into MySQL: {e}")
 
     finally:
         cursor.close()
-
-def load_all_csvs_to_db(folder_path, connection):
-    """Load all CSV files in a folder to MySQL tables"""
-    csv_files = glob.glob(f"{folder_path}/*.csv")
-    for csv_file in csv_files:
-        load_csv_to_table(csv_file, connection)
 
 if __name__ == "__main__":
     # Connect to MySQL
@@ -93,11 +100,9 @@ if __name__ == "__main__":
         # Drop all existing tables in the database
         drop_all_tables(connection)
 
-        # Define the folder containing your CSV files
-        csv_folder = './data/'
-        
-        # Load all CSV files into MySQL tables
-        load_all_csvs_to_db(csv_folder, connection)
-        
+        # Load the CSV file
+        CSV_FILE = os.getenv('CSV_FILE')
+        load_csv_to_table(CSV_FILE, connection)
+
         # Close the MySQL connection
         connection.close()

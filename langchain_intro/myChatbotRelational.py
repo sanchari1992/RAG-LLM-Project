@@ -46,15 +46,15 @@ mysql_connection = connect_to_mysql()
 def fetch_reviews_from_db(question):
     cursor = mysql_connection.cursor(dictionary=True)
     query = """
-        SELECT body FROM reviews
-        WHERE MATCH(body) AGAINST (%s IN NATURAL LANGUAGE MODE)
+        SELECT content FROM reviews
+        WHERE MATCH(content) AGAINST (%s IN NATURAL LANGUAGE MODE)
         LIMIT 10
     """
     cursor.execute(query, (question,))
     reviews = cursor.fetchall()
     cursor.close()
 
-    context = " ".join([review['body'] for review in reviews])  # Updated to 'body'
+    context = " ".join([review['content'] for review in reviews])  # Updated to 'body'
     return context
 
 # Define the review templates
@@ -94,11 +94,18 @@ tools = [
     Tool(
         name="Reviews",
         func=review_chain.invoke,
-        description="Useful when answering questions about IoT medical devices from the MySQL database."
+        description="""Useful when you need to answer questions
+        about the top 20 applications on the Google Play Store from the data in the database.
+        Useful for answering questions from the available reviews. Also useful to frame 
+        answers gathered from the information within the reviews, such as feedback.
+        Pass the entire question as input to the tool. For instance,
+        if the question is "Which social networking application do people prefer?",
+        the input should be "Which social networking application do people prefer?"
+        """,
     ),
 ]
 
-hospital_agent_prompt = PromptTemplate(
+mybot_agent_prompt = PromptTemplate(
     input_variables=["input", "agent_scratchpad"],
     template="""You are a helpful assistant. You must only answer questions based on the existing database information.
 
@@ -108,14 +115,14 @@ hospital_agent_prompt = PromptTemplate(
     Agent Scratchpad: {agent_scratchpad}"""
 )
 
-hospital_agent = create_openai_functions_agent(
+mybot_agent = create_openai_functions_agent(
     llm=chat_model,
-    prompt=hospital_agent_prompt,
+    prompt=mybot_agent_prompt,
     tools=tools,
 )
 
-hospital_agent_executor = AgentExecutor(
-    agent=hospital_agent,
+mybot_agent_executor = AgentExecutor(
+    agent=mybot_agent,
     tools=tools,
     return_intermediate_steps=False,
     verbose=True,
@@ -127,7 +134,7 @@ def ask_question():
         data = request.json
         question = data.get("question", "")
         context = fetch_reviews_from_db(question)
-        result = hospital_agent_executor({"input": question, "context": context})
+        result = mybot_agent_executor({"input": question, "context": context})
         return jsonify({"answer": result["output"]})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
