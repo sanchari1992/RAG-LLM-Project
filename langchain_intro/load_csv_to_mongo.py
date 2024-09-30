@@ -28,6 +28,14 @@ def load_csv_to_mongodb(csv_file, collection_name):
     collection = db[collection_name]
     collection.insert_many(records)  # Insert the records into MongoDB
     print(f"Loaded {len(records)} records into {collection_name}.")
+    
+    # Add indexing on key fields
+    # You can create indexes on multiple fields based on your query patterns
+    collection.create_index([("reviewId", 1)])  # Ascending index on reviewId
+    collection.create_index([("app", 1)])       # Ascending index on app
+    collection.create_index([("score", 1)])     # Ascending index on score
+    
+    print("Indexes have been created on reviewId, app, and score fields.")
 
 # File paths
 reviews_file = os.getenv('CSV_FILE')
