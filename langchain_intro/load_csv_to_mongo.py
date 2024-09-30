@@ -9,7 +9,6 @@ load_dotenv()
 # MongoDB connection
 mongodb_uri = os.getenv('MONGODB_URI')
 database_name = os.getenv('DATABASE_NAME')
-specs_collection_name = os.getenv('SPECS_COLLECTION')
 reviews_collection_name = os.getenv('REVIEWS_COLLECTION')
 
 # Create a MongoDB client
@@ -31,11 +30,9 @@ def load_csv_to_mongodb(csv_file, collection_name):
     print(f"Loaded {len(records)} records into {collection_name}.")
 
 # File paths
-specs_file = './data/specs.csv'
-reviews_file = './data/reviews.csv'
+reviews_file = os.getenv('CSV_FILE')
 
 # Load the CSV files into MongoDB
-load_csv_to_mongodb(specs_file, specs_collection_name)
 load_csv_to_mongodb(reviews_file, reviews_collection_name)
 
 # Close the MongoDB client
