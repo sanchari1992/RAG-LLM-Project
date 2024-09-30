@@ -69,8 +69,9 @@ def fetch_reviews_from_mongodb(question):
         "$text": {"$search": question}
     }).limit(10)
 
-    context = " ".join([review['body'] for review in reviews])  # Assuming 'body' is the field for review text
+    context = " ".join([review['content'] for review in reviews])  # Assuming 'content' is the field for review text
     return context
+
 
 # Modify the review_chain to use MongoDB data
 review_chain = (
