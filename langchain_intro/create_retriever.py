@@ -26,7 +26,7 @@ data_file = loader_file.load()
 
 # Step 4: Initialize Chroma DB with OpenAI Embeddings and save both documents
 reviews_vector_db = Chroma.from_documents(
-    data_file,  # Combine reviews and specs documents
+    data_file,
     OpenAIEmbeddings(),
     persist_directory=CHROMA_PERSIST_PATH
 )
