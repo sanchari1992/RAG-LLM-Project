@@ -42,19 +42,31 @@ def connect_to_mysql():
 
 mysql_connection = connect_to_mysql()
 
-# Function to fetch reviews from MySQL
+# Function to fetch reviews from all tables in MySQL
 def fetch_reviews_from_db(question):
     cursor = mysql_connection.cursor(dictionary=True)
-    query = """
-        SELECT content FROM cleaned_random_2000_rows
-        WHERE MATCH(content) AGAINST (%s IN NATURAL LANGUAGE MODE)
-    """
-    cursor.execute(query, (question,))
-    reviews = cursor.fetchall()
+
+    # Get all table names dynamically
+    cursor.execute("SHOW TABLES")
+    tables = [table['Tables_in_' + os.getenv('MYSQL_DATABASE')] for table in cursor.fetchall()]
+    
+    context = ""
+
+    # Query each table for matching reviews
+    for table in tables:
+        query = f"""
+            SELECT Comment FROM {table}
+            WHERE MATCH(Comment) AGAINST (%s IN NATURAL LANGUAGE MODE)
+        """
+        cursor.execute(query, (question,))
+        reviews = cursor.fetchall()
+
+        # Concatenate reviews into a single context
+        context += " ".join([review['Comment'] for review in reviews]) + " "
+
     cursor.close()
 
-    context = " ".join([review['content'] for review in reviews])  # Updated to 'body'
-    return context
+    return context.strip()  # Return the full context without extra whitespace
 
 # Define the review templates
 review_template_str = """You are restricted to using ONLY the database entries provided to you.
@@ -94,13 +106,8 @@ tools = [
         name="Reviews",
         func=review_chain.invoke,
         description="""Useful when you need to answer questions
-        about the top 20 applications on the Google Play Store from the data in the database.
-        Useful for answering questions from the available reviews. Also useful to frame 
-        answers gathered from the information within the reviews, such as feedback.
-        Pass the entire question as input to the tool. For instance,
-        if the question is "Which social networking application do people prefer?",
-        the input should be "Which social networking application do people prefer?"
-        """,
+        about mental health center reviews from the available data in the MySQL database.
+        Pass the entire question as input to the tool.""",
     ),
 ]
 
