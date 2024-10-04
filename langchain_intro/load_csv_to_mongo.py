@@ -15,11 +15,15 @@ csv_data_folder = os.getenv('CSV_DATA_FOLDER')  # Folder where CSV files are sto
 client = MongoClient(mongodb_uri)
 db = client[database_name]
 
+# Function to drop all collections in the database
+def drop_all_collections():
+    collection_names = db.list_collection_names()  # Get all collection names
+    for collection_name in collection_names:
+        db[collection_name].drop()  # Drop each collection
+        print(f"Dropped collection: {collection_name}")
+
 # Function to load a single CSV file into MongoDB
 def load_csv_to_mongodb(csv_file, collection_name):
-    # Drop the collection if it exists
-    db[collection_name].drop()
-
     # Load data from CSV
     data = pd.read_csv(csv_file)
     records = data.to_dict(orient='records')  # Convert DataFrame to a list of dictionaries
@@ -43,6 +47,9 @@ def load_all_csvs_to_mongodb(data_folder):
             load_csv_to_mongodb(full_path, collection_name)
 
 if __name__ == "__main__":
+    # Drop all collections in the database before loading new data
+    drop_all_collections()
+
     # Load all CSV files from the specified folder into MongoDB
     load_all_csvs_to_mongodb(csv_data_folder)
 
