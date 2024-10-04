@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
@@ -20,6 +21,9 @@ dotenv.load_dotenv()
 # Flask app setup
 app = Flask(__name__)
 CORS(app)
+
+# Set up logging
+logging.basicConfig(level=logging.WARNING)  # Adjust logging level as needed
 
 # MongoDB connection
 mongodb_uri = os.getenv('MONGODB_URI')
@@ -62,27 +66,29 @@ review_prompt_template = ChatPromptTemplate(
 chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
 output_parser = StrOutputParser()
 
-# Function to retrieve all reviews from a specified collection in MongoDB
-def fetch_all_reviews(collection_name):
-    reviews = db[collection_name].find()
-
-    # Create a context string from the retrieved reviews
+# Function to retrieve all reviews from all collections in MongoDB
+def fetch_all_reviews():
     context = ""
-    for review in reviews:
-        review_content = (
-            f"Center: {review['Name']}\n"
-            f"Rating: {review['Rating']}/5\n"
-            f"Review Year: {review['Review Year']}\n"
-            f"Comment: {review['Comment']}\n\n"
-        )
-        context += review_content
+    collection_names = get_collection_names()  # Get all collection names
+
+    # Iterate over each collection and retrieve reviews
+    for collection_name in collection_names:
+        reviews = db[collection_name].find()
+        for review in reviews:
+            review_content = (
+                f"Center: {review['Name']}\n"
+                f"Rating: {review['Rating (out of 5)']}/5\n"  # Use the correct column name
+                f"Review Year: {review['Review Year']}\n"
+                f"Comment: {review['Comment']}\n\n"
+            )
+            context += review_content
     
     return context if context else "I don't know."
 
 # Function to create the review chain
-def create_review_chain(collection_name):
+def create_review_chain():
     # Create a Runnable to fetch all reviews
-    fetch_reviews_runnable = RunnablePassthrough(fetch_all_reviews(collection_name))
+    fetch_reviews_runnable = RunnablePassthrough(fetch_all_reviews)
     
     review_chain = (
         fetch_reviews_runnable
@@ -92,19 +98,11 @@ def create_review_chain(collection_name):
     )
     return review_chain
 
-# Get collection names
-collection_names = get_collection_names()
-# Assuming you want to work with the first collection, adjust as needed
-if collection_names:
-    selected_collection_name = collection_names[0]
-else:
-    raise ValueError("No collections found in the database.")
-
 # Tool setup for the agent
 tools = [
     Tool(
         name="Reviews",
-        func=create_review_chain(selected_collection_name).invoke,
+        func=create_review_chain().invoke,
         description="""Useful when you need to answer questions
         about mental health center reviews in the database.
         The reviews include fields like 'Center Name', 'Rating', 'Review Year', and 'Comment'.
@@ -136,7 +134,7 @@ mybot_agent_executor = AgentExecutor(
     agent=mybot_agent,
     tools=tools,
     return_intermediate_steps=False,
-    verbose=True,
+    verbose=False,  # Set verbose to False to reduce console output
 )
 
 @app.route("/ask", methods=["POST"])
@@ -150,4 +148,4 @@ def ask_question():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # Set to False in production
