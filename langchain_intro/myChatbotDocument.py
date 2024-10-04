@@ -72,7 +72,7 @@ def fetch_all_reviews(collection_name):
         review_content = (
             f"Center: {review['Name']}\n"
             f"Rating: {review['Rating']}/5\n"
-            f"Review Year: {review['Review_Year']}\n"
+            f"Review Year: {review['Review Year']}\n"
             f"Comment: {review['Comment']}\n\n"
         )
         context += review_content
