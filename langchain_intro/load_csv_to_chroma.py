@@ -24,14 +24,20 @@ for csv_file in os.listdir(CSV_DATA_FOLDER):
         full_path = os.path.join(CSV_DATA_FOLDER, csv_file)
         print(f"Processing file: {full_path}")
         
-        # Load the CSV file using CSVLoader
-        loader_file = CSVLoader(file_path=full_path)
+        try:
+            # Load the CSV file using CSVLoader with UTF-8 encoding
+            loader_file = CSVLoader(file_path=full_path, encoding="utf-8")
+            
+            # Load documents from the CSV file
+            data_file = loader_file.load()
+            
+            # Append the data to all_documents list
+            all_documents.extend(data_file)
         
-        # Load documents from the CSV file
-        data_file = loader_file.load()
-        
-        # Append the data to all_documents list
-        all_documents.extend(data_file)
+        except UnicodeDecodeError as e:
+            print(f"Encoding error in file {full_path}: {e}")
+        except RuntimeError as e:
+            print(f"Error loading {full_path}: {e}")
 
 # Step 3: Initialize Chroma DB with OpenAI Embeddings and load all documents
 reviews_vector_db = Chroma.from_documents(
