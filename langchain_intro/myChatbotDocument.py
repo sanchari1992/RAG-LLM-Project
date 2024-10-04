@@ -76,7 +76,7 @@ def fetch_all_reviews():
         for review in reviews:
             review_content = (
                 f"Center: {review['Name']}\n"
-                f"Rating: {review['Rating (out of 5)']}/5\n"  # Use the correct column name
+                f"Rating: {review['Rating']}/5\n"  # Use the correct column name
                 f"Review Year: {review['Review Year']}\n"
                 f"Comment: {review['Comment']}\n\n"
             )
