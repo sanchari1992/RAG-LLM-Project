@@ -12,7 +12,7 @@ from langchain.prompts import (
 )
 from langchain_core.output_parsers import StrOutputParser
 from langchain.agents import create_openai_functions_agent, Tool, AgentExecutor
-from langchain.schema.runnable import RunnablePassthrough
+from langchain.schema.runnable import Runnable, RunnablePassthrough
 import dotenv
 
 # Load environment variables
@@ -85,11 +85,11 @@ def fetch_all_reviews():
     
     return context if context else "I don't know."
 
+# Create a Runnable to fetch all reviews
+fetch_reviews_runnable = Runnable(lambda: fetch_all_reviews())
+
 # Function to create the review chain
 def create_review_chain():
-    # Create a Runnable to fetch all reviews
-    fetch_reviews_runnable = RunnablePassthrough(fetch_all_reviews)
-    
     review_chain = (
         fetch_reviews_runnable
         | review_prompt_template
