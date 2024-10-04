@@ -17,7 +17,6 @@ from langchain.agents import (
     Tool,
     AgentExecutor,
 )
-from tools import get_current_wait_time
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -26,6 +25,15 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 REVIEWS_CHROMA_PATH = "chroma_data/"
+
+# Initialize Chroma vector DB for reviews
+reviews_vector_db = Chroma(
+    persist_directory=REVIEWS_CHROMA_PATH,
+    embedding_function=OpenAIEmbeddings()
+)
+
+# Set up the retriever from the Chroma DB
+reviews_retriever = reviews_vector_db.as_retriever(k=10)
 
 # Define the review templates
 review_template_str = """You are restricted to using ONLY the database entries provided to you.
@@ -51,6 +59,7 @@ review_human_prompt = HumanMessagePromptTemplate(
         template="{question}",
     )
 )
+
 messages = [review_system_prompt, review_human_prompt]
 
 review_prompt_template = ChatPromptTemplate(
@@ -60,14 +69,6 @@ review_prompt_template = ChatPromptTemplate(
 
 chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
 output_parser = StrOutputParser()
-
-# Initialize Chroma vector DB for reviews
-reviews_vector_db = Chroma(
-    persist_directory=REVIEWS_CHROMA_PATH,
-    embedding_function=OpenAIEmbeddings()
-)
-
-reviews_retriever = reviews_vector_db.as_retriever(k=10)
 
 review_chain = (
     {"context": reviews_retriever, "question": RunnablePassthrough()}
@@ -81,16 +82,14 @@ tools = [
         name="Reviews",
         func=review_chain.invoke,
         description="""Useful when you need to answer questions
-        about the top 20 applications on the Google Play Store from the data in the database.
-        Useful for answering questions from the available reviews. Also useful to frame 
-        answers gathered from the information within the reviews, such as feedback.
-        Pass the entire question as input to the tool. For instance,
-        if the question is "Which social networking application do people prefer?",
-        the input should be "Which social networking application do people prefer?"
+        about mental health center reviews in the database.
+        The reviews include fields like 'Center Name', 'Rating', 'Review Year', and 'Comment'.
+        Pass the entire question as input to the tool. For example,
+        if the question is "What do people think of Center A?",
+        the input should be "What do people think of Center A?"
         """,
     ),
 ]
-
 
 mybot_agent_prompt = PromptTemplate(
     input_variables=["input", "agent_scratchpad"],
