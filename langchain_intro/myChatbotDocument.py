@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import dotenv
-import os
+from pymongo import MongoClient
 from langchain_openai import ChatOpenAI
 from langchain.prompts import (
     PromptTemplate,
@@ -10,17 +9,14 @@ from langchain.prompts import (
     ChatPromptTemplate,
 )
 from langchain_core.output_parsers import StrOutputParser
-from langchain.schema.runnable import RunnablePassthrough
-from langchain.agents import (
-    create_openai_functions_agent,
-    Tool,
-    AgentExecutor,
-)
-from pymongo import MongoClient
+from langchain.agents import create_openai_functions_agent, Tool, AgentExecutor
+import os
+import dotenv
 
 # Load environment variables
 dotenv.load_dotenv()
 
+# Flask app setup
 app = Flask(__name__)
 CORS(app)
 
@@ -61,38 +57,14 @@ review_prompt_template = ChatPromptTemplate(
 chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
 output_parser = StrOutputParser()
 
-# Mapping keywords to collection names
-collection_mapping = {
-    'mental health': 'mental_health_centers',  # Adjust collection names as needed
-    'center': 'mental_health_centers',
-    # Add other mappings here
-}
-
-# Function to fetch the appropriate collection name based on incoming requests
-def get_collection_name_from_question(question):
-    question_lower = question.lower()
-    for keyword, collection_name in collection_mapping.items():
-        if keyword in question_lower:
-            return collection_name
-    return None  # Return None if no matching collection found
-
-# Function to retrieve reviews from MongoDB based on the dynamic collection name
-def fetch_reviews_from_mongodb(question):
-    collection_name = get_collection_name_from_question(question)  # Get the dynamic collection name
-
-    # Check if the collection exists
-    if collection_name is None or collection_name not in db.list_collection_names():
-        return "Collection not found or not specified."
-
-    # Search for relevant reviews based on the question (full-text search on 'Comment')
-    reviews = db[collection_name].find({
-        "$text": {"$search": question}
-    }).limit(10)
+# Function to retrieve all reviews from MongoDB
+def fetch_all_reviews():
+    collection_name = 'your_collection_name'  # Replace with your actual collection name
+    reviews = db[collection_name].find()
 
     # Create a context string from the retrieved reviews
     context = ""
     for review in reviews:
-        # Assuming 'Comment', 'Name', 'Rating', and 'Review_Year' are the fields
         review_content = (
             f"Center: {review['Name']}\n"
             f"Rating: {review['Rating']}/5\n"
@@ -103,18 +75,21 @@ def fetch_reviews_from_mongodb(question):
     
     return context if context else "I don't know."
 
-# Modify the review_chain to use MongoDB data
-review_chain = (
-    {"context": fetch_reviews_from_mongodb, "question": RunnablePassthrough()}
-    | review_prompt_template
-    | chat_model
-    | output_parser
-)
+# Function to create the review chain
+def create_review_chain():
+    review_chain = (
+        {"context": fetch_all_reviews, "question": RunnablePassthrough()}
+        | review_prompt_template
+        | chat_model
+        | output_parser
+    )
+    return review_chain
 
+# Tool setup for the agent
 tools = [
     Tool(
         name="Reviews",
-        func=review_chain.invoke,
+        func=create_review_chain().invoke,
         description="""Useful when you need to answer questions
         about mental health center reviews in the database.
         The reviews include fields like 'Center Name', 'Rating', 'Review Year', and 'Comment'.
@@ -125,6 +100,7 @@ tools = [
     ),
 ]
 
+# Agent setup
 mybot_agent_prompt = PromptTemplate(
     input_variables=["input", "agent_scratchpad"],
     template="""You are a helpful assistant. You must only answer questions based on the existing database information.
