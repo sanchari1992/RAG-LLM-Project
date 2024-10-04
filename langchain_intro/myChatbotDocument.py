@@ -64,12 +64,23 @@ output_parser = StrOutputParser()
 
 # Function to retrieve reviews from MongoDB
 def fetch_reviews_from_mongodb(question):
-    # Search for relevant reviews based on the question
+    # Search for relevant reviews based on the question (full-text search on 'Comment')
     reviews = db[reviews_collection_name].find({
         "$text": {"$search": question}
     }).limit(10)
 
-    context = " ".join([review['content'] for review in reviews])  # Assuming 'content' is the field for review text
+    # Create a context string from the retrieved reviews
+    context = ""
+    for review in reviews:
+        # Assuming 'Comment', 'Name', 'Rating', and 'Review_Year' are the fields
+        review_content = (
+            f"Center: {review['Name']}\n"
+            f"Rating: {review['Rating']}/5\n"
+            f"Review Year: {review['Review_Year']}\n"
+            f"Comment: {review['Comment']}\n\n"
+        )
+        context += review_content
+    
     return context
 
 
@@ -86,12 +97,11 @@ tools = [
         name="Reviews",
         func=review_chain.invoke,
         description="""Useful when you need to answer questions
-        about the top 20 applications on the Google Play Store from the data in the database.
-        Useful for answering questions from the available reviews. Also useful to frame 
-        answers gathered from the information within the reviews, such as feedback.
-        Pass the entire question as input to the tool. For instance,
-        if the question is "Which social networking application do people prefer?",
-        the input should be "Which social networking application do people prefer?"
+        about mental health center reviews in the database.
+        The reviews include fields like 'Center Name', 'Rating', 'Review Year', and 'Comment'.
+        Pass the entire question as input to the tool. For example,
+        if the question is "What do people think of Center A?",
+        the input should be "What do people think of Center A?"
         """,
     ),
 ]
