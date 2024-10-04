@@ -82,7 +82,7 @@ def fetch_all_reviews(collection_name):
 # Function to create the review chain
 def create_review_chain(collection_name):
     # Create a Runnable to fetch all reviews
-    fetch_reviews_runnable = RunnablePassthrough.from_function(lambda: fetch_all_reviews(collection_name))
+    fetch_reviews_runnable = RunnablePassthrough(fetch_all_reviews(collection_name))
     
     review_chain = (
         fetch_reviews_runnable
