@@ -10,7 +10,7 @@ from langchain.prompts import (
 )
 from langchain_core.output_parsers import StrOutputParser
 from langchain.agents import create_openai_functions_agent, Tool, AgentExecutor
-from langchain.schema.runnable import RunnablePassthrough  # Importing RunnablePassthrough
+from langchain.schema.runnable import RunnablePassthrough
 import os
 import dotenv
 
@@ -79,7 +79,7 @@ def fetch_all_reviews():
 # Function to create the review chain
 def create_review_chain():
     review_chain = (
-        {"context": fetch_all_reviews, "question": RunnablePassthrough()}
+        {"context": fetch_all_reviews(), "question": RunnablePassthrough()}  # Call fetch_all_reviews() here
         | review_prompt_template
         | chat_model
         | output_parser
