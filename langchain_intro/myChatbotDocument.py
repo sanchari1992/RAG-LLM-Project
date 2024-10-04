@@ -82,10 +82,20 @@ def fetch_all_reviews():
             )
             context += review_content
     
+    # Return context or a default message if empty
     return context if context else "I don't know."
+
+# Function to truncate context to a specific length
+def truncate_context(context, max_length=4000):
+    if len(context) > max_length:
+        return context[:max_length] + "... (truncated)"
+    return context
 
 # Function to create the review chain
 def create_review_chain(context, question):
+    # Truncate the context if it's too long
+    context = truncate_context(context)
+
     # Construct the prompt
     context_prompt = review_prompt_template.invoke({"context": context, "question": question})
     
