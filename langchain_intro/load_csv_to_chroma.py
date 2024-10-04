@@ -1,6 +1,7 @@
 import os
 import shutil
 import dotenv
+import pandas as pd
 from langchain.document_loaders.csv_loader import CSVLoader
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
@@ -9,7 +10,7 @@ from langchain_openai import OpenAIEmbeddings
 dotenv.load_dotenv()
 
 # Paths for CSV files folder and Chroma persistence directory
-CSV_DATA_FOLDER = os.getenv('CSV_DATA_FOLDER')
+CSV_DATA_FOLDER = os.getenv('CSV_DATA_FOLDER', './data')
 CHROMA_PERSIST_PATH = "chroma_data"
 
 # Step 1: Delete the existing Chroma data to clear all prior documents
@@ -23,30 +24,49 @@ for csv_file in os.listdir(CSV_DATA_FOLDER):
     if csv_file.endswith(".csv"):
         full_path = os.path.join(CSV_DATA_FOLDER, csv_file)
         print(f"Processing file: {full_path}")
-        
+
         try:
             # Load the CSV file using CSVLoader with UTF-8 encoding
             loader_file = CSVLoader(file_path=full_path, encoding="utf-8")
-            
+
             # Load documents from the CSV file
             data_file = loader_file.load()
-            
+
             # Append the data to all_documents list
             all_documents.extend(data_file)
-        
+
         except UnicodeDecodeError as e:
             print(f"Encoding error in file {full_path}: {e}")
         except RuntimeError as e:
             print(f"Error loading {full_path}: {e}")
 
-# Step 3: Initialize Chroma DB with OpenAI Embeddings and load all documents
+# Step 3: Prepare documents for Chroma DB
+formatted_documents = []
+for doc in all_documents:
+    # Assuming `doc` has fields corresponding to the CSV columns
+    formatted_doc = {
+        'Name': doc.get('Name'),
+        'Rating': doc.get('Rating'),
+        'Year': doc.get('Year'),
+        'Comment': doc.get('Comment'),
+        'text': f"Center: {doc.get('Name')}, Rating: {doc.get('Rating')}, Year: {doc.get('Year')}, Comment: {doc.get('Comment')}"  # Create a text representation
+    }
+    formatted_documents.append(formatted_doc)
+
+# Step 4: Initialize Chroma DB with OpenAI Embeddings and load all documents
 reviews_vector_db = Chroma.from_documents(
-    all_documents,
+    formatted_documents,
     OpenAIEmbeddings(),
     persist_directory=CHROMA_PERSIST_PATH
 )
 
+# Step 5: Creating indexes on relevant fields for optimized querying
+reviews_vector_db.create_index(fields=["Name"])  # Index for Name
+reviews_vector_db.create_index(fields=["Rating"])  # Index for Rating
+reviews_vector_db.create_index(fields=["Year"])  # Index for Year
+reviews_vector_db.create_index(fields=["Comment"])  # Index for Comment
+
 # Persist the new data to disk
 reviews_vector_db.persist()
 
-print("All CSV files from the data folder have been successfully loaded into Chroma DB, and previous data was cleared.")
+print("All CSV files from the data folder have been successfully loaded into Chroma DB, previous data was cleared, and indexes were created.")
