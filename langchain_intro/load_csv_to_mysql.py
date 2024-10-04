@@ -12,7 +12,7 @@ MYSQL_HOST = os.getenv('MYSQL_HOST')
 MYSQL_USER = os.getenv('MYSQL_USER')
 MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
 MYSQL_DATABASE = os.getenv('MYSQL_DATABASE')
-DATA_FOLDER = os.getenv('DATA_FOLDER')  # Folder where CSV files are stored
+CSV_DATA_FOLDER = os.getenv('CSV_DATA_FOLDER')  # Folder where CSV files are stored
 
 def connect_to_mysql():
     """Connect to MySQL database"""
@@ -63,8 +63,7 @@ def load_csv_to_table(csv_file, connection):
             Name VARCHAR(255) NOT NULL,
             Rating INT,
             Review_Year INT,
-            Comment TEXT,
-            PRIMARY KEY (Name)
+            Comment TEXT
         )
         """
         cursor.execute(create_table_query)
@@ -110,7 +109,7 @@ if __name__ == "__main__":
         drop_all_tables(connection)
 
         # Load all CSV files from the data folder
-        load_all_csvs_from_folder(DATA_FOLDER, connection)
+        load_all_csvs_from_folder(CSV_DATA_FOLDER, connection)
 
         # Close the MySQL connection
         connection.close()
