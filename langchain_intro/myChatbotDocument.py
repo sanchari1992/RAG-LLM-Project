@@ -27,7 +27,7 @@ CORS(app)
 # MongoDB connection
 mongodb_uri = os.getenv('MONGODB_URI')
 database_name = os.getenv('DATABASE_NAME')
-reviews_collection_name = os.getenv('REVIEWS_COLLECTION')
+csv_data_folder = os.getenv('CSV_DATA_FOLDER')  # To load the collection names dynamically
 
 # Create a MongoDB client
 client = MongoClient(mongodb_uri)
@@ -62,10 +62,20 @@ review_prompt_template = ChatPromptTemplate(
 chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
 output_parser = StrOutputParser()
 
-# Function to retrieve reviews from MongoDB
+# Function to fetch the appropriate collection name based on incoming requests
+def get_collection_name_from_question(question):
+    # Here, implement logic to determine the collection name based on the question
+    # This could be done through keywords in the question, or you could maintain a mapping
+    # Example: return 'mental_health_centers' if 'center' in question.lower()
+    # For now, we assume a single collection for simplicity; adjust as needed.
+    return 'your_dynamic_collection_name'  # Placeholder, replace with actual logic
+
+# Function to retrieve reviews from MongoDB based on the dynamic collection name
 def fetch_reviews_from_mongodb(question):
+    collection_name = get_collection_name_from_question(question)  # Get the dynamic collection name
+
     # Search for relevant reviews based on the question (full-text search on 'Comment')
-    reviews = db[reviews_collection_name].find({
+    reviews = db[collection_name].find({
         "$text": {"$search": question}
     }).limit(10)
 
@@ -81,8 +91,7 @@ def fetch_reviews_from_mongodb(question):
         )
         context += review_content
     
-    return context
-
+    return context if context else "I don't know."
 
 # Modify the review_chain to use MongoDB data
 review_chain = (
@@ -105,7 +114,6 @@ tools = [
         """,
     ),
 ]
-
 
 mybot_agent_prompt = PromptTemplate(
     input_variables=["input", "agent_scratchpad"],
