@@ -12,6 +12,7 @@ MYSQL_HOST = os.getenv('MYSQL_HOST')
 MYSQL_USER = os.getenv('MYSQL_USER')
 MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
 MYSQL_DATABASE = os.getenv('MYSQL_DATABASE')
+DATA_FOLDER = os.getenv('DATA_FOLDER')  # Folder where CSV files are stored
 
 def connect_to_mysql():
     """Connect to MySQL database"""
@@ -59,11 +60,11 @@ def load_csv_to_table(csv_file, connection):
         # Create table if it doesn't exist
         create_table_query = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
-            reviewId VARCHAR(255) NOT NULL,
-            content TEXT,
-            score INT,
-            app TEXT,
-            PRIMARY KEY (reviewId)
+            Name VARCHAR(255) NOT NULL,
+            Rating INT,
+            Review_Year INT,
+            Comment TEXT,
+            PRIMARY KEY (Name)
         )
         """
         cursor.execute(create_table_query)
@@ -76,21 +77,29 @@ def load_csv_to_table(csv_file, connection):
         connection.commit()
         print(f"Data from {csv_file} successfully loaded into {table_name} table")
 
-        # Create a full-text index on 'content' column
-        cursor.execute(f"CREATE FULLTEXT INDEX idx_content ON {table_name} (content);")
-        print(f"Fulltext index on 'content' column created for {table_name}.")
+        # Create a full-text index on 'Comment' column
+        cursor.execute(f"CREATE FULLTEXT INDEX idx_comment ON {table_name} (Comment);")
+        print(f"Fulltext index on 'Comment' column created for {table_name}.")
 
-        # Add index on 'app' column for faster queries if it exists
-        if 'app' in df.columns:
-            add_index_query = f"CREATE INDEX idx_app ON {table_name} (app(255));"
+        # Add index on 'Review_Year' column for faster queries
+        if 'Review_Year' in df.columns:
+            add_index_query = f"CREATE INDEX idx_review_year ON {table_name} (Review_Year);"
             cursor.execute(add_index_query)
-            print(f"Index on 'app' column (first 255 characters) created for {table_name}.")
+            print(f"Index on 'Review_Year' column created for {table_name}.")
 
     except Error as e:
         print(f"Error while loading data into MySQL: {e}")
 
     finally:
         cursor.close()
+
+def load_all_csvs_from_folder(data_folder, connection):
+    """Load all CSV files from the specified folder into MySQL"""
+    for csv_file in os.listdir(data_folder):
+        if csv_file.endswith(".csv"):
+            full_path = os.path.join(data_folder, csv_file)
+            print(f"Processing file: {full_path}")
+            load_csv_to_table(full_path, connection)
 
 if __name__ == "__main__":
     # Connect to MySQL
@@ -100,9 +109,8 @@ if __name__ == "__main__":
         # Drop all existing tables in the database
         drop_all_tables(connection)
 
-        # Load the CSV file
-        CSV_FILE = os.getenv('CSV_FILE')
-        load_csv_to_table(CSV_FILE, connection)
+        # Load all CSV files from the data folder
+        load_all_csvs_from_folder(DATA_FOLDER, connection)
 
         # Close the MySQL connection
         connection.close()
