@@ -12,7 +12,6 @@ from langchain.prompts import (
 )
 from langchain_core.output_parsers import StrOutputParser
 from langchain.agents import create_openai_functions_agent, Tool, AgentExecutor
-from langchain.schema.runnable import RunnableLambda  # Import RunnableLambda
 import dotenv
 
 # Load environment variables
@@ -23,7 +22,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Set up logging
-# logging.basicConfig(level=logging.WARNING)  # Adjust logging level as needed
+logging.basicConfig(level=logging.WARNING)
 
 # MongoDB connection
 mongodb_uri = os.getenv('MONGODB_URI')
@@ -86,23 +85,20 @@ def fetch_all_reviews():
     return context if context else "I don't know."
 
 # Function to create the review chain
-def create_review_chain():
-    # Create a Runnable to fetch all reviews
-    fetch_reviews_runnable = RunnableLambda(lambda: fetch_all_reviews())  # Use RunnableLambda
+def create_review_chain(context, question):
+    # Construct the prompt
+    context_prompt = review_prompt_template.invoke({"context": context, "question": question})
     
-    review_chain = (
-        fetch_reviews_runnable
-        | review_prompt_template
-        | chat_model
-        | output_parser
-    )
-    return review_chain
+    # Get the answer from the chat model
+    answer = chat_model.invoke(context_prompt)
+
+    return output_parser.parse(answer)
 
 # Tool setup for the agent
 tools = [
     Tool(
         name="Reviews",
-        func=create_review_chain().invoke,
+        func=lambda question: create_review_chain(fetch_all_reviews(), question),
         description="""Useful when you need to answer questions
         about mental health center reviews in the database.
         The reviews include fields like 'Center Name', 'Rating', 'Review Year', and 'Comment'.
