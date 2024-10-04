@@ -10,6 +10,7 @@ from langchain.prompts import (
 )
 from langchain_core.output_parsers import StrOutputParser
 from langchain.agents import create_openai_functions_agent, Tool, AgentExecutor
+from langchain.schema.runnable import RunnablePassthrough  # Importing RunnablePassthrough
 import os
 import dotenv
 
