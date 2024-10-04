@@ -41,9 +41,13 @@ def connect_to_mysql():
         return None
 
 mysql_connection = connect_to_mysql()
+def truncate_review(review, max_words=100):
+    words = review.split()
+    if len(words) > max_words:
+        return " ".join(words[:max_words]) + "..."
+    return review
 
-# Function to fetch reviews from all tables in MySQL
-def fetch_reviews_from_db(question):
+def fetch_reviews_from_db(question, max_reviews_per_table=5):
     cursor = mysql_connection.cursor(dictionary=True)
 
     # Get all table names dynamically
@@ -51,22 +55,36 @@ def fetch_reviews_from_db(question):
     tables = [table['Tables_in_' + os.getenv('MYSQL_DATABASE')] for table in cursor.fetchall()]
     
     context = ""
+    token_count = 0  # Track the number of tokens
+
+    tokens_per_word = 1.3
+    max_tokens = 16000  # Stay below the limit
 
     # Query each table for matching reviews
     for table in tables:
         query = f"""
             SELECT Comment FROM {table}
             WHERE MATCH(Comment) AGAINST (%s IN NATURAL LANGUAGE MODE)
+            LIMIT {max_reviews_per_table}
         """
         cursor.execute(query, (question,))
         reviews = cursor.fetchall()
 
-        # Concatenate reviews into a single context
-        context += " ".join([review['Comment'] for review in reviews]) + " "
+        # Add reviews to the context, but truncate if too long
+        for review in reviews:
+            truncated_review = truncate_review(review['Comment'], max_words=50)
+            review_token_count = int(len(truncated_review.split()) * tokens_per_word)
+
+            if token_count + review_token_count < max_tokens:
+                context += truncated_review + " "
+                token_count += review_token_count
+            else:
+                break  # Stop if we exceed the token limit
 
     cursor.close()
 
-    return context.strip()  # Return the full context without extra whitespace
+    return context.strip()
+
 
 # Define the review templates
 review_template_str = """You are restricted to using ONLY the database entries provided to you.
