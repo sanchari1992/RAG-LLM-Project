@@ -1,142 +1,61 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from pymongo import MongoClient
-from langchain_openai import ChatOpenAI
-from langchain.prompts import (
-    PromptTemplate,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-    ChatPromptTemplate,
-)
-from langchain_core.output_parsers import StrOutputParser
-from langchain.agents import create_openai_functions_agent, Tool, AgentExecutor
-from langchain.schema.runnable import RunnablePassthrough, RunnableMap, RunnableSequence
 import os
-import dotenv
+import pandas as pd
+from pymongo import MongoClient
+from dotenv import load_dotenv
 
 # Load environment variables
-dotenv.load_dotenv()
+load_dotenv()
 
-# Flask app setup
-app = Flask(__name__)
-CORS(app)
-
-# MongoDB connection
+# MongoDB connection details from .env
 mongodb_uri = os.getenv('MONGODB_URI')
 database_name = os.getenv('DATABASE_NAME')
+csv_data_folder = os.getenv('CSV_DATA_FOLDER')  # Folder where CSV files are stored
 
 # Create a MongoDB client
 client = MongoClient(mongodb_uri)
 db = client[database_name]
 
-# Define the review templates
-review_template_str = """You are restricted to using ONLY the database entries provided to you.
-Do not answer any questions based on your own knowledge or any external sources. 
-You must base your answer entirely on the provided context. 
+# Function to get and print collection names
+def get_collection_names():
+    collection_names = db.list_collection_names()  # Retrieve the collection names
+    print("Collections in the database:")
+    for name in collection_names:
+        print(f"- {name}")  # Print each collection name
+    return collection_names
 
-If the context does not contain the information needed to answer the question, 
-respond with 'I don't know'. 
+# Function to load a single CSV file into MongoDB
+def load_csv_to_mongodb(csv_file, collection_name):
+    # Drop the collection if it exists
+    db[collection_name].drop()
 
-{context}
-"""
+    # Load data from CSV
+    data = pd.read_csv(csv_file)
+    records = data.to_dict(orient='records')  # Convert DataFrame to a list of dictionaries
 
-review_system_prompt = SystemMessagePromptTemplate(
-    prompt=PromptTemplate(input_variables=["context"], template=review_template_str)
-)
+    # Insert the records into MongoDB
+    collection = db[collection_name]
+    collection.insert_many(records)  # Insert the records into MongoDB
+    print(f"Loaded {len(records)} records into {collection_name}.")
 
-review_human_prompt = HumanMessagePromptTemplate(
-    prompt=PromptTemplate(input_variables=["question"], template="{question}")
-)
+    # Add a text index on the 'Comment' field for full-text search
+    collection.create_index([("Comment", "text")])  # Create a text index on the Comment field
+    print(f"Text index created on the 'Comment' field.")
 
-messages = [review_system_prompt, review_human_prompt]
-
-review_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question"],
-    messages=messages,
-)
-
-chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
-output_parser = StrOutputParser()
-
-# Function to retrieve all reviews from MongoDB
-def fetch_all_reviews():
-    collection_name = 'your_collection_name'  # Replace with your actual collection name
-    reviews = db[collection_name].find()
-
-    # Create a context string from the retrieved reviews
-    context = ""
-    for review in reviews:
-        review_content = (
-            f"Center: {review['Name']}\n"
-            f"Rating: {review['Rating']}/5\n"
-            f"Review Year: {review['Review_Year']}\n"
-            f"Comment: {review['Comment']}\n\n"
-        )
-        context += review_content
-    
-    return context if context else "I don't know."
-
-# Function to create the review chain
-def create_review_chain():
-    # Create a Runnable to fetch all reviews
-    fetch_reviews_runnable = RunnablePassthrough.from_function(fetch_all_reviews)
-    
-    review_chain = (
-        fetch_reviews_runnable
-        | review_prompt_template
-        | chat_model
-        | output_parser
-    )
-    return review_chain
-
-# Tool setup for the agent
-tools = [
-    Tool(
-        name="Reviews",
-        func=create_review_chain().invoke,
-        description="""Useful when you need to answer questions
-        about mental health center reviews in the database.
-        The reviews include fields like 'Center Name', 'Rating', 'Review Year', and 'Comment'.
-        Pass the entire question as input to the tool. For example,
-        if the question is "What do people think of Center A?",
-        the input should be "What do people think of Center A?"
-        """,
-    ),
-]
-
-# Agent setup
-mybot_agent_prompt = PromptTemplate(
-    input_variables=["input", "agent_scratchpad"],
-    template="""You are a helpful assistant. You must only answer questions based on the existing database information.
-
-    Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.'
-
-    Question: {input}
-    Agent Scratchpad: {agent_scratchpad}"""
-)
-
-mybot_agent = create_openai_functions_agent(
-    llm=chat_model,
-    prompt=mybot_agent_prompt,
-    tools=tools,
-)
-
-mybot_agent_executor = AgentExecutor(
-    agent=mybot_agent,
-    tools=tools,
-    return_intermediate_steps=False,
-    verbose=True,
-)
-
-@app.route("/ask", methods=["POST"])
-def ask_question():
-    try:
-        data = request.json
-        question = data.get("question", "")
-        result = mybot_agent_executor({"input": question})
-        return jsonify({"answer": result["output"]})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# Function to load all CSV files from the folder into MongoDB
+def load_all_csvs_to_mongodb(data_folder):
+    for csv_file in os.listdir(data_folder):
+        if csv_file.endswith(".csv"):
+            full_path = os.path.join(data_folder, csv_file)
+            collection_name = os.path.splitext(csv_file)[0]  # Use file name (without extension) as collection name
+            print(f"Processing file: {full_path}")
+            load_csv_to_mongodb(full_path, collection_name)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Load all CSV files from the specified folder into MongoDB
+    load_all_csvs_to_mongodb(csv_data_folder)
+
+    # Get and print collection names
+    get_collection_names()
+
+    # Close the MongoDB client
+    client.close()
