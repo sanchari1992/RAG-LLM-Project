@@ -23,7 +23,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Set up logging
-logging.basicConfig(level=logging.WARNING)  # Adjust logging level as needed
+# logging.basicConfig(level=logging.WARNING)  # Adjust logging level as needed
 
 # MongoDB connection
 mongodb_uri = os.getenv('MONGODB_URI')
