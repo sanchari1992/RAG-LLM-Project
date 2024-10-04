@@ -6,16 +6,16 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# MongoDB connection
+# MongoDB connection details from .env
 mongodb_uri = os.getenv('MONGODB_URI')
 database_name = os.getenv('DATABASE_NAME')
-reviews_collection_name = os.getenv('REVIEWS_COLLECTION')
+csv_data_folder = os.getenv('CSV_DATA_FOLDER')  # Folder where CSV files are stored
 
 # Create a MongoDB client
 client = MongoClient(mongodb_uri)
 db = client[database_name]
 
-# Function to load CSV to MongoDB
+# Function to load a single CSV file into MongoDB
 def load_csv_to_mongodb(csv_file, collection_name):
     # Drop the collection if it exists
     db[collection_name].drop()
@@ -29,15 +29,22 @@ def load_csv_to_mongodb(csv_file, collection_name):
     collection.insert_many(records)  # Insert the records into MongoDB
     print(f"Loaded {len(records)} records into {collection_name}.")
 
-    # Add a text index on the 'content' field for full-text search
-    collection.create_index([("content", "text")])  # Create a text index on the content field
-    print(f"Text index created on the 'content' field.")
+    # Add a text index on the 'Comment' field for full-text search
+    collection.create_index([("Comment", "text")])  # Create a text index on the Comment field
+    print(f"Text index created on the 'Comment' field.")
 
-# File paths
-reviews_file = os.getenv('CSV_FILE')
+# Function to load all CSV files from the folder into MongoDB
+def load_all_csvs_to_mongodb(data_folder):
+    for csv_file in os.listdir(data_folder):
+        if csv_file.endswith(".csv"):
+            full_path = os.path.join(data_folder, csv_file)
+            collection_name = os.path.splitext(csv_file)[0]  # Use file name (without extension) as collection name
+            print(f"Processing file: {full_path}")
+            load_csv_to_mongodb(full_path, collection_name)
 
-# Load the CSV files into MongoDB
-load_csv_to_mongodb(reviews_file, reviews_collection_name)
+if __name__ == "__main__":
+    # Load all CSV files from the specified folder into MongoDB
+    load_all_csvs_to_mongodb(csv_data_folder)
 
-# Close the MongoDB client
-client.close()
+    # Close the MongoDB client
+    client.close()
