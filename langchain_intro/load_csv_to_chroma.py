@@ -4,6 +4,7 @@ import dotenv
 from langchain.document_loaders.csv_loader import CSVLoader
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
+from langchain.schema import Document  # Import the Document class
 
 # Load environment variables from .env
 dotenv.load_dotenv()
@@ -39,22 +40,23 @@ for csv_file in os.listdir(CSV_DATA_FOLDER):
         except RuntimeError as e:
             print(f"Error loading {full_path}: {e}")
 
-# Step 3: Prepare documents for Chroma DB
+# Step 3: Prepare documents for Chroma DB as `Document` objects
 formatted_documents = []
 for doc in all_documents:
     # Extract fields from the Document object
     content = doc.page_content  # This contains the text content of the document
-    # If the Document has metadata, you can access it using doc.metadata
     metadata = doc.metadata if hasattr(doc, 'metadata') else {}
 
-    # Create a formatted document
-    formatted_doc = {
-        'Name': metadata.get('Name', ''),
-        'Rating': metadata.get('Rating', ''),
-        'Year': metadata.get('Year', ''),
-        'Comment': metadata.get('Comment', ''),
-        'text': f"Center: {metadata.get('Name', '')}, Rating: {metadata.get('Rating', '')}, Year: {metadata.get('Year', '')}, Comment: {metadata.get('Comment', '')}"
-    }
+    # Create a Document object for Chroma
+    formatted_doc = Document(
+        page_content=f"Center: {metadata.get('Name', '')}, Rating: {metadata.get('Rating', '')}, Year: {metadata.get('Year', '')}, Comment: {metadata.get('Comment', '')}",
+        metadata={
+            'Name': metadata.get('Name', ''),
+            'Rating': metadata.get('Rating', ''),
+            'Year': metadata.get('Year', ''),
+            'Comment': metadata.get('Comment', '')
+        }
+    )
     formatted_documents.append(formatted_doc)
 
 # Step 4: Initialize Chroma DB with OpenAI Embeddings and load all documents
@@ -64,13 +66,7 @@ reviews_vector_db = Chroma.from_documents(
     persist_directory=CHROMA_PERSIST_PATH
 )
 
-# Step 5: Creating indexes on relevant fields for optimized querying
-reviews_vector_db.create_index(fields=["Name"])  # Index for Name
-reviews_vector_db.create_index(fields=["Rating"])  # Index for Rating
-reviews_vector_db.create_index(fields=["Year"])  # Index for Year
-reviews_vector_db.create_index(fields=["Comment"])  # Index for Comment
-
-# Persist the new data to disk
+# Step 5: Persist the new data to disk
 reviews_vector_db.persist()
 
-print("All CSV files from the data folder have been successfully loaded into Chroma DB, previous data was cleared, and indexes were created.")
+print("All CSV files from the data folder have been successfully loaded into Chroma DB and previous data was cleared.")
