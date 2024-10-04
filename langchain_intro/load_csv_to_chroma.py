@@ -1,7 +1,6 @@
 import os
 import shutil
 import dotenv
-import pandas as pd
 from langchain.document_loaders.csv_loader import CSVLoader
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
@@ -43,13 +42,18 @@ for csv_file in os.listdir(CSV_DATA_FOLDER):
 # Step 3: Prepare documents for Chroma DB
 formatted_documents = []
 for doc in all_documents:
-    # Assuming `doc` has fields corresponding to the CSV columns
+    # Extract fields from the Document object
+    content = doc.page_content  # This contains the text content of the document
+    # If the Document has metadata, you can access it using doc.metadata
+    metadata = doc.metadata if hasattr(doc, 'metadata') else {}
+
+    # Create a formatted document
     formatted_doc = {
-        'Name': doc.get('Name'),
-        'Rating': doc.get('Rating'),
-        'Year': doc.get('Year'),
-        'Comment': doc.get('Comment'),
-        'text': f"Center: {doc.get('Name')}, Rating: {doc.get('Rating')}, Year: {doc.get('Year')}, Comment: {doc.get('Comment')}"  # Create a text representation
+        'Name': metadata.get('Name', ''),
+        'Rating': metadata.get('Rating', ''),
+        'Year': metadata.get('Year', ''),
+        'Comment': metadata.get('Comment', ''),
+        'text': f"Center: {metadata.get('Name', '')}, Rating: {metadata.get('Rating', '')}, Year: {metadata.get('Year', '')}, Comment: {metadata.get('Comment', '')}"
     }
     formatted_documents.append(formatted_doc)
 
