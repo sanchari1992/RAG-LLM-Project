@@ -1,5 +1,5 @@
 Details about file...
 *****
-P1."Who is a good therapist in the area?"
-P2."Which counseling center does Dr. Pam Pierce sit at?"
+P1."Which therapist has generally good reviews?"
+P2."Which counseling center does Dr. Pierce sit at?"
 *****
