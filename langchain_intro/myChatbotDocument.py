@@ -139,7 +139,7 @@ mybot_agent = create_openai_functions_agent(
 mybot_agent_executor = AgentExecutor(
     agent=mybot_agent,
     tools=tools,
-    return_intermediate_steps=False,
+    return_intermediate_steps=True,
     verbose=False,  # Set verbose to False to reduce console output
 )
 
