@@ -47,10 +47,11 @@ for doc in all_documents:
     content = doc.page_content  # This contains the text content of the document
     metadata = doc.metadata if hasattr(doc, 'metadata') else {}
 
-    # Create a Document object for Chroma
+    # Create a Document object for Chroma, now including 'Counseling Center'
     formatted_doc = Document(
-        page_content=f"Center: {metadata.get('Name', '')}, Rating: {metadata.get('Rating', '')}, Year: {metadata.get('Year', '')}, Comment: {metadata.get('Comment', '')}",
+        page_content=f"Counseling Center: {metadata.get('Counseling Center', '')}, Center: {metadata.get('Name', '')}, Rating: {metadata.get('Rating', '')}, Year: {metadata.get('Year', '')}, Comment: {metadata.get('Comment', '')}",
         metadata={
+            'Counseling Center': metadata.get('Counseling Center', ''),
             'Name': metadata.get('Name', ''),
             'Rating': metadata.get('Rating', ''),
             'Year': metadata.get('Year', ''),
