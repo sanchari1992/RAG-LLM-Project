@@ -56,7 +56,8 @@ def write_responses(questions, answers, output_file):
         file.write("*****\n")
         
         for question, answer in zip(questions, answers):
-            file.write(f"{question}\n{answer}")
+#            file.write(f"{question}\n{answer}")
+            file.write(f"{answer}")
             file.write("*****\n")
 
 if __name__ == "__main__":

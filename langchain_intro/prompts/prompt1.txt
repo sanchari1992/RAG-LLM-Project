@@ -1,5 +1,5 @@
 Details about file...
 *****
-P1."Which therapist would you recommend at Thriveworks Counseling & Therapy?"
-P2."Which year were most reviews to Thriveworks Counseling & Therapy posted?"
+P1."Who is a good therapist in the area?"
+P2."Which counseling center does Dr. Pam Pierce sit at?"
 *****
