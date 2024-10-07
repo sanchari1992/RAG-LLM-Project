@@ -75,7 +75,8 @@ def fetch_all_reviews():
         reviews = db[collection_name].find()
         for review in reviews:
             review_content = (
-                f"Center: {review['Name']}\n"
+                f"Center: {review['Counseling Center']}\n"
+                f"Name: {review['Name']}\n"
                 f"Rating: {review['Rating']}/5\n"  # Use the correct column name
                 f"Review Year: {review['Review Year']}\n"
                 f"Comment: {review['Comment']}\n\n"
@@ -110,7 +111,7 @@ tools = [
         name="Reviews",
         func=lambda question: create_review_chain(fetch_all_reviews(), question),
         description="""Useful when you need to answer questions
-        about mental health center reviews in the database.
+        about therapists and mental health centers based on the reviews in the database.
         The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.
         Pass the entire question as input to the tool. For example,
         if the question is "What do people think of Center A?",
