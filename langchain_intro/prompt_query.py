@@ -31,23 +31,24 @@ def get_answers(questions):
         try:
             question_number, question_text = question.split('.', 1)
             question_payload = {"question": question_text.strip()}
-            
+
             # Sending POST request and waiting for response
             response = requests.post(api_url, headers=headers, data=json.dumps(question_payload), timeout=300)
-            
+
             if response.status_code == 200:
                 answer_data = response.json()
                 answer = answer_data.get("answer", "No answer received.")
             else:
                 answer = "Failed to get answer."
 
-            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA1.\"{answer}\"\n")
+            # Format the answer properly and append it
+            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA{question_number}.\"{answer}\"\n")
         except Exception as e:
-            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA1.\"Error: {str(e)}\"\n")
+            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA{question_number}.\"Error: {str(e)}\"\n")
     return answers
 
 # Function to write responses to the output file
-def write_responses(questions, answers, output_file):
+def write_responses(answers, output_file):
     current_time = datetime.now().strftime("%H:%M:%S")
     current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -55,8 +56,7 @@ def write_responses(questions, answers, output_file):
         file.write(f"Responses: Time: {current_time} Date: {current_date}\n")
         file.write("*****\n")
         
-        for question, answer in zip(questions, answers):
-#            file.write(f"{question}\n{answer}")
+        for answer in answers:
             file.write(f"{answer}")
             file.write("*****\n")
 
@@ -92,6 +92,6 @@ if __name__ == "__main__":
     answers = get_answers(questions)
 
     # Write the responses to the output file
-    write_responses(questions, answers, output_file)
+    write_responses(answers, output_file)
 
     print(f"Responses have been written to {output_file}")
