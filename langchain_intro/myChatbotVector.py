@@ -83,7 +83,7 @@ tools = [
         func=review_chain.invoke,
         description="""Useful when you need to answer questions
         about mental health center reviews in the database.
-        The reviews include fields like 'Center Name', 'Rating', 'Review Year', and 'Comment'.
+        The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.
         Pass the entire question as input to the tool. For example,
         if the question is "What do people think of Center A?",
         the input should be "What do people think of Center A?"
