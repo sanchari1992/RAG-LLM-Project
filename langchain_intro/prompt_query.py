@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 import time
@@ -59,15 +60,30 @@ def write_responses(questions, answers, output_file):
             file.write("*****\n")
 
 if __name__ == "__main__":
-    # Ask user for the input file name
-    input_file = input("Please enter the name of the input file (with extension): ")
-    input_file = "./prompts/" + input_file
+    # Define the base path for the langchain_intro directory
+    base_path = os.path.dirname(__file__)
 
-    # Generate the output file name based on current datetime
+    # Define subfolders for prompts and responses
+    prompts_folder = os.path.join(base_path, 'prompts')
+    responses_folder = os.path.join(base_path, 'responses')
+
+    # Ask user for the input file name
+    input_file_name = input("Please enter the name of the input file (with extension): ")
+
+    # Generate the full path for the input file
+    input_file = os.path.join(prompts_folder, input_file_name)
+
+    # Generate the output file name based on the current datetime
     current_datetime = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_file = f"response_{current_datetime}.txt"
-    output_file = "./responses/" + output_file
+    output_file_name = f"response_{current_datetime}.txt"
+
+    # Generate the full path for the output file
+    output_file = os.path.join(responses_folder, output_file_name)
     
+    # Ensure the responses directory exists
+    if not os.path.exists(responses_folder):
+        os.makedirs(responses_folder)
+
     # Extract questions from the input file
     questions = extract_questions(input_file)
 
