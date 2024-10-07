@@ -1,4 +1,4 @@
-Details about file...
+Details about file.
 *****
 P1."Which therapy center has the highest overall rating?"
 P2."Can you provide a list of therapy centers with a 5-star rating?"
@@ -18,7 +18,7 @@ P15."Is there a particular year when a center received very low ratings?"
 P16."Can you recommend a center based on reviews for anxiety treatment?"
 P17."Which therapy center is recommended by clients for its compassionate staff?"
 P18."If I want quick appointments, which therapy center should I choose based on reviews?"
-P19."Can you show me reviews that mention “effective therapy” or similar terms?"
+P19."Can you show me reviews that mention effective therapy or similar terms?"
 P20."What do reviews say about the cleanliness of the facilities?"
 P21."Are the reviews for therapy centers in Birmingham mostly positive or negative?"
 P22."Which center has the highest number of negative reviews?"
