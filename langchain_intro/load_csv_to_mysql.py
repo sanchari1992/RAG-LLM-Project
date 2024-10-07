@@ -60,6 +60,7 @@ def load_csv_to_table(csv_file, connection):
         # Create table if it doesn't exist
         create_table_query = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
+            Counseling_Center VARCHAR(255),
             Name VARCHAR(255) NOT NULL,
             Rating INT,
             Review_Year INT,
