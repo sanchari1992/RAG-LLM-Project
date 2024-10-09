@@ -111,7 +111,7 @@ tools = [
         name="Reviews",
         func=lambda question: create_review_chain(fetch_all_reviews(), question),
         description="""Useful when you need to answer questions
-        about therapists and mental health centers based on the reviews in the database.
+        about therapists and mental health counseling centers based on the reviews in the database.
         The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.
         Pass the entire question as input to the tool. For example,
         if the question is "What do people think of Center A?",
