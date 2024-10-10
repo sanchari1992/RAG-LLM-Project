@@ -13,8 +13,8 @@ nltk.download('stopwords')
 load_dotenv()
 
 # Define the folder paths
-DATA_FOLDER = 'data'  # Folder where the original CSV files are stored
-CLEANED_DATA_FOLDER = 'cleaned_data'  # Folder to store the cleaned CSV files
+DATA_FOLDER = os.getenv('CSV_DATA_FOLDER')
+CLEANED_DATA_FOLDER =os.getenv('CLEANED_CSV_FOLDER')  # Folder to store the cleaned CSV files
 
 # Create the cleaned_data folder if it doesn't exist
 if not os.path.exists(CLEANED_DATA_FOLDER):
