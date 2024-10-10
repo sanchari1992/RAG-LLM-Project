@@ -1,16 +1,10 @@
 import os
 import pandas as pd
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
+import spacy
 from dotenv import load_dotenv
 
-# Download the stopwords from nltk
-nltk.download('punkt')
-nltk.download('stopwords')
-
-# Load environment variables from .env file if needed
-load_dotenv()
+# Load spaCy's English model
+nlp = spacy.load('en_core_web_sm')
 
 # Define the folder paths
 DATA_FOLDER = os.getenv('CSV_DATA_FOLDER')
@@ -20,16 +14,13 @@ CLEANED_DATA_FOLDER =os.getenv('CLEANED_CSV_FOLDER')  # Folder to store the clea
 if not os.path.exists(CLEANED_DATA_FOLDER):
     os.makedirs(CLEANED_DATA_FOLDER)
 
-# Get stop words from NLTK
-stop_words = set(stopwords.words('english'))
-
 def clean_comment(comment):
-    """Remove filler words (stopwords) from the comment and return the cleaned text."""
-    # Tokenize the comment into words
-    words = word_tokenize(comment)
+    """Remove filler words (stopwords) from the comment using spaCy and return the cleaned text."""
+    # Process the comment using spaCy
+    doc = nlp(comment)
 
-    # Remove stopwords and join the remaining words back into a sentence
-    cleaned_words = [word for word in words if word.lower() not in stop_words]
+    # Remove stopwords and punctuation, and join the remaining words into a sentence
+    cleaned_words = [token.text for token in doc if not token.is_stop and not token.is_punct]
 
     return ' '.join(cleaned_words)
 
