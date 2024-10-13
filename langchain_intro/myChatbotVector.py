@@ -1,128 +1,60 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS  # Import CORS
+import os
+import shutil
 import dotenv
-from langchain_openai import ChatOpenAI
-from langchain.prompts import (
-    PromptTemplate,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-    ChatPromptTemplate,
-)
-from langchain_core.output_parsers import StrOutputParser
+from flask import Flask, request, jsonify
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAIEmbeddings
-from langchain.schema.runnable import RunnablePassthrough
-from langchain.agents import (
-    create_openai_functions_agent,
-    Tool,
-    AgentExecutor,
-)
+from langchain_openai import OpenAIEmbeddings, OpenAI
+from langchain.chains import RetrievalQA
+from langchain.prompts import PromptTemplate
 
-# Load environment variables
+# Load environment variables from .env
 dotenv.load_dotenv()
 
+# Initialize Flask app
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
 
-REVIEWS_CHROMA_PATH = "chroma_data/"
+# Paths for Chroma persistence directory
+CHROMA_PERSIST_PATH = "chroma_data"
 
-# Initialize Chroma vector DB for reviews
+# Step 1: Load the existing Chroma DB
 reviews_vector_db = Chroma(
-    persist_directory=REVIEWS_CHROMA_PATH,
+    persist_directory=CHROMA_PERSIST_PATH,
     embedding_function=OpenAIEmbeddings()
 )
 
-# Set up the retriever from the Chroma DB
-reviews_retriever = reviews_vector_db.as_retriever(k=10)
+# Step 2: Define the custom prompt template to restrict answers to database data
+prompt_template = """
+You are an AI assistant specialized in mental health therapy center reviews from Birmingham, Alabama.
+Only answer questions based on the data provided. If the answer is not in the data, respond with "I don't know".
 
-# Define the review templates
-review_template_str = """You are restricted to using ONLY the database entries provided to you.
-Do not answer any questions based on your own knowledge or any external sources. 
-You must base your answer entirely on the provided context. 
+Question: {question}
 
-If the context does not contain the information needed to answer the question, 
-respond with 'I don't know'. 
-
-{context}
+Answer:
 """
 
-review_system_prompt = SystemMessagePromptTemplate(
-    prompt=PromptTemplate(
-        input_variables=["context"],
-        template=review_template_str,
-    )
+# Step 3: Create the QA chain using the Chroma database as a retriever and GPT as the model
+qa_chain = RetrievalQA.from_chain_type(
+    llm=OpenAI(model="gpt-3.5-turbo-0125"),
+    retriever=reviews_vector_db.as_retriever(),
+    chain_type="stuff",  # This uses the default question-answering chain
+    return_source_documents=False,  # If you want to see source documents, set this to True
+    prompt=PromptTemplate(input_variables=["question"], template=prompt_template)
 )
 
-review_human_prompt = HumanMessagePromptTemplate(
-    prompt=PromptTemplate(
-        input_variables=["question"],
-        template="{question}",
-    )
-)
-
-messages = [review_system_prompt, review_human_prompt]
-
-review_prompt_template = ChatPromptTemplate(
-    input_variables=["context", "question"],
-    messages=messages,
-)
-
-chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
-output_parser = StrOutputParser()
-
-review_chain = (
-    {"context": reviews_retriever, "question": RunnablePassthrough()}
-    | review_prompt_template
-    | chat_model
-    | output_parser
-)
-
-tools = [
-    Tool(
-        name="Reviews",
-        func=review_chain.invoke,
-        description="""Useful when you need to answer questions
-        about therapists and mental health counseling centers based on the reviews in the database.
-        The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.
-        Pass the entire question as input to the tool. For example,
-        if the question is "What do people think of Center A?",
-        the input should be "What do people think of Center A?"
-        """,
-    ),
-]
-
-mybot_agent_prompt = PromptTemplate(
-    input_variables=["input", "agent_scratchpad"],
-    template="""You are a helpful assistant. You must only answer questions based on the existing database information.
-
-    Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.'
-
-    Question: {input}
-    Agent Scratchpad: {agent_scratchpad}"""
-)
-
-mybot_agent = create_openai_functions_agent(
-    llm=chat_model,
-    prompt=mybot_agent_prompt,
-    tools=tools,
-)
-
-mybot_agent_executor = AgentExecutor(
-    agent=mybot_agent,
-    tools=tools,
-    return_intermediate_steps=False,
-    verbose=True,
-)
-
+# Step 4: Define the POST route for asking questions
 @app.route("/ask", methods=["POST"])
 def ask_question():
     try:
         data = request.json
         question = data.get("question", "")
-        result = mybot_agent_executor({"input": question})
-        return jsonify({"answer": result["output"]})
+        
+        # Use the agent to process the question
+        result = qa_chain({"question": question})
+        
+        return jsonify({"answer": result["result"]})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Step 5: Run the Flask app
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
