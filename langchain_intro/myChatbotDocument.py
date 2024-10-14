@@ -21,8 +21,8 @@ dotenv.load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# Set up logging
-logging.basicConfig(level=logging.WARNING)
+# # Set up logging
+# logging.basicConfig(level=logging.WARNING)
 
 # MongoDB connection
 mongodb_uri = os.getenv('MONGODB_URI')
@@ -31,10 +31,6 @@ database_name = os.getenv('DATABASE_NAME')
 # Create a MongoDB client
 client = MongoClient(mongodb_uri)
 db = client[database_name]
-
-# Function to get and print collection names
-def get_collection_names():
-    return db.list_collection_names()  # Retrieve the collection names
 
 # Define the review templates
 review_template_str = """You are restricted to using ONLY the database entries provided to you.
@@ -65,38 +61,29 @@ review_prompt_template = ChatPromptTemplate(
 chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
 output_parser = StrOutputParser()
 
-# Function to retrieve all reviews from all collections in MongoDB
-def fetch_all_reviews():
-    context = ""
-    collection_names = get_collection_names()  # Get all collection names
-
-    # Iterate over each collection and retrieve reviews
-    for collection_name in collection_names:
-        reviews = db[collection_name].find()
-        for review in reviews:
-            review_content = (
-                f"Center: {review['Counseling Center']}\n"
-                f"Name: {review['Name']}\n"
-                f"Rating: {review['Rating']}/5\n"  # Use the correct column name
-                f"Review Year: {review['Review Year']}\n"
-                f"Comment: {review['Comment']}\n\n"
-            )
-            context += review_content
+# Function to fetch relevant reviews based on the question
+def fetch_relevant_reviews(question):
+    # Example: Query the database for reviews containing keywords from the question
+    keywords = question.split()  # Basic keyword extraction, you can improve this
+    query = {"$or": [{"Comment": {"$regex": keyword, "$options": "i"}} for keyword in keywords]}
+    reviews = db.reviews.find(query)  # Adjust according to your collection structure
     
-    # Return context or a default message if empty
+    context = ""
+    for review in reviews:
+        review_content = (
+            f"Center: {review['Counseling Center']}\n"
+            f"Name: {review['Name']}\n"
+            f"Rating: {review['Rating']}/5\n"
+            f"Review Year: {review['Review Year']}\n"
+            f"Comment: {review['Comment']}\n\n"
+        )
+        context += review_content
+    
     return context if context else "I don't know."
 
-# Function to truncate context to a specific length
-def truncate_context(context, max_length=4000):
-    if len(context) > max_length:
-        return context[:max_length] + "... (truncated)"
-    return context
-
 # Function to create the review chain
-def create_review_chain(context, question):
-    # Truncate the context if it's too long
-    context = truncate_context(context)
-
+def create_review_chain(question):
+    context = fetch_relevant_reviews(question)
     # Construct the prompt
     context_prompt = review_prompt_template.invoke({"context": context, "question": question})
     
@@ -109,7 +96,7 @@ def create_review_chain(context, question):
 tools = [
     Tool(
         name="Reviews",
-        func=lambda question: create_review_chain(fetch_all_reviews(), question),
+        func=create_review_chain,
         description="""Useful when you need to answer questions
         about therapists and mental health counseling centers based on the reviews in the database.
         The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.
@@ -141,7 +128,7 @@ mybot_agent_executor = AgentExecutor(
     agent=mybot_agent,
     tools=tools,
     return_intermediate_steps=True,
-    verbose=True,  # Set verbose to False to reduce console output
+    verbose=True,
 )
 
 @app.route("/ask", methods=["POST"])
