@@ -1,0 +1,78 @@
+Responses: Time: 21:57:13 Date: 2024-10-13
+*****
+P1.""Which therapy center has the highest overall rating?""
+AP1."The therapy center with the highest overall rating is Angelica Bellman. She received a five-star rating and a comment expressing that she deserves 10 stars."
+*****
+P2.""Can you provide a list of therapy centers with a 5-star rating?""
+AP2."Agent stopped due to iteration limit or time limit."
+*****
+P3.""Which counseling center received the most recent review?""
+AP3."Agent stopped due to iteration limit or time limit."
+*****
+P4.""Which center has improved the most in terms of reviews since 2020?""
+AP4."Agent stopped due to iteration limit or time limit."
+*****
+P5.""What do people generally think about the customer service at Thriveworks Counseling?""
+AP5."Agent stopped due to iteration limit or time limit."
+*****
+P6.""What are the most common compliments mentioned for therapy center Alabama Psychiatry?""
+AP6."Agent stopped due to iteration limit or time limit."
+*****
+P7.""Are there any complaints about long wait times in the reviews?""
+AP7."I don't know."
+*****
+P8.""What do people say about the quality of therapists at Restorative Counseling?""
+AP8."Agent stopped due to iteration limit or time limit."
+*****
+P9.""Which center is praised the most for its friendly staff?""
+AP9."The center that is praised the most for its friendly staff is the office mentioned in the reviews. The reviews consistently mention that the staff at this office is friendly and helpful."
+*****
+P10.""How does the rating of Birmingham Anxiety and Trauma Therapy compare to Eastside Mental Health?""
+AP10."Agent stopped due to iteration limit or time limit."
+*****
+P11.""Which counseling center has better reviews for its atmosphere?""
+AP11."Agent stopped due to iteration limit or time limit."
+*****
+P12.""Are there more positive reviews for therapy center Restorative Counseling or Alabama Psychiatry and Counseling?""
+AP12."Based on the available database information, there are positive reviews for Alabama Psychiatry and Counseling. Restorative Counseling is not mentioned in the provided database entries, so I cannot compare the number of positive reviews between the two therapy centers."
+*****
+P13.""Which therapy center has a better rating for 2022 reviews?""
+AP13."Agent stopped due to iteration limit or time limit."
+*****
+P14.""Have there been more positive or negative reviews for Birmingham Anxiety and Trauma Therapy in 2023?""
+AP14."Agent stopped due to iteration limit or time limit."
+*****
+P15.""Is there a particular year when a center received very low ratings?""
+AP15."Agent stopped due to iteration limit or time limit."
+*****
+P16.""Can you recommend a center based on reviews for anxiety treatment?""
+AP16."Based on the provided reviews, the following mental health professionals are highly recommended for anxiety treatment:
+
+1. Rachel Lawley: According to a review, seeing Rachel Lawley has changed someone's life positively, helping them deal with anxiety effectively.
+
+2. Dr. Paulk: Dr. Paulk is dedicated to the growth of her clients and provides a warm and supportive energy necessary for anxiety treatment.
+
+3. Pam Pierce: Pam Pierce is an excellent therapist who keeps up with what clients have told her, evaluates underlying issues, and provides real-life recommendations on how to overcome situations related to anxiety.
+
+4. Brandy Smith: Brandy Smith is compassionate, listens well, and tries to understand clients' needs. With years of experience, she provides treatment for various concerns, including anxiety.
+
+These professionals have received positive feedback for their ability to help individuals dealing with anxiety-related issues."
+*****
+P17.""Which therapy center is recommended by clients for its compassionate staff?""
+AP17."Agent stopped due to iteration limit or time limit."
+*****
+P18.""If I want quick appointments, which therapy center should I choose based on reviews?""
+AP18."Agent stopped due to iteration limit or time limit."
+*****
+P19.""Can you show me reviews that mention effective therapy or similar terms?""
+AP19."Agent stopped due to iteration limit or time limit."
+*****
+P20.""What do reviews say about the cleanliness of the facilities?""
+AP20."Agent stopped due to iteration limit or time limit."
+*****
+P21.""Are the reviews for therapy centers in Birmingham mostly positive or negative?""
+AP21."Agent stopped due to iteration limit or time limit."
+*****
+P22.""Which center has the highest number of negative reviews?""
+AP22."Agent stopped due to iteration limit or time limit."
+*****
