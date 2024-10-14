@@ -22,5 +22,4 @@ P19."Can you show me reviews that mention effective therapy or similar terms?"
 P20."What do reviews say about the cleanliness of the facilities?"
 P21."Are the reviews for therapy centers in Birmingham mostly positive or negative?"
 P22."Which center has the highest number of negative reviews?"
-P23."Which therapist has good reviews?"
 *****
