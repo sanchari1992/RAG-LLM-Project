@@ -62,7 +62,7 @@ review_prompt_template = ChatPromptTemplate(
     messages=messages,
 )
 
-chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
+chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0, max_tokens=200)
 output_parser = StrOutputParser()
 
 # Function to retrieve all reviews from all collections in MongoDB

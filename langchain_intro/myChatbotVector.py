@@ -69,7 +69,7 @@ review_prompt_template = ChatPromptTemplate(
 )
 
 # Step 4: Set up the ChatOpenAI model and output parser
-chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
+chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0, max_tokens=200)
 output_parser = StrOutputParser()
 
 # Step 5: Create the review chain, combining the retriever, prompt template, and chat model

@@ -108,7 +108,7 @@ review_human_prompt = HumanMessagePromptTemplate(
 messages = [review_system_prompt, review_human_prompt]
 review_prompt_template = ChatPromptTemplate(input_variables=["context", "question"], messages=messages)
 
-chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
+chat_model = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0, max_tokens=200)
 output_parser = StrOutputParser()
 
 # Replace Chroma with MySQL-based retrieval
