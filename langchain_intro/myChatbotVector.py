@@ -17,6 +17,7 @@ from langchain.agents import (
     Tool,
     AgentExecutor,
 )
+from langchain import hub
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -36,13 +37,9 @@ reviews_vector_db = Chroma(
 reviews_retriever = reviews_vector_db.as_retriever(k=10)  # Fetch top 10 matches
 
 # Step 3: Define the review templates
-review_template_str = """
-You are restricted to using ONLY the database entries provided to you.
-Do not answer any questions based on your own knowledge or any external sources. 
-You must base your answer entirely on the provided context. 
-
-If the context does not contain the information needed to answer the question, 
-respond with 'I don't know'. 
+review_template_str = """DO NOT INVOKE MORE THAN ONCE. You are restricted to using ONLY the database entries provided to you. 
+Do not answer any questions based on your own knowledge or any external sources.  Use only the following context to answer questions.
+Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options. Return whatever information you get in the first try itself. No need to refine further for a better answer. 
 
 {context}
 """
@@ -85,8 +82,9 @@ tools = [
     Tool(
         name="Reviews",
         func=review_chain.invoke,
-        description="""Useful when you need to answer questions
-        about therapists and mental health counseling centers based on the reviews in the database.
+        description="""Useful when you need to answer questions from the Chromadb database
+        about mental health counseling centers - their ratings, rankings, staff, affordability, properties etc based on the reviews in the database.
+        There are five relations on five different counseling centers in Birmingham, Alabama.
         The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.
         Pass the entire question as input to the tool. For example,
         if the question is "What do people think of Center A?",
@@ -95,16 +93,17 @@ tools = [
     ),
 ]
 
+mybot_agent_prompt = hub.pull("hwchase17/openai-functions-agent")
 # Step 7: Create the agent's prompt
-mybot_agent_prompt = PromptTemplate(
-    input_variables=["input", "agent_scratchpad"],
-    template="""You are a helpful assistant. You must only answer questions based on the existing database information.
+# mybot_agent_prompt = PromptTemplate(
+#     input_variables=["input", "agent_scratchpad"],
+#     template="""You are a helpful assistant. You must only answer questions based on the existing database information.
 
-    Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.'
+#     Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.'
 
-    Question: {input}
-    Agent Scratchpad: {agent_scratchpad}"""
-)
+#     Question: {input}
+#     Agent Scratchpad: {agent_scratchpad}"""
+# )
 
 # Step 8: Set up the agent with the OpenAI model and tools
 mybot_agent = create_openai_functions_agent(
@@ -116,11 +115,11 @@ mybot_agent = create_openai_functions_agent(
 mybot_agent_executor = AgentExecutor(
     agent=mybot_agent,
     tools=tools,
-    return_intermediate_steps=False,
-    verbose=True,
+    return_intermediate_steps=True,
+    verbose=True,  # Set verbose to False to reduce console output
+    max_iterations=5
 )
 
-# Step 9: Flask API to handle POST requests
 @app.route("/ask", methods=["POST"])
 def ask_question():
     try:
@@ -130,6 +129,6 @@ def ask_question():
         return jsonify({"answer": result["output"]})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+    
 if __name__ == "__main__":
     app.run(debug=True)
