@@ -89,13 +89,19 @@ def fetch_reviews_from_db(question, max_reviews_per_table=5):
 # Define the review templates
 review_template_str = """You are restricted to using ONLY the database entries provided to you.
 Do not answer any questions based on your own knowledge or any external sources. 
-You must base your answer entirely on the provided context. 
+You must base your answer entirely on the provided context.
 
-If the context does not contain the information needed to answer the question, 
-respond with 'I don't know'. 
+Your task is to summarize the sentiment of the reviews. Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options.
+
+If a review mentions staff being friendly or rude, summarize that sentiment. If the context does not contain the information needed to answer the question, respond with 'I don't know.'
+
+Here are examples of how to respond:
+- If the reviews say, "The staff at XYZ Counseling are very friendly and helpful," you could respond, "The staff at XYZ Counseling are considered friendly by reviewers."
+- If no reviews mention a certain aspect, you should respond, "I don't know."
 
 {context}
 """
+
 
 review_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(input_variables=["context"], template=review_template_str)
@@ -149,7 +155,7 @@ mybot_agent_executor = AgentExecutor(
     agent=mybot_agent,
     tools=tools,
     return_intermediate_steps=False,
-    verbose=True,
+    verbose=True
 )
 
 @app.route("/ask", methods=["POST"])
