@@ -41,6 +41,7 @@ def connect_to_mysql():
         return None
 
 mysql_connection = connect_to_mysql()
+
 def truncate_review(review, max_words=100):
     words = review.split()
     if len(words) > max_words:
@@ -95,13 +96,14 @@ Your task is to summarize the sentiment of the reviews. Look for trends in the c
 
 If a review mentions staff being friendly or rude, summarize that sentiment. If the context does not contain the information needed to answer the question, respond with 'I don't know.'
 
+Please aim to answer the question within 5 iterations.
+
 Here are examples of how to respond:
 - If the reviews say, "The staff at XYZ Counseling are very friendly and helpful," you could respond, "The staff at XYZ Counseling are considered friendly by reviewers."
 - If no reviews mention a certain aspect, you should respond, "I don't know."
 
 {context}
 """
-
 
 review_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(input_variables=["context"], template=review_template_str)
@@ -155,7 +157,8 @@ mybot_agent_executor = AgentExecutor(
     agent=mybot_agent,
     tools=tools,
     return_intermediate_steps=False,
-    verbose=True
+    verbose=True,
+    max_iterations=5  # Restrict to a maximum of 5 iterations
 )
 
 @app.route("/ask", methods=["POST"])
