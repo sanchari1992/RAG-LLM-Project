@@ -108,7 +108,7 @@ tools = [
     Tool(
         name="Reviews",
         func=lambda question: create_review_chain(fetch_all_reviews(), question),
-        description="""Useful when you need to answer questions
+        description="""Useful when you need to answer questions from the MongoDB database
         about mental health counseling centers - their ratings, rankings, staff, affordability, properties etc based on the reviews in the database.
         There are five relations on five different counseling centers in Birmingham, Alabama.
         The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.

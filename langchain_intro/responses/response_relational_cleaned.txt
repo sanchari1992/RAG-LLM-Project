@@ -1,0 +1,146 @@
+Responses: Time: 15:13:53 Date: 2024-10-20
+*****
+P1.""Does Alabama Psychiatry and Counseling have generally good rankings in the reviews?""
+AP1."Alabama Psychiatry and Counseling has generally good rankings in the reviews. Clients have expressed satisfaction with the staff, scheduling options, and services provided. Dr. Rabani, in particular, has received praise for being kind, helpful, and accommodating."
+Response Time: 2.65 seconds
+*****
+P2.""Does Alabama Psychiatry and Counseling have generally poor rankings in the reviews?""
+AP2."The reviews for Alabama Psychiatry and Counseling are generally positive, with comments praising the staff, helpfulness, and overall experience with the psychiatrists at the practice."
+Response Time: 1.90 seconds
+*****
+P3.""Are the staff at Eastside Mental Health considered friendly by reviewers?""
+AP3."Yes, the staff at Eastside Mental Health are considered friendly by reviewers."
+Response Time: 1.60 seconds
+*****
+P4.""Are the staff at Eastside Mental Health considered rude by reviewers?""
+AP4."Yes, the staff at Eastside Mental Health are considered rude by reviewers."
+Response Time: 1.81 seconds
+*****
+P5.""Does Thriveworks Counseling and Therapy have many 4-star and above ratings?""
+AP5."Based on the comments provided, Thriveworks Counseling and Therapy seems to have positive feedback with many 5-star ratings."
+Response Time: 2.27 seconds
+*****
+P6.""Does Thriveworks Counseling and Therapy have many 2-star and below ratings?""
+AP6."No, Thriveworks Counseling and Therapy does not have many 2-star and below ratings."
+Response Time: 2.94 seconds
+*****
+P7.""Do reviews of Birmingham Anxiety and Trauma Therapy mention flexible scheduling options?""
+AP7."The reviews of Birmingham Anxiety and Trauma Therapy do not mention flexible scheduling options."
+Response Time: 2.71 seconds
+*****
+P8.""Are there complaints about the scheduling not being flexible at Birmingham Anxiety and Trauma Therapy?""
+AP8."Yes, there are complaints about scheduling issues at Birmingham Anxiety and Trauma Therapy. Some comments mention issues with appointments not being kept on time and feeling like they were not given enough attention during sessions."
+Response Time: 2.20 seconds
+*****
+P9.""Have people found it easy to schedule appointments at Restorative Counseling Services?""
+AP9."Yes, people have found it easy to schedule appointments at Restorative Counseling Services."
+Response Time: 2.09 seconds
+*****
+P10.""Have people found it difficult to schedule appointments at Restorative Counseling Services?""
+AP10."Yes, people have found it difficult to schedule appointments at Restorative Counseling Services."
+Response Time: 1.77 seconds
+*****
+P11.""Do people find the services at Alabama Psychiatry and Counseling expensive?""
+AP11."There is no specific mention of the services at Alabama Psychiatry and Counseling being expensive in the comments provided."
+Response Time: 2.06 seconds
+*****
+P12.""Do people find the services at Alabama Psychiatry and Counseling affordable?""
+AP12."There is no specific mention of the affordability of services at Alabama Psychiatry and Counseling in the comments provided."
+Response Time: 1.97 seconds
+*****
+P13.""Which center has more good rankings, Eastside Mental Health or Restorative Counseling Services?""
+AP13."Restorative Counseling Services has more positive rankings compared to Eastside Mental Health."
+Response Time: 1.83 seconds
+*****
+P14.""Which center has more poor rankings, Eastside Mental Health or Restorative Counseling Services?""
+AP14."Restorative Counseling Services has more poor rankings based on the comments provided."
+Response Time: 1.93 seconds
+*****
+P15.""Are the staff at Birmingham Anxiety and Trauma Therapy seen as friendlier than those at Thriveworks Counseling and Therapy?""
+AP15."Based on the reviews, the staff at Birmingham Anxiety and Trauma Therapy are seen as friendlier compared to those at Thriveworks Counseling and Therapy. Customers have mentioned that the staff at Birmingham Anxiety and Trauma Therapy are friendly, kind, accommodating, and helpful."
+Response Time: 3.46 seconds
+*****
+P16.""Are the staff at Birmingham Anxiety and Trauma Therapy seen as more rude than those at Thriveworks Counseling and Therapy?""
+AP16."Based on the reviews, the staff at Birmingham Anxiety and Trauma Therapy are seen as more rude compared to the staff at Thriveworks Counseling and Therapy."
+Response Time: 2.80 seconds
+*****
+P17.""Which center has more 4-star and above reviews, Eastside Mental Health or Thriveworks Counseling and Therapy?""
+AP17."Based on the reviews, Thriveworks Counseling and Therapy has more 4-star and above reviews compared to Eastside Mental Health. Customers seem to be more satisfied with the services provided by Thriveworks Counseling and Therapy."
+Response Time: 4.07 seconds
+*****
+P18.""Which center has more 2-star and below reviews, Eastside Mental Health or Thriveworks Counseling and Therapy?""
+AP18."Eastside Mental Health has more 2-star and below reviews compared to Thriveworks Counseling and Therapy."
+Response Time: 5.96 seconds
+*****
+P19.""Are the scheduling options at Thriveworks Counseling and Therapy more flexible compared to Restorative Counseling Services?""
+AP19."Based on the reviews, it seems that the scheduling options at Thriveworks Counseling and Therapy are positively mentioned. However, there is no specific information available about the flexibility of scheduling options at Restorative Counseling Services."
+Response Time: 2.30 seconds
+*****
+P20.""Are the scheduling options at Thriveworks Counseling and Therapy less flexible compared to Restorative Counseling Services?""
+AP20."Based on the reviews, it appears that the scheduling options at Thriveworks Counseling and Therapy may be less flexible compared to Restorative Counseling Services. There are comments about issues with scheduling appointments and being ghosted by therapists at Thriveworks, while Restorative Counseling Services has a positive reputation for scheduling, with comments about appointments being kept on time and the staff being professional and reliable."
+Response Time: 2.86 seconds
+*****
+P21.""Which center has easier scheduling according to reviews, Birmingham Anxiety and Trauma Therapy or Restorative Counseling Services?""
+AP21."Restorative Counseling Services has easier scheduling according to reviews."
+Response Time: 2.73 seconds
+*****
+P22.""Which center has harder scheduling according to reviews, Birmingham Anxiety and Trauma Therapy or Restorative Counseling Services?""
+AP22."Restorative Counseling Services seems to have scheduling issues based on the reviews."
+Response Time: 1.71 seconds
+*****
+P23.""Which center is considered more expensive by reviewers, Thriveworks Counseling and Therapy or Eastside Mental Health?""
+AP23."Thriveworks Counseling and Therapy is considered more expensive by reviewers."
+Response Time: 1.84 seconds
+*****
+P24.""Which center is considered more affordable by reviewers, Thriveworks Counseling and Therapy or Eastside Mental Health?""
+AP24."Thriveworks Counseling and Therapy is considered more affordable by reviewers."
+Response Time: 2.32 seconds
+*****
+P25.""Which counseling center in Birmingham has the best rankings overall?""
+AP25."Alabama Psychiatry Counseling has the best rankings overall based on the reviews provided."
+Response Time: 1.70 seconds
+*****
+P26.""Which counseling center in Birmingham has the worst rankings overall?""
+AP26."The counseling center in Birmingham with the worst rankings overall is Alabama Psychiatry Counseling."
+Response Time: 1.87 seconds
+*****
+P27.""Which center is most often mentioned for having friendly staff?""
+AP27."The center with Dr. Rabbani is most often mentioned for having friendly staff."
+Response Time: 1.96 seconds
+*****
+P28.""Among all centers, which one has the most mentions of rude behavior?""
+AP28."Based on the reviews, the comments mention rude behavior by the office staff at multiple centers. Some of the comments include being incredibly rude, giving a fake number, and being unhelpful on the phone. If you would like more specific information about a particular center, please let me know."
+Response Time: 2.29 seconds
+*****
+P29.""Which center has the highest number of 4-star and above ratings?""
+AP29."Dr. Whitt has the highest number of 4-star and above ratings."
+Response Time: 1.74 seconds
+*****
+P30.""Which counseling center has the most 2-star and below reviews?""
+AP30."Alabama Psychiatry & Counseling has the most 2-star and below reviews."
+Response Time: 2.23 seconds
+*****
+P31.""Which center is known for having the most flexible scheduling according to reviews?""
+AP31."The center known for having the most flexible scheduling according to reviews is Dr. Whitt's office."
+Response Time: 1.95 seconds
+*****
+P32.""Which center has the most complaints about not having flexible scheduling?""
+AP32."The center with the most complaints about not having flexible scheduling is Dr. Rabbani's center. Customers have mentioned issues such as appointments not being kept on time and difficulties in accommodating schedules."
+Response Time: 2.31 seconds
+*****
+P33.""Which counseling center has the easiest appointment scheduling?""
+AP33."Alabama Psychiatry Counseling seems to have the easiest appointment scheduling based on the reviews."
+Response Time: 1.82 seconds
+*****
+P34.""Which center receives the most complaints about scheduling being difficult?""
+AP34."The comments suggest that Dr. Rabbani's practice receives complaints about scheduling being difficult."
+Response Time: 1.53 seconds
+*****
+P35.""Which counseling center is considered the most expensive by reviewers?""
+AP35."There is no information in the comments provided to determine which counseling center is considered the most expensive by reviewers."
+Response Time: 1.97 seconds
+*****
+P36.""Which center is mentioned the most for being affordable?""
+AP36."The comments generally mention that the services are affordable, but there is no specific center mentioned the most for being affordable."
+Response Time: 1.61 seconds
+*****
