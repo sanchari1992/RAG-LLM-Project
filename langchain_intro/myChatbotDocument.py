@@ -150,33 +150,11 @@ def ask_question():
     try:
         data = request.json
         question = data.get("question", "")
-        context = fetch_reviews_from_db(question)
-
-        # Call the executor with the input question and context
-        result = mybot_agent_executor({"input": question, "context": context})
-
-        # Check if the reasoning steps were taken and generate response
-        if result.get("intermediate_steps"):
-            current_reasoning = result["intermediate_steps"]
-
-            # If there are reasoning steps, construct the response
-            if len(current_reasoning) > 0:
-                # Check the last reasoning step to see if it was a response
-                if isinstance(current_reasoning[-1], ResponseReasoningStep):
-                    response_step = current_reasoning[-1]
-                    response_str = response_step.response
-                else:
-                    # If the last step is not a response, get its content
-                    response_str = current_reasoning[-1].get_content()
-                
-                # Return the generated response
-                return jsonify({"answer": response_str})
-            else:
-                return jsonify({"answer": "I don't know."})
-        else:
-            return jsonify({"answer": "I don't know."})
+        result = mybot_agent_executor({"input": question})
+        return jsonify({"answer": result["output"]})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 
 if __name__ == "__main__":
