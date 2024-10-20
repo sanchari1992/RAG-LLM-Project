@@ -86,23 +86,12 @@ def fetch_reviews_from_db(question, max_reviews_per_table=5):
 
     return context.strip()
 
-
 # Define the review templates
-review_template_str = """You are restricted to using ONLY the database entries provided to you.
+review_template_str = """You are restricted to using ONLY the database entries provided to you. 
 Do not answer any questions based on your own knowledge or any external sources. 
-You must base your answer entirely on the provided context.
-
-Your task is to summarize the sentiment of the reviews for all answers to any questions asked. Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options.
-
-If the reviews mention staff being friendly or rude, summarize that sentiment. If the reviews generally mention a center having flexible or easy scheduling, summarize that sentiment. If the reviews generally mention a center being affordable or expensive, summarize that sentiment. Basically summarize all sentiments based on all the available reviews from all relations and give answer. If the context does not contain the information needed to answer the question, respond with 'I don't know.'
-
-Answer the question based on what you get back in the first iteration. Don't attempt more iterations. Whatever you get in the first iterations, you can consolidate it and it will be the best answer to return to user.
-
-Here are examples of how to respond:
-- If the reviews say, "The staff at XYZ Counseling are very friendly and helpful," you could respond, "The staff at XYZ Counseling are considered friendly by reviewers."
-- If no reviews mention a certain aspect, you should respond, "I don't know."
-
-Do not make the answers too long. Make them brief.
+Your task is to summarize the sentiment of the reviews for all answers to any questions asked. 
+Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options. 
+Answer the question based on the information you get back in the first invocation. Do not attempt any further invocations.
 
 {context}
 """
@@ -139,13 +128,12 @@ tools = [
     ),
 ]
 
+# Updated the prompt to remove the scratchpad reference
 mybot_agent_prompt = PromptTemplate(
     input_variables=["input", "agent_scratchpad"],
-    template="""You are a helpful assistant. You must only answer questions based on the existing database information.
-
-    Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.'
-
-    Answer the question based on what you find in the first iteration. Do not attempt further iterations or refinements.
+    template="""You are a helpful assistant. You must only answer questions based on the existing database information. 
+    Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.' 
+    Answer the question based on what you find in the first invocation. 
 
     Question: {input}
     Agent Scratchpad: {agent_scratchpad}"""
@@ -163,7 +151,7 @@ mybot_agent_executor = AgentExecutor(
     tools=tools,
     return_intermediate_steps=False,
     verbose=True,
-    max_iterations=10
+    max_iterations=1  # Ensures only one invocation is performed
 )
 
 @app.route("/ask", methods=["POST"])
@@ -172,10 +160,34 @@ def ask_question():
         data = request.json
         question = data.get("question", "")
         context = fetch_reviews_from_db(question)
+
+        # Call the executor with the input question and context
         result = mybot_agent_executor({"input": question, "context": context})
-        return jsonify({"answer": result["output"]})
+
+        # Check if the reasoning steps were taken and generate response
+        if result.get("intermediate_steps"):
+            current_reasoning = result["intermediate_steps"]
+
+            # If there are reasoning steps, construct the response
+            if len(current_reasoning) > 0:
+                # Check the last reasoning step to see if it was a response
+                if isinstance(current_reasoning[-1], ResponseReasoningStep):
+                    response_step = current_reasoning[-1]
+                    response_str = response_step.response
+                else:
+                    # If the last step is not a response, get its content
+                    response_str = current_reasoning[-1].get_content()
+                
+                # Return the generated response
+                return jsonify({"answer": response_str})
+            else:
+                return jsonify({"answer": "I don't know."})
+        else:
+            return jsonify({"answer": "I don't know."})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
