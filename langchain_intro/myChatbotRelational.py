@@ -92,15 +92,17 @@ review_template_str = """You are restricted to using ONLY the database entries p
 Do not answer any questions based on your own knowledge or any external sources. 
 You must base your answer entirely on the provided context.
 
-Your task is to summarize the sentiment of the reviews. Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options.
+Your task is to summarize the sentiment of the reviews for all answers to any questions asked. Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options.
 
-If a review mentions staff being friendly or rude, summarize that sentiment. If the context does not contain the information needed to answer the question, respond with 'I don't know.'
+If the reviews mention staff being friendly or rude, summarize that sentiment. If the reviews generally mention a center having flexible or easy scheduling, summarize that sentiment. If the reviews generally mention a center being affordable or expensive, summarize that sentiment. Basically summarize all sentiments based on all the available reviews from all relations and give answer. If the context does not contain the information needed to answer the question, respond with 'I don't know.'
 
 Please aim to answer the question within 5 iterations.
 
 Here are examples of how to respond:
 - If the reviews say, "The staff at XYZ Counseling are very friendly and helpful," you could respond, "The staff at XYZ Counseling are considered friendly by reviewers."
 - If no reviews mention a certain aspect, you should respond, "I don't know."
+
+Do not make the answers too long. Make them brief.
 
 {context}
 """
