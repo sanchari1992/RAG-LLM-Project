@@ -13,6 +13,7 @@ from langchain.prompts import (
 from langchain_core.output_parsers import StrOutputParser
 from langchain.agents import create_openai_functions_agent, Tool, AgentExecutor
 import dotenv
+from langchain import hub
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -37,11 +38,9 @@ def get_collection_names():
     return db.list_collection_names()  # Retrieve the collection names
 
 # Define the review templates
-review_template_str = """You are restricted to using ONLY the database entries provided to you. 
-Do not answer any questions based on your own knowledge or any external sources. 
-Your task is to summarize the sentiment of the reviews for all answers to any questions asked. 
-Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options. 
-Answer the question based on the information you get back in the first invocation. Do not attempt any further invocations.
+review_template_str = """DO NOT INVOKE MORE THAN ONCE. You are restricted to using ONLY the database entries provided to you. 
+Do not answer any questions based on your own knowledge or any external sources.  Use only the following context to answer questions.
+Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options. Return whatever information you get in the first try itself. No need to refine further for a better answer. 
 
 {context}
 """
@@ -110,7 +109,8 @@ tools = [
         name="Reviews",
         func=lambda question: create_review_chain(fetch_all_reviews(), question),
         description="""Useful when you need to answer questions
-        about therapists and mental health counseling centers based on the reviews in the database.
+        about mental health counseling centers - their ratings, rankings, staff, affordability, properties etc based on the reviews in the database.
+        There are five relations on five different counseling centers in Birmingham, Alabama.
         The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.
         Pass the entire question as input to the tool. For example,
         if the question is "What do people think of Center A?",
@@ -119,16 +119,18 @@ tools = [
     ),
 ]
 
-# Agent setup
-mybot_agent_prompt = PromptTemplate(
-    input_variables=["input", "agent_scratchpad"],
-    template="""You are a helpful assistant. You must only answer questions based on the existing database information. 
-    Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.' 
-    Answer the question based on what you find in the first invocation. 
+mybot_agent_prompt = hub.pull("hwchase17/openai-functions-agent")
+# # Agent setup
+# mybot_agent_prompt = PromptTemplate(
+#     input_variables=["input", "agent_scratchpad"],
+#     template="""You are a helpful assistant.
+#     DO NOT INVOKE MORE THAN ONCE. 
+#     Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.' 
+#     You can rephrase and present the question in a way that lets the answer be decided in a single iteration.
 
-    Question: {input}
-    Agent Scratchpad: {agent_scratchpad}"""
-)
+#     Question: {input} 
+#     Agent Scratchpad: {agent_scratchpad}"""
+# )
 
 mybot_agent = create_openai_functions_agent(
     llm=chat_model,
@@ -141,8 +143,7 @@ mybot_agent_executor = AgentExecutor(
     tools=tools,
     return_intermediate_steps=True,
     verbose=True,  # Set verbose to False to reduce console output
-    max_iterations=5,
-    max_token = 150
+    max_iterations=5
 )
 
 @app.route("/ask", methods=["POST"])
