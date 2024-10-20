@@ -96,7 +96,7 @@ Your task is to summarize the sentiment of the reviews for all answers to any qu
 
 If the reviews mention staff being friendly or rude, summarize that sentiment. If the reviews generally mention a center having flexible or easy scheduling, summarize that sentiment. If the reviews generally mention a center being affordable or expensive, summarize that sentiment. Basically summarize all sentiments based on all the available reviews from all relations and give answer. If the context does not contain the information needed to answer the question, respond with 'I don't know.'
 
-Please aim to answer the question within 5 iterations.
+Answer the question based on what you get back in the first five iterations. Don't attempt more iterations. Whatever you get in the five iterations, you can consolidate it and it will be the best answer to return to user.
 
 Here are examples of how to respond:
 - If the reviews say, "The staff at XYZ Counseling are very friendly and helpful," you could respond, "The staff at XYZ Counseling are considered friendly by reviewers."
@@ -145,7 +145,7 @@ mybot_agent_prompt = PromptTemplate(
 
     Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.'
 
-    Once you have found an adequate answer based on the reviews, you should stop querying and return your final answer.
+    Whatever answer you have found within first five iterations, you should stop querying and consolidate it to return your final answer.
 
     Question: {input}
     Agent Scratchpad: {agent_scratchpad}"""
