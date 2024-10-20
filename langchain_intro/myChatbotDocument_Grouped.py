@@ -39,8 +39,8 @@ def get_collection_names():
 
 # Define the review templates
 review_template_str = """DO NOT INVOKE MORE THAN ONCE. You are restricted to using ONLY the database entries provided to you. 
-Do not answer any questions based on your own knowledge or any external sources.  Use only the following context to answer questions.
-Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options. Return whatever information you get in the first try itself. No need to refine further for a better answer. 
+Do not answer any questions based on your own knowledge or any external sources. Use only the following context to answer questions.
+Look for trends in the comments, such as whether they are generally positive (good), neutral, or negative (bad) regarding specific aspects of the services, staff, or scheduling options. Return whatever information you get in the first try itself. No need to refine further for a better answer. 
 
 {context}
 """
@@ -75,7 +75,7 @@ def fetch_all_reviews():
             review_content = (
                 f"Center: {review['Counseling Center']}\n"
                 f"Name: {review['Name']}\n"
-                f"Rating: {review['Rating']}/5\n"  # Use the correct column name
+                f"Rating: {review['Rating']}/5 ({review['Rating Category']})\n"  # Display Rating and Category
                 f"Review Year: {review['Review Year']}\n"
                 f"Comment: {review['Comment']}\n\n"
             )
@@ -83,6 +83,7 @@ def fetch_all_reviews():
     
     # Return context or a default message if empty
     return context if context else "I don't know."
+
 
 # Function to truncate context to a specific length
 def truncate_context(context, max_length=4000):
