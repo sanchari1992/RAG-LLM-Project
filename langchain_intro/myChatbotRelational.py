@@ -151,6 +151,12 @@ mybot_agent_prompt = PromptTemplate(
     Agent Scratchpad: {agent_scratchpad}"""
 )
 
+mybot_agent = create_openai_functions_agent(
+    llm=chat_model,
+    prompt=mybot_agent_prompt,
+    tools=tools,
+)
+
 # Updating the AgentExecutor to stop once the answer is found
 mybot_agent_executor = AgentExecutor(
     agent=mybot_agent,
