@@ -21,7 +21,7 @@ def extract_questions(input_file):
                 questions.append(line)
     return questions
 
-# Function to make POST request to the API for each question
+# Function to make POST request to the API for each question and measure response time
 def get_answers(questions):
     api_url = "http://127.0.0.1:5000/ask"
     headers = {"Content-Type": "application/json"}
@@ -32,8 +32,15 @@ def get_answers(questions):
             question_number, question_text = question.split('.', 1)
             question_payload = {"question": question_text.strip()}
 
+            # Start measuring time before sending the POST request
+            start_time = time.time()
+
             # Sending POST request and waiting for response
             response = requests.post(api_url, headers=headers, data=json.dumps(question_payload), timeout=300)
+
+            # End measuring time after receiving the response
+            end_time = time.time()
+            response_time = end_time - start_time
 
             if response.status_code == 200:
                 answer_data = response.json()
@@ -41,10 +48,10 @@ def get_answers(questions):
             else:
                 answer = "Failed to get answer."
 
-            # Format the answer properly and append it
-            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA{question_number}.\"{answer}\"\n")
+            # Format the answer properly and include response time
+            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA{question_number}.\"{answer}\"\nResponse Time: {response_time:.2f} seconds\n")
         except Exception as e:
-            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA{question_number}.\"Error: {str(e)}\"\n")
+            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA{question_number}.\"Error: {str(e)}\"\nResponse Time: N/A\n")
     return answers
 
 # Function to write responses to the output file
@@ -88,7 +95,7 @@ if __name__ == "__main__":
     # Extract questions from the input file
     questions = extract_questions(input_file)
 
-    # Get answers by sending POST requests
+    # Get answers by sending POST requests and measuring response time
     answers = get_answers(questions)
 
     # Write the responses to the output file
