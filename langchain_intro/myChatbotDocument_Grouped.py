@@ -41,6 +41,7 @@ def get_collection_names():
 review_template_str = """DO NOT INVOKE MORE THAN ONCE. You are restricted to using ONLY the database entries provided to you. 
 Do not answer any questions based on your own knowledge or any external sources. Use only the following context to answer questions.
 Look for trends in the comments, such as whether they are generally positive (good), neutral, or negative (bad) regarding specific aspects of the services, staff, or scheduling options. Return whatever information you get in the first try itself. No need to refine further for a better answer. 
+Rating Category is good for ratings 4 and 5, neutral for 3, and bad for 1 and 2. This can be used to guess general sentiment for the rest of the comment.
 
 {context}
 """
@@ -112,7 +113,8 @@ tools = [
         description="""Useful when you need to answer questions from the MongoDB database
         about mental health counseling centers - their ratings, rankings, staff, affordability, properties etc based on the reviews in the database.
         There are five relations on five different counseling centers in Birmingham, Alabama.
-        The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.
+        The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', 'Comment' and 'Rating Category'.
+        Rating Category is good for ratings 4 and 5, neutral for 3, and bad for 1 and 2.
         Pass the entire question as input to the tool. For example,
         if the question is "What do people think of Center A?",
         the input should be "What do people think of Center A?"
