@@ -145,22 +145,19 @@ mybot_agent_prompt = PromptTemplate(
 
     Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.'
 
+    Once you have found an adequate answer based on the reviews, you should stop querying and return your final answer.
+
     Question: {input}
     Agent Scratchpad: {agent_scratchpad}"""
 )
 
-mybot_agent = create_openai_functions_agent(
-    llm=chat_model,
-    prompt=mybot_agent_prompt,
-    tools=tools,
-)
-
+# Updating the AgentExecutor to stop once the answer is found
 mybot_agent_executor = AgentExecutor(
     agent=mybot_agent,
     tools=tools,
     return_intermediate_steps=False,
     verbose=True,
-    max_iterations=5  # Restrict to a maximum of 5 iterations
+    max_iterations=10
 )
 
 @app.route("/ask", methods=["POST"])
@@ -173,6 +170,3 @@ def ask_question():
         return jsonify({"answer": result["output"]})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-if __name__ == "__main__":
-    app.run(debug=True)
