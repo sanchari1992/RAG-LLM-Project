@@ -151,7 +151,8 @@ mybot_agent_executor = AgentExecutor(
     tools=tools,
     return_intermediate_steps=False,
     verbose=True,
-    max_iterations=1  # Ensures only one invocation is performed
+    max_iterations=5,
+    max_token = 150  # Ensures only one invocation is performed
 )
 
 @app.route("/ask", methods=["POST"])
