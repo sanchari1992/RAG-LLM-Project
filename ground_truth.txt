@@ -38,13 +38,13 @@ A17."Thriveworks Counseling and Therapy."
 P18."Which center has more 2-star and below reviews, Eastside Mental Health or Thriveworks Counseling and Therapy?"
 A18."Eastside Mental Health."
 P19."Are the scheduling options at Thriveworks Counseling and Therapy more flexible compared to Restorative Counseling Services?"
-A19.
+A19."Yes, Restorative Counseling Services has bad reviews on flexibility."
 P20."Are the scheduling options at Thriveworks Counseling and Therapy less flexible compared to Restorative Counseling Services?"
-A20.
+A20."No, Restorative Counseling Services has bad reviews on flexibility."
 P21."Which center has easier scheduling according to reviews, Birmingham Anxiety and Trauma Therapy or Restorative Counseling Services?"
-A21.
+A21."Both have few bad reviews on scheduling issues, Birmingham Anxiety and Trauma Therapy has one more than Restorative Counseling Services."
 P22."Which center has harder scheduling according to reviews, Birmingham Anxiety and Trauma Therapy or Restorative Counseling Services?"
-A22.
+A22."Both have few bad reviews on scheduling issues, Birmingham Anxiety and Trauma Therapy has one more than Restorative Counseling Services."
 P23."Which center is considered more expensive by reviewers, Thriveworks Counseling and Therapy or Eastside Mental Health?"
 A23.
 P24."Which center is considered more affordable by reviewers, Thriveworks Counseling and Therapy or Eastside Mental Health?"
