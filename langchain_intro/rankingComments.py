@@ -35,9 +35,9 @@ def analyze_comment(comment):
     - Flexibility in scheduling (1 to 5)
     - Ease of scheduling (1 to 5)
     - Affordability (1 to 5)
-    Only return the rating number and no additional text. If you cannot rate it for any reason, give it a 0.
+    Only return the rating number with new lines and no additional text. If you cannot rate it for any reason, give it a 0.
 
-    For example, if the comment sent is 'The best literally changed me for the better.' the response for ranking should be '5'.
+    For example, if the comment sent is 'The best literally changed me for the better.' the response should be '5\n0\n5\n0\n4\n5'.
 
     Comment: "{comment}"
     """
