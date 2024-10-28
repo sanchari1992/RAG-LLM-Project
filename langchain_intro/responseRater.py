@@ -13,26 +13,25 @@ def evaluate_answer(question, answer):
         f"Answer: {answer}\n"
         f"Rating (0-5):"
     )
-        prompt = f"""
-        Evaluate the following answer to the question on a scale of 0 to 5, 
-        where 0 means the answer does not adhere to the question at all, 
-        and 5 means the answer perfectly adheres to the question.
-        Question: {question}\n
-        Answer: {answer}\n
-        Rating (0-5):
+    prompt = f"""
+    Evaluate the following answer to the question on a scale of 0 to 5, 
+    where 0 means the answer does not adhere to the question at all, 
+    and 5 means the answer perfectly adheres to the question.
+    Question: {question}\n
+    Answer: {answer}\n
+    Rating (0-5):
 
-        Respond with only the numbers for each category, one per line, or "0" if a category is not mentioned in the comment.
+    Respond with only the numbers for each category, one per line, or "0" if a category is not mentioned in the comment.
 
-        Example:
-        Question:"Does Alabama Psychiatry and Counseling have generally good rankings in the reviews?"
-        Answer:"There are no reviews or comments available for "Alabama Psychiatry and Counseling" in the database provided."
-        Rating: 0
-        
-        Question:"Are the staff at Eastside Mental Health considered friendly by reviewers?""
-        Answer:"The reviews about the staff at Eastside Mental Health are mixed. Some reviewers have positive interactions with staff members like Dr. Yulia Spencer and Neal Tillman, who are described as caring and helpful. However, there are also negative comments mentioning issues like high turnover of doctors, concerns about nurse practitioners prescribing medications, and dissatisfaction with the level of care provided."
-        Rating: 3
-
-        """
+    Example:
+    Question:"Does Alabama Psychiatry and Counseling have generally good rankings in the reviews?"
+    Answer:"There are no reviews or comments available for 'Alabama Psychiatry and Counseling' in the database provided."
+    Rating: 0
+    
+    Question:"Are the staff at Eastside Mental Health considered friendly by reviewers?"
+    Answer:"The reviews about the staff at Eastside Mental Health are mixed. Some reviewers have positive interactions with staff members like Dr. Yulia Spencer and Neal Tillman, who are described as caring and helpful. However, there are also negative comments mentioning issues like high turnover of doctors, concerns about nurse practitioners prescribing medications, and dissatisfaction with the level of care provided."
+    Rating: 3
+    """
     
     response = model.predict(prompt)  # Get the model's response
     return response.strip()  # Clean up the response
@@ -58,8 +57,9 @@ def process_file(input_file, output_folder):
                 outfile.write(f"{line}\nAP{line[1]}\"{rating}\"\n")  # Write to output
 
 if __name__ == "__main__":
-    # Specify your input file and output folder
-    input_file_path = "path/to/your/input_file.txt"  # Change this to your input file
-    output_folder_path = "path/to/your/output_folder"  # Change this to your output folder
+    # Ask for input file and output folder from the user
+    input_file_path = input("Enter the path to your input file (e.g., path/to/input_file.txt): ")
+    output_folder_path = input("Enter the path to your output folder (e.g., path/to/output_folder): ")
 
     process_file(input_file_path, output_folder_path)
+
