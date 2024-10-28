@@ -47,18 +47,23 @@ def analyze_comment(comment):
         response = chat([HumanMessage(content=prompt)])
         logging.debug(f"GPT Response:\n{response.content}")
 
-        scores = response.content.split('\n')
+        # Split response by newlines and clean whitespace
+        scores = response.content.strip().split('\n')
         
-        # Convert scores to float, with non-numeric values set to 0
-        processed_scores = {}
-        for line in scores:
-            if ':' in line:
-                key, value = line.split(":", 1)
-                value = value.strip()
-                try:
-                    processed_scores[key] = float(value)
-                except ValueError:
-                    processed_scores[key] = 0.0  # Set non-numeric to 0
+        # Ensure we have exactly 6 scores
+        if len(scores) != 6:
+            logging.warning("Unexpected number of scores received. Filling with zeros.")
+            scores += ['0'] * (6 - len(scores))  # Fill missing scores with 0
+
+        # Convert scores to float
+        processed_scores = {
+            "Ranking": float(scores[0]) if scores[0] else 0.0,
+            "Friendliness": float(scores[1]) if scores[1] else 0.0,
+            "General Rating": float(scores[2]) if scores[2] else 0.0,
+            "Flexibility": float(scores[3]) if scores[3] else 0.0,
+            "Ease": float(scores[4]) if scores[4] else 0.0,
+            "Affordability": float(scores[5]) if scores[5] else 0.0
+        }
         return processed_scores
     except Exception as e:
         logging.error(f"Error parsing response: {e}")
