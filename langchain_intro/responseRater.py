@@ -57,8 +57,19 @@ def process_file(input_file, output_folder):
                     outfile.write(f"{line}\nAP{line[1]}\"{rating}\"\n")  # Write to output
 
 if __name__ == "__main__":
-    # Ask for input file and output folder from the user
-    input_file_path = input("Enter the path to your input file (e.g., path/to/input_file.txt): ")
-    output_folder_path = input("Enter the path to your output folder (e.g., path/to/output_folder): ")
+    # Define the input and output paths
+    input_folder_path = "langchain_intro/responses"
+    output_folder_path = "langchain_intro/scaled_Responses"
 
-    process_file(input_file_path, output_folder_path)
+    # Prompt user for the filename to process
+    input_file_name = input("Enter the filename to process (including extension, e.g., 'file.txt'): ")
+
+    # Construct the full input file path
+    input_file_path = os.path.join(input_folder_path, input_file_name)
+
+    # Check if the file exists
+    if os.path.isfile(input_file_path):
+        process_file(input_file_path, output_folder_path)
+        print(f"Processed: {input_file_name}")
+    else:
+        print(f"File '{input_file_name}' not found in '{input_folder_path}'. Please check the filename and try again.")
