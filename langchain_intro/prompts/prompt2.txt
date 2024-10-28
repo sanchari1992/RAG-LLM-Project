@@ -1,0 +1,43 @@
+Details about file:
+Prompts ordered into three categories -
+individual, comparative, overall
+For
+good/poor ranking, friendly/rude, most 4* and above/most 2* and below, flexible scheduling/not, easy scheduling/not, expensive/affordable.
+*****
+P1."On a scale of 1 to 5, how would you rate the rankings for Alabama Psychiatry and Counseling in the reviews?"
+P2."On a scale of 1 to 5, how poor are the rankings for Alabama Psychiatry and Counseling in the reviews?"
+P3."On a scale of 1 to 5, how friendly are the staff at Eastside Mental Health according to reviewers?"
+P4."On a scale of 1 to 5, how rude are the staff at Eastside Mental Health according to reviewers?"
+P5."On a scale of 1 to 5, how many ratings of 4 stars and above does Thriveworks Counseling and Therapy have?"
+P6."On a scale of 1 to 5, how many ratings of 2 stars and below does Thriveworks Counseling and Therapy have?"
+P7."On a scale of 1 to 5, how often do reviews of Birmingham Anxiety and Trauma Therapy mention flexible scheduling options?"
+P8."On a scale of 1 to 5, how many complaints are there about the scheduling not being flexible at Birmingham Anxiety and Trauma Therapy?"
+P9."On a scale of 1 to 5, how easy is it to schedule appointments at Restorative Counseling Services?"
+P10."On a scale of 1 to 5, how difficult is it to schedule appointments at Restorative Counseling Services?"
+P11."On a scale of 1 to 5, how expensive do people find the services at Alabama Psychiatry and Counseling?"
+P12."On a scale of 1 to 5, how affordable do people find the services at Alabama Psychiatry and Counseling?"
+P13."On a scale of 1 to 5, which center has more good rankings, Eastside Mental Health or Restorative Counseling Services?"
+P14."On a scale of 1 to 5, which center has more poor rankings, Eastside Mental Health or Restorative Counseling Services?"
+P15."On a scale of 1 to 5, how much friendlier are the staff at Birmingham Anxiety and Trauma Therapy compared to those at Thriveworks Counseling and Therapy?"
+P16."On a scale of 1 to 5, how much ruder are the staff at Birmingham Anxiety and Trauma Therapy compared to those at Thriveworks Counseling and Therapy?"
+P17."On a scale of 1 to 5, which center has more 4-star and above reviews, Eastside Mental Health or Thriveworks Counseling and Therapy?"
+P18."On a scale of 1 to 5, which center has more 2-star and below reviews, Eastside Mental Health or Thriveworks Counseling and Therapy?"
+P19."On a scale of 1 to 5, how flexible are the scheduling options at Thriveworks Counseling and Therapy compared to Restorative Counseling Services?"
+P20."On a scale of 1 to 5, how less flexible are the scheduling options at Thriveworks Counseling and Therapy compared to Restorative Counseling Services?"
+P21."On a scale of 1 to 5, how easy is scheduling according to reviews for Birmingham Anxiety and Trauma Therapy compared to Restorative Counseling Services?"
+P22."On a scale of 1 to 5, how hard is scheduling according to reviews for Birmingham Anxiety and Trauma Therapy compared to Restorative Counseling Services?"
+P23."On a scale of 1 to 5, how expensive is Thriveworks Counseling and Therapy considered compared to Eastside Mental Health?"
+P24."On a scale of 1 to 5, how affordable is Thriveworks Counseling and Therapy considered compared to Eastside Mental Health?"
+P25."On a scale of 1 to 5, which counseling center in Birmingham has the best overall rankings?"
+P26."On a scale of 1 to 5, which counseling center in Birmingham has the worst overall rankings?"
+P27."On a scale of 1 to 5, which center is most often mentioned for having friendly staff?"
+P28."On a scale of 1 to 5, among all centers, which one has the most mentions of rude behavior?"
+P29."On a scale of 1 to 5, which center has the highest number of 4-star and above ratings?"
+P30."On a scale of 1 to 5, which counseling center has the most 2-star and below reviews?"
+P31."On a scale of 1 to 5, which center is known for having the most flexible scheduling according to reviews?"
+P32."On a scale of 1 to 5, which center has the most complaints about not having flexible scheduling?"
+P33."On a scale of 1 to 5, which counseling center has the easiest appointment scheduling?"
+P34."On a scale of 1 to 5, which center receives the most complaints about scheduling being difficult?"
+P35."On a scale of 1 to 5, which counseling center is considered the most expensive by reviewers?"
+P36."On a scale of 1 to 5, which center is mentioned the most for being affordable?"
+*****
