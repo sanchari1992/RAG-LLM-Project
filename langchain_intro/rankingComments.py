@@ -32,7 +32,7 @@ def analyze_comment(comment):
     try:
         response = chat([HumanMessage(content=prompt)])
         scores = response.content.split('\n')
-        scores = {key: int(value.strip()) for key, value in 
+        scores = {key: float(value.strip()) for key, value in 
                   (line.split(":") for line in scores if ':' in line)}
         return scores
     except Exception as e:
