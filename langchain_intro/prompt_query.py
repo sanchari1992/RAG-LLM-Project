@@ -45,11 +45,17 @@ def get_answers(questions):
             if response.status_code == 200:
                 answer_data = response.json()
                 answer = answer_data.get("answer", "No answer received.")
+
+                # Check if the answer is a valid score (1-5) or set to "0"
+                if answer.isdigit() and 1 <= int(answer) <= 5:
+                    formatted_answer = answer
+                else:
+                    formatted_answer = "0"  # Set to "0" if the answer is not valid
             else:
-                answer = "Failed to get answer."
+                formatted_answer = "Failed to get answer."
 
             # Format the answer properly and include response time
-            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA{question_number}.\"{answer}\"\nResponse Time: {response_time:.2f} seconds\n")
+            answers.append(f"{question_number}.\"{question_text.strip()}\"\nA{question_number}.\"{formatted_answer}\"\nResponse Time: {response_time:.2f} seconds\n")
         except Exception as e:
             answers.append(f"{question_number}.\"{question_text.strip()}\"\nA{question_number}.\"Error: {str(e)}\"\nResponse Time: N/A\n")
     return answers

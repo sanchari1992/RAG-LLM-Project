@@ -87,10 +87,18 @@ def fetch_reviews_from_db(question, max_reviews_per_table=5):
 
     return context.strip()
 
-# Define the review templates
-review_template_str = """DO NOT INVOKE MORE THAN ONCE. You are restricted to using ONLY the database entries provided to you. 
+# Update the review templates
+review_template_str = """You are restricted to using ONLY the database entries provided to you. 
 Do not answer any questions based on your own knowledge or any external sources.  Use only the following context to answer questions.
-Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options. Return whatever information you get in the first try itself. No need to refine further for a better answer. 
+Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options. 
+Please rate the following comment on a scale of 1 to 5 for the question:
+- 1: Very Poor
+- 2: Poor
+- 3: Average
+- 4: Good
+- 5: Excellent
+
+Respond with only the numbers for each category, one per line, or "0" if a category is not mentioned in the comment.
 
 {context}
 """
@@ -133,17 +141,6 @@ tools = [
 ]
 
 mybot_agent_prompt = hub.pull("hwchase17/openai-functions-agent")
-# Updated the prompt to remove the scratchpad reference
-# mybot_agent_prompt = PromptTemplate(
-#     input_variables=["input", "agent_scratchpad"],
-#     template="""You are a helpful assistant. You must only answer questions based on the existing database information. 
-#     Do not use any external knowledge. If the answer is not available in the context, say 'I don't know.' 
-#     Answer the question based on what you find in the first invocation. 
-
-#     Question: {input}
-#     Agent Scratchpad: {agent_scratchpad}"""
-# )
-
 mybot_agent = create_openai_functions_agent(
     llm=chat_model,
     prompt=mybot_agent_prompt,
@@ -153,7 +150,7 @@ mybot_agent_executor = AgentExecutor(
     agent=mybot_agent,
     tools=tools,
     return_intermediate_steps=True,
-    verbose=True,  # Set verbose to False to reduce console output
+    verbose=True,
     max_iterations=5
 )
 
@@ -163,7 +160,18 @@ def ask_question():
         data = request.json
         question = data.get("question", "")
         result = mybot_agent_executor({"input": question})
-        return jsonify({"answer": result["output"]})
+
+        # Check and format the response to ensure it is within the range of 1 to 5 or "0"
+        ratings = result["output"].strip().splitlines()
+        formatted_ratings = []
+
+        for rating in ratings:
+            if rating.isdigit() and 1 <= int(rating) <= 5:
+                formatted_ratings.append(rating)
+            else:
+                formatted_ratings.append("0")  # Assign "0" for invalid ratings
+
+        return jsonify({"answer": "\n".join(formatted_ratings)})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
