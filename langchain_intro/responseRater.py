@@ -5,23 +5,17 @@ from langchain_openai import ChatOpenAI
 model = ChatOpenAI(model="gpt-3.5-turbo")  # Specify your model here
 
 def evaluate_answer(question, answer):
-    prompt = (
-        f"Evaluate the following answer to the question on a scale of 0 to 5, "
-        f"where 0 means the answer does not adhere to the question at all, "
-        f"and 5 means the answer perfectly adheres to the question.\n\n"
-        f"Question: {question}\n"
-        f"Answer: {answer}\n"
-        f"Rating (0-5):"
-    )
+
     prompt = f"""
     Evaluate the following answer to the question on a scale of 0 to 5, 
-    where 0 means the answer does not adhere to the question at all, 
-    and 5 means the answer perfectly adheres to the question.
+    where 0 means the answer does not adhere to the question at all,
+    1 means it is poor in response (eg. if it asks is center A friendly and answer is center A is not friendly at all) 
+    and 5 means the answer perfectly adheres to the question (eg. if it asks is center A friendly and answer is center A is very friendly).
     Question: {question}\n
     Answer: {answer}\n
     Rating (0-5):
 
-    Respond with only the numbers for each category, one per line, or "0" if a category is not mentioned in the comment.
+    Respond with only the rating number as answer or "0" if a category is not mentioned in the comment.
 
     Example:
     Question:"Does Alabama Psychiatry and Counseling have generally good rankings in the reviews?"
@@ -51,21 +45,38 @@ def process_file(input_file, output_folder):
             line = lines[i].strip()
             if line.startswith('P'):  # Question line
                 question = line.split('""')[1]  # Extract the question
-                if i + 1 < len(lines):  # Check if the next line exists
-                    answer = lines[i + 1].strip().split('""')[1]  # Extract the answer
-                    rating = evaluate_answer(question, answer)  # Get the rating
-                    outfile.write(f"{line}\nAP{line[1]}\"{rating}\"\n")  # Write to output
+                
+                # Check if the next line exists and is formatted correctly
+                if i + 1 < len(lines):  # Ensure there's a next line
+                    answer_line = lines[i + 1].strip()  # Get the next line
+                    
+                    # Check if the answer line starts with 'AP'
+                    if answer_line.startswith('AP'):
+                        # Extract the answer part after the first period (.)
+                        answer = answer_line.split('.', 1)[1].strip() if '.' in answer_line else ''
+                        
+                        # Check if answer is not empty
+                        if answer:
+                            rating = evaluate_answer(question, answer)  # Get the rating
+                            outfile.write(f"{line}\nAP{line[1]}\"{rating}\"\n")  # Write to output
+                        else:
+                            print(f"No valid answer found for question: {question}")
+                    else:
+                        print(f"Expected answer line after question line, but found: {answer_line}")
+                else:
+                    print(f"No answer line found after question line: {line}")
 
 if __name__ == "__main__":
     # Define the input and output paths
-    input_folder_path = "langchain_intro/responses"
-    output_folder_path = "langchain_intro/scaled_Responses"
+    input_folder_path = "langchain_intro\\responses"
+    output_folder_path = "langchain_intro\\scaled_Responses"
 
     # Prompt user for the filename to process
     input_file_name = input("Enter the filename to process (including extension, e.g., 'file.txt'): ")
 
     # Construct the full input file path
     input_file_path = os.path.join(input_folder_path, input_file_name)
+    print(input_file_path)
 
     # Check if the file exists
     if os.path.isfile(input_file_path):
