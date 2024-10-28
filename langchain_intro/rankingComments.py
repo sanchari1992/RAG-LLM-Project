@@ -1,15 +1,16 @@
 import os
 import pandas as pd
-import openai
 from dotenv import load_dotenv
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import HumanMessage
 
 # Load environment variables
 load_dotenv()
 CSV_DATA_FOLDER = os.getenv("CSV_DATA_FOLDER")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# Set up OpenAI API key
-openai.api_key = OPENAI_API_KEY
+# Set up ChatOpenAI instance with your API key
+chat = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-3.5-turbo")
 
 def analyze_comment(comment):
     """
@@ -28,15 +29,9 @@ def analyze_comment(comment):
     Comment: "{comment}"
     """
     
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content": "You are a helpful assistant."},
-                  {"role": "user", "content": prompt}],
-        max_tokens=100
-    )
-    
     try:
-        scores = response['choices'][0]['message']['content'].split('\n')
+        response = chat([HumanMessage(content=prompt)])
+        scores = response.content.split('\n')
         scores = {key: int(value.strip()) for key, value in 
                   (line.split(":") for line in scores if ':' in line)}
         return scores
