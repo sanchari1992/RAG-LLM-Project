@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import shutil
 from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
@@ -11,6 +12,15 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Set up ChatOpenAI instance with your API key
 chat = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-3.5-turbo")
+
+# Define the output folder
+output_folder = "processed_csvs"
+
+# Ensure the output folder is empty at the start of each run
+if os.path.exists(output_folder):
+    # Remove all files in the folder
+    shutil.rmtree(output_folder)
+os.makedirs(output_folder, exist_ok=True)
 
 def analyze_comment(comment):
     """
@@ -81,13 +91,9 @@ def process_csv_files():
             
             # Save scores to a new CSV
             new_df = pd.DataFrame(scores_data)
-            new_file_path = os.path.join("processed_csvs", f"processed_{filename}")
+            new_file_path = os.path.join(output_folder, f"processed_{filename}")
             new_df.to_csv(new_file_path, index=False)
             print(f"Processed file saved as: {new_file_path}")
-
-# Ensure output folder exists
-if not os.path.exists("processed_csvs"):
-    os.makedirs("processed_csvs")
 
 # Run the processing function
 process_csv_files()
