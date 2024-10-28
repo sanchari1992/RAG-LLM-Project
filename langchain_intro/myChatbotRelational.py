@@ -91,7 +91,9 @@ def fetch_reviews_from_db(question, max_reviews_per_table=5):
 review_template_str = """You are restricted to using ONLY the database entries provided to you. 
 Do not answer any questions based on your own knowledge or any external sources.  Use only the following context to answer questions.
 Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options. 
-Please rate the following comment on a scale of 1 to 5 for the question:
+ Return whatever information you get in the first try itself. No need to refine further for a better answer.
+Try to categorize this returned information on a scale of 0 to 5 in terms of the question asked:
+- 0: No information at all
 - 1: Very Poor
 - 2: Poor
 - 3: Average
@@ -99,6 +101,8 @@ Please rate the following comment on a scale of 1 to 5 for the question:
 - 5: Excellent
 
 Respond with only the numbers for each category, one per line, or "0" if a category is not mentioned in the comment.
+
+For example, if returned information is "The feedback for counseling center C is generally friendly.", return '4'.
 
 {context}
 """
