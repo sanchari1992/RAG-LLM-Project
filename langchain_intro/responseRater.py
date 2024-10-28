@@ -47,14 +47,14 @@ def process_file(input_file, output_folder):
         lines = file.readlines()
 
     with open(output_file, 'w') as outfile:
-        for line in lines:
-            line = line.strip()
+        for i in range(len(lines)):
+            line = lines[i].strip()
             if line.startswith('P'):  # Question line
                 question = line.split('""')[1]  # Extract the question
-                next_line = next(lines).strip()  # Get the corresponding answer line
-                answer = next_line.split('""')[1]  # Extract the answer
-                rating = evaluate_answer(question, answer)  # Get the rating
-                outfile.write(f"{line}\nAP{line[1]}\"{rating}\"\n")  # Write to output
+                if i + 1 < len(lines):  # Check if the next line exists
+                    answer = lines[i + 1].strip().split('""')[1]  # Extract the answer
+                    rating = evaluate_answer(question, answer)  # Get the rating
+                    outfile.write(f"{line}\nAP{line[1]}\"{rating}\"\n")  # Write to output
 
 if __name__ == "__main__":
     # Ask for input file and output folder from the user
@@ -62,4 +62,3 @@ if __name__ == "__main__":
     output_folder_path = input("Enter the path to your output folder (e.g., path/to/output_folder): ")
 
     process_file(input_file_path, output_folder_path)
-
