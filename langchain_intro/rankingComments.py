@@ -30,7 +30,7 @@ def analyze_comment(comment):
     """
     prompt = f"""
     Please rate the following comment on a scale of 1 to 5 for these categories:
-    - Ranking (1 to 5)
+    - Ranking (1 to 5) You can just accept the numeral in the ranking field and pass it on
     - Friendliness (1 to 5)
     - General rating (1 to 5)
     - Flexibility in scheduling (1 to 5)
