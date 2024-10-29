@@ -26,18 +26,18 @@ os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 def analyze_comment(comment):
     """
     Send a comment to ChatGPT and get scores for ranking, friendliness,
-    general ratings, flexibility, ease, and affordability.
+    general ratings, flexibility, ease, and affordability. Comments start with the Counseling Center column.
     """
     prompt = f"""
     Please rate the following comment on a scale of 1 to 5 for these categories:
-    - Ranking (1 to 5) You can just accept the numeral in the ranking field and pass it on
-    - Friendliness (1 to 5)
-    - General rating (1 to 5)
-    - Flexibility in scheduling (1 to 5)
-    - Ease of scheduling (1 to 5)
-    - Affordability (1 to 5)
+    - Ranking (1 to 5) i.e. What would you rank the center based on this comment?
+    - Friendliness (1 to 5) i.e. How friendly do the people at the center seem?
+    - General rating (1 to 5) You can just accept the numeral in the Rating column for this comment and pass it on
+    - Flexibility in scheduling (1 to 5) i.e. How flexible does scheduling at the center seem?
+    - Ease of scheduling (1 to 5) i.e. How easy does scheduling at the center seem?
+    - Affordability (1 to 5) i.e. Is the center cheap or expensive?
 
-    Respond with only the numbers for each category, one per line, or "0" if a category is not mentioned in the comment.
+    Respond with only the numbers for each category, one per line, or "0" if the information about the category is not obtained from the comment.
 
     Comment: "{comment}"
     """
