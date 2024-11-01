@@ -54,7 +54,7 @@ def analyze_comments_batch(batch):
     Below is a list of comments. For each comment, please provide a rating from 1 to 5 for these categories:
     - Ranking
     - Friendliness
-    - General rating (accept the numeral in the Rating column if it is provided)
+    - Rating (accept the numeral in the Rating column if it is provided)
     - Flexibility in scheduling
     - Ease of scheduling
     - Affordability
@@ -63,7 +63,7 @@ def analyze_comments_batch(batch):
     Comment #:
     Ranking
     Friendliness
-    General Rating
+    Rating
     Flexibility
     Ease
     Affordability
@@ -116,7 +116,7 @@ def analyze_comments_batch(batch):
                 "Name": row["Name"],
                 "Ranking": 0.0,
                 "Friendliness": 0.0,
-                "General Rating": 0.0,
+                "Rating": 0.0,
                 "Flexibility": 0.0,
                 "Ease": 0.0,
                 "Affordability": 0.0,
@@ -139,7 +139,7 @@ def process_csv_files():
                         "Name",
                         "Ranking",
                         "Friendliness",
-                        "General Rating",
+                        "Rating",
                         "Flexibility",
                         "Ease",
                         "Affordability",
@@ -153,11 +153,15 @@ def process_csv_files():
                         if len(batch) == BATCH_SIZE:
                             scores_data = analyze_comments_batch(batch)
                             writer.writerows(scores_data)
+                            print('Scores Data')
+                            print(scores_data)
                             batch.clear()  # Clear the batch after processing
 
                     # Process any remaining comments in the last batch
                     if batch:
                         scores_data = analyze_comments_batch(batch)
+                        print('Scores Data Outside')
+                        print(scores_data)
                         writer.writerows(scores_data)
 
                 logging.info(f"Processed data saved to: {output_file_path}")
