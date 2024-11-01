@@ -104,6 +104,7 @@ def analyze_comments_batch(batch):
                     current_score[category] = 0.0
 
         if current_score:
+            print(current_score)
             scores_data.append(current_score)
 
         return scores_data
