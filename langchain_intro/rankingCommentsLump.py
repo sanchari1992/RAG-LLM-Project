@@ -42,13 +42,11 @@ def format_comments_for_batch(df):
         formatted_comment = f"{i+1}. {name} {rating} stars {years_ago} years ago \"{comment}\""
         formatted_comments.append(formatted_comment)
     
-    # Join all formatted comments into a single prompt
-    batch_prompt = "\n".join(formatted_comments)
-    return batch_prompt
+    return "\n".join(formatted_comments)
 
 def analyze_comments_batch(df):
     """
-    Send a batch of comments to ChatGPT and get scores for each category.
+    Send a batch of comments to ChatGPT and parse the response.
     """
     formatted_comments = format_comments_for_batch(df)
     
@@ -75,15 +73,14 @@ def analyze_comments_batch(df):
     Comments:
     {formatted_comments}
     """
-
     try:
         # Sending the batch prompt and logging the response
         response = chat([HumanMessage(content=prompt)])
         logging.debug(f"GPT Batch Response:\n{response.content}")
 
-        # Initialize scores_data with empty lists for each category
+        # Parse response into structured data
         scores_data = {
-            "Name": [],
+            "Name": df["Name"].tolist(),
             "Ranking": [],
             "Friendliness": [],
             "General Rating": [],
@@ -92,18 +89,15 @@ def analyze_comments_batch(df):
             "Affordability": []
         }
 
-        # Process the response line by line
+        # Process response line by line
         response_lines = response.content.strip().split('\n')
         current_comment_index = -1
 
         for line in response_lines:
             line = line.strip()
             if line.startswith("Comment"):
-                # Increment comment index and append the name to keep length consistent
                 current_comment_index += 1
-                scores_data["Name"].append(df.iloc[current_comment_index]["Name"])
             elif line and current_comment_index >= 0:
-                # Parse score values for categories
                 try:
                     score = float(line) if line.isdigit() else 0.0
                     category = list(scores_data.keys())[1:][(len(scores_data['Ranking']) - current_comment_index - 1) % 6]
@@ -112,7 +106,7 @@ def analyze_comments_batch(df):
                     logging.warning(f"Unable to convert score for {line} - adding 0.0 as placeholder.")
                     scores_data[category].append(0.0)
         
-        # Ensure each list in scores_data has the same length as the 'Name' list
+        # Normalize list lengths in scores_data
         for key in scores_data.keys():
             while len(scores_data[key]) < len(scores_data["Name"]):
                 scores_data[key].append(0.0)
@@ -143,27 +137,17 @@ def process_csv_files():
                 logging.warning(f"Skipping {filename}: required columns missing.")
                 continue
 
-            all_scores = {
-                "Name": [],
-                "Ranking": [],
-                "Friendliness": [],
-                "General Rating": [],
-                "Flexibility": [],
-                "Ease": [],
-                "Affordability": []
-            }
+            all_scores = { "Name": [], "Ranking": [], "Friendliness": [], "General Rating": [], "Flexibility": [], "Ease": [], "Affordability": [] }
 
-            # Process in batches of 50
             for start in range(0, len(df), BATCH_SIZE):
-                end = min(start + BATCH_SIZE, len(df))
-                batch_df = df.iloc[start:end]
+                batch_df = df.iloc[start:start + BATCH_SIZE]
                 batch_scores = analyze_comments_batch(batch_df)
+                
+                # Append batch results to all_scores
+                for key in all_scores:
+                    all_scores[key].extend(batch_scores[key])
 
-                # Append each category's batch results to all_scores
-                for category, scores in batch_scores.items():
-                    all_scores[category].extend(scores)
-
-            # Save accumulated scores for this file to a new CSV
+            # Save scores to a new CSV
             new_df = pd.DataFrame(all_scores)
             new_file_path = os.path.join(OUTPUT_FOLDER, f"processed_{filename}")
             new_df.to_csv(new_file_path, index=False)
