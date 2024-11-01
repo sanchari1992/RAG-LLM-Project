@@ -23,11 +23,28 @@ if os.path.exists(OUTPUT_FOLDER):
     shutil.rmtree(OUTPUT_FOLDER)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-def analyze_comment(comment):
+def format_comment(row):
     """
-    Send a comment to ChatGPT and get scores for ranking, friendliness,
-    general ratings, flexibility, ease, and affordability. Comments start with the Counseling Center column.
+    Format the comment to include name, rating, and years ago.
     """
+    name = row.get("Name", "Unknown")
+    rating = row.get("Rating", "0")
+    review_year = row.get("Review Year", "Unknown")
+    current_year = pd.Timestamp.now().year
+    years_ago = current_year - int(review_year) if pd.notnull(review_year) else "Unknown"
+    comment = row.get("Comment", "")
+    
+    # Construct the formatted comment
+    formatted_comment = f"{name} {rating} stars {years_ago} years ago \"{comment}\""
+    return formatted_comment
+
+def analyze_comment(row):
+    """
+    Send a formatted comment to ChatGPT and get scores for ranking, friendliness,
+    general ratings, flexibility, ease, and affordability.
+    """
+    formatted_comment = format_comment(row)
+    
     prompt = f"""
     Please rate the following comment on a scale of 1 to 5 for these categories:
     - Ranking (1 to 5)
@@ -49,7 +66,7 @@ def analyze_comment(comment):
     0
 
 
-    Comment: "{comment}"
+    Comment: "{formatted_comment}"
     """
     
     try:
@@ -109,7 +126,7 @@ def process_csv_files():
             
             for _, row in df.iterrows():
                 scores_data["Name"].append(row["Name"])
-                scores = analyze_comment(row["Comment"])
+                scores = analyze_comment(row)
                 
                 # Append each score to its respective list
                 scores_data["Ranking"].append(scores.get("Ranking"))
