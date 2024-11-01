@@ -38,7 +38,6 @@ def format_comments_for_batch(df):
         
         # Construct the formatted comment for each row
         formatted_comment = f"{i+1}. {name} {rating} stars {years_ago} years ago \"{comment}\""
-        print(formatted_comment)
         formatted_comments.append(formatted_comment)
     
     # Join all formatted comments into a single prompt
@@ -81,7 +80,7 @@ def analyze_comments_batch(df):
         response = chat([HumanMessage(content=prompt)])
         logging.debug(f"GPT Batch Response:\n{response.content}")
 
-        # Parse response
+        # Initialize scores_data with empty lists for each category
         scores_data = {
             "Name": [],
             "Ranking": [],
@@ -97,22 +96,31 @@ def analyze_comments_batch(df):
         current_comment_index = -1
 
         for line in response_lines:
+            line = line.strip()
             if line.startswith("Comment"):
+                # Increment comment index and append the name to keep length consistent
                 current_comment_index += 1
                 scores_data["Name"].append(df.iloc[current_comment_index]["Name"])
-            elif current_comment_index >= 0:
+            elif line and current_comment_index >= 0:
+                # Parse score values for categories
                 try:
-                    # Convert line to float and add to respective score
-                    score = float(line.strip())
-                    category = list(scores_data.keys())[1:][(current_comment_index % 6)]
+                    score = float(line) if line.isdigit() else 0.0
+                    category = list(scores_data.keys())[1:][(len(scores_data['Ranking']) - current_comment_index - 1) % 6]
                     scores_data[category].append(score)
                 except ValueError:
-                    continue
+                    logging.warning(f"Unable to convert score for {line} - adding 0.0 as placeholder.")
+                    scores_data[category].append(0.0)
+        
+        # Ensure each list in scores_data has the same length as the 'Name' list
+        for key in scores_data.keys():
+            while len(scores_data[key]) < len(scores_data["Name"]):
+                scores_data[key].append(0.0)
 
         return scores_data
 
     except Exception as e:
         logging.error(f"Error parsing batch response: {e}")
+        # Return zeroed data for all rows in case of an exception
         return {
             "Name": df["Name"].tolist(),
             "Ranking": [0.0] * len(df),
