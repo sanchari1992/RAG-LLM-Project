@@ -23,6 +23,8 @@ if os.path.exists(OUTPUT_FOLDER):
     shutil.rmtree(OUTPUT_FOLDER)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
+BATCH_SIZE = 50  # Process 50 comments at a time
+
 def format_comments_for_batch(df):
     """
     Format multiple comments for a batch request to the LLM.
@@ -46,8 +48,7 @@ def format_comments_for_batch(df):
 
 def analyze_comments_batch(df):
     """
-    Send all comments in a CSV to ChatGPT as a batch and get scores for ranking, friendliness,
-    general ratings, flexibility, ease, and affordability for each comment.
+    Send a batch of comments to ChatGPT and get scores for each category.
     """
     formatted_comments = format_comments_for_batch(df)
     
@@ -142,11 +143,28 @@ def process_csv_files():
                 logging.warning(f"Skipping {filename}: required columns missing.")
                 continue
 
-            # Analyze all comments in the file in a single batch
-            scores_data = analyze_comments_batch(df)
-            
-            # Save scores to a new CSV
-            new_df = pd.DataFrame(scores_data)
+            all_scores = {
+                "Name": [],
+                "Ranking": [],
+                "Friendliness": [],
+                "General Rating": [],
+                "Flexibility": [],
+                "Ease": [],
+                "Affordability": []
+            }
+
+            # Process in batches of 50
+            for start in range(0, len(df), BATCH_SIZE):
+                end = min(start + BATCH_SIZE, len(df))
+                batch_df = df.iloc[start:end]
+                batch_scores = analyze_comments_batch(batch_df)
+
+                # Append each category's batch results to all_scores
+                for category, scores in batch_scores.items():
+                    all_scores[category].extend(scores)
+
+            # Save accumulated scores for this file to a new CSV
+            new_df = pd.DataFrame(all_scores)
             new_file_path = os.path.join(OUTPUT_FOLDER, f"processed_{filename}")
             new_df.to_csv(new_file_path, index=False)
             logging.info(f"Processed file saved as: {new_file_path}")
