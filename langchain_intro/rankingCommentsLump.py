@@ -7,7 +7,7 @@ from langchain.schema import HumanMessage
 import shutil
 
 # Set up logging configuration
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load environment variables
 load_dotenv()
@@ -153,7 +153,7 @@ def process_csv_files():
                         if len(batch) == BATCH_SIZE:
                             scores_data = analyze_comments_batch(batch)
                             writer.writerows(scores_data)
-                            batch.clear()
+                            batch.clear()  # Clear the batch after processing
 
                     # Process any remaining comments in the last batch
                     if batch:
