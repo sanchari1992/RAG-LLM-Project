@@ -38,6 +38,7 @@ def format_comments_for_batch(df):
         
         # Construct the formatted comment for each row
         formatted_comment = f"{i+1}. {name} {rating} stars {years_ago} years ago \"{comment}\""
+        print(formatted_comment)
         formatted_comments.append(formatted_comment)
     
     # Join all formatted comments into a single prompt
