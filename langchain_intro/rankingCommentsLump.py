@@ -82,29 +82,28 @@ def analyze_comments_batch(batch):
         scores_data = []
         response_lines = response.content.strip().split('\n')
         current_score = {}
-        current_comment_index = -1
 
         for line in response_lines:
             line = line.strip()
             if line.startswith("Comment"):
+                # If current_score is populated, append it to scores_data
                 if current_score:
                     scores_data.append(current_score)
-                current_score = {"Name": batch[current_comment_index]["Name"]}
-                current_comment_index += 1
+                # Reset for the new comment
+                current_score = {"Name": batch[len(scores_data)]["Name"]}  # Get name by index
             elif line:
-                try:
-                    # This assumes each line corresponds to a specific rating category in sequence
-                    score = float(line) if line.isdigit() else 0.0
-                    category = ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability"][
-                        len(current_score) - 1
-                    ]
+                # Split the line by ": " to separate category from its score
+                parts = line.split(": ")
+                if len(parts) == 2:
+                    category = parts[0].strip()
+                    try:
+                        score = float(parts[1]) if parts[1].isdigit() else 0.0
+                    except ValueError:
+                        score = 0.0
                     current_score[category] = score
-                except ValueError:
-                    logging.warning(f"Unable to parse score for {line}, using 0.0 as a placeholder.")
-                    current_score[category] = 0.0
 
+        # Don't forget to append the last score after exiting the loop
         if current_score:
-            print(current_score)
             scores_data.append(current_score)
 
         return scores_data
