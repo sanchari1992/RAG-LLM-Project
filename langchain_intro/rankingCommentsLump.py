@@ -137,21 +137,23 @@ def process_csv_files():
                 logging.warning(f"Skipping {filename}: required columns missing.")
                 continue
 
-            all_scores = { "Name": [], "Ranking": [], "Friendliness": [], "General Rating": [], "Flexibility": [], "Ease": [], "Affordability": [] }
+            output_file_path = os.path.join(OUTPUT_FOLDER, f"processed_{filename}")
 
             for start in range(0, len(df), BATCH_SIZE):
                 batch_df = df.iloc[start:start + BATCH_SIZE]
                 batch_scores = analyze_comments_batch(batch_df)
                 
-                # Append batch results to all_scores
-                for key in all_scores:
-                    all_scores[key].extend(batch_scores[key])
-
-            # Save scores to a new CSV
-            new_df = pd.DataFrame(all_scores)
-            new_file_path = os.path.join(OUTPUT_FOLDER, f"processed_{filename}")
-            new_df.to_csv(new_file_path, index=False)
-            logging.info(f"Processed file saved as: {new_file_path}")
+                # Convert batch_scores to DataFrame and save it immediately
+                batch_df_result = pd.DataFrame(batch_scores)
+                
+                if not os.path.exists(output_file_path):
+                    # Write header for the first batch
+                    batch_df_result.to_csv(output_file_path, index=False, mode='w')
+                else:
+                    # Append without header for subsequent batches
+                    batch_df_result.to_csv(output_file_path, index=False, mode='a', header=False)
+                    
+                logging.info(f"Processed batch saved to: {output_file_path}")
 
 # Run the processing function
 process_csv_files()
