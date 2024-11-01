@@ -1,6 +1,6 @@
-import logging
 import os
-import pandas as pd
+import csv
+import logging
 from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
@@ -25,17 +25,17 @@ os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 BATCH_SIZE = 50  # Process 50 comments at a time
 
-def format_comments_for_batch(df):
+def format_comments_for_batch(batch):
     """
     Format multiple comments for a batch request to the LLM.
     """
     formatted_comments = []
-    for i, row in df.iterrows():
+    for i, row in enumerate(batch):
         name = row.get("Name", "Unknown")
         rating = row.get("Rating", "0")
         review_year = row.get("Review Year", "Unknown")
-        current_year = pd.Timestamp.now().year
-        years_ago = current_year - int(review_year) if pd.notnull(review_year) else "Unknown"
+        current_year = 2024  # Adjust as needed or use datetime if needed dynamically
+        years_ago = current_year - int(review_year) if review_year.isdigit() else "Unknown"
         comment = row.get("Comment", "")
         
         # Construct the formatted comment for each row
@@ -44,11 +44,11 @@ def format_comments_for_batch(df):
     
     return "\n".join(formatted_comments)
 
-def analyze_comments_batch(df):
+def analyze_comments_batch(batch):
     """
     Send a batch of comments to ChatGPT and parse the response.
     """
-    formatted_comments = format_comments_for_batch(df)
+    formatted_comments = format_comments_for_batch(batch)
     
     prompt = f"""
     Below is a list of comments. For each comment, please provide a rating from 1 to 5 for these categories:
@@ -79,81 +79,88 @@ def analyze_comments_batch(df):
         logging.debug(f"GPT Batch Response:\n{response.content}")
 
         # Parse response into structured data
-        scores_data = {
-            "Name": df["Name"].tolist(),
-            "Ranking": [],
-            "Friendliness": [],
-            "General Rating": [],
-            "Flexibility": [],
-            "Ease": [],
-            "Affordability": []
-        }
-
-        # Process response line by line
+        scores_data = []
         response_lines = response.content.strip().split('\n')
+        current_score = {}
         current_comment_index = -1
 
         for line in response_lines:
             line = line.strip()
             if line.startswith("Comment"):
+                if current_score:
+                    scores_data.append(current_score)
+                current_score = {"Name": batch[current_comment_index]["Name"]}
                 current_comment_index += 1
-            elif line and current_comment_index >= 0:
+            elif line:
                 try:
+                    # This assumes each line corresponds to a specific rating category in sequence
                     score = float(line) if line.isdigit() else 0.0
-                    category = list(scores_data.keys())[1:][(len(scores_data['Ranking']) - current_comment_index - 1) % 6]
-                    scores_data[category].append(score)
+                    category = ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability"][
+                        len(current_score) - 1
+                    ]
+                    current_score[category] = score
                 except ValueError:
-                    logging.warning(f"Unable to convert score for {line} - adding 0.0 as placeholder.")
-                    scores_data[category].append(0.0)
-        
-        # Normalize list lengths in scores_data
-        for key in scores_data.keys():
-            while len(scores_data[key]) < len(scores_data["Name"]):
-                scores_data[key].append(0.0)
+                    logging.warning(f"Unable to parse score for {line}, using 0.0 as a placeholder.")
+                    current_score[category] = 0.0
+
+        if current_score:
+            scores_data.append(current_score)
 
         return scores_data
 
     except Exception as e:
         logging.error(f"Error parsing batch response: {e}")
         # Return zeroed data for all rows in case of an exception
-        return {
-            "Name": df["Name"].tolist(),
-            "Ranking": [0.0] * len(df),
-            "Friendliness": [0.0] * len(df),
-            "General Rating": [0.0] * len(df),
-            "Flexibility": [0.0] * len(df),
-            "Ease": [0.0] * len(df),
-            "Affordability": [0.0] * len(df)
-        }
+        return [
+            {
+                "Name": row["Name"],
+                "Ranking": 0.0,
+                "Friendliness": 0.0,
+                "General Rating": 0.0,
+                "Flexibility": 0.0,
+                "Ease": 0.0,
+                "Affordability": 0.0,
+            }
+            for row in batch
+        ]
 
 def process_csv_files():
     for filename in os.listdir(CSV_DATA_FOLDER):
         if filename.endswith(".csv"):
             file_path = os.path.join(CSV_DATA_FOLDER, filename)
-            df = pd.read_csv(file_path)
-            
-            # Ensure required columns are present
-            if "Comment" not in df.columns or "Name" not in df.columns:
-                logging.warning(f"Skipping {filename}: required columns missing.")
-                continue
+            with open(file_path, mode="r", encoding="utf-8") as csv_file:
+                reader = csv.DictReader(csv_file)
+                batch = []
+                output_file_path = os.path.join(OUTPUT_FOLDER, f"processed_{filename}")
 
-            output_file_path = os.path.join(OUTPUT_FOLDER, f"processed_{filename}")
+                # Set up output CSV with header
+                with open(output_file_path, mode="w", newline="", encoding="utf-8") as output_file:
+                    fieldnames = [
+                        "Name",
+                        "Ranking",
+                        "Friendliness",
+                        "General Rating",
+                        "Flexibility",
+                        "Ease",
+                        "Affordability",
+                    ]
+                    writer = csv.DictWriter(output_file, fieldnames=fieldnames)
+                    writer.writeheader()
 
-            for start in range(0, len(df), BATCH_SIZE):
-                batch_df = df.iloc[start:start + BATCH_SIZE]
-                batch_scores = analyze_comments_batch(batch_df)
-                
-                # Convert batch_scores to DataFrame and save it immediately
-                batch_df_result = pd.DataFrame(batch_scores)
-                
-                if not os.path.exists(output_file_path):
-                    # Write header for the first batch
-                    batch_df_result.to_csv(output_file_path, index=False, mode='w')
-                else:
-                    # Append without header for subsequent batches
-                    batch_df_result.to_csv(output_file_path, index=False, mode='a', header=False)
-                    
-                logging.info(f"Processed batch saved to: {output_file_path}")
+                    # Process each comment in batches
+                    for row in reader:
+                        batch.append(row)
+                        if len(batch) == BATCH_SIZE:
+                            scores_data = analyze_comments_batch(batch)
+                            writer.writerows(scores_data)
+                            batch.clear()
+
+                    # Process any remaining comments in the last batch
+                    if batch:
+                        scores_data = analyze_comments_batch(batch)
+                        writer.writerows(scores_data)
+
+                logging.info(f"Processed data saved to: {output_file_path}")
 
 # Run the processing function
 process_csv_files()
