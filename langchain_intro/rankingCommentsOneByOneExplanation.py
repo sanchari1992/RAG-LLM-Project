@@ -23,6 +23,16 @@ if os.path.exists(OUTPUT_FOLDER):
     shutil.rmtree(OUTPUT_FOLDER)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
+# Mapping for expected category names
+CATEGORY_MAPPING = {
+    "Ranking": "Ranking",
+    "Friendliness": "Friendliness",
+    "General Rating": "General Rating",
+    "Flexibility in scheduling": "Flexibility",
+    "Ease of scheduling": "Ease",
+    "Affordability": "Affordability"
+}
+
 def format_comment(row):
     """
     Format the comment to include name, rating, and years ago.
@@ -83,17 +93,20 @@ def analyze_comment(row):
                 category, detail = line.split(": ", 1)
                 parts = detail.split(" - ", 1)
                 
-                # Extract score and explanation
-                score = float(parts[0]) if parts[0].isdigit() else 0.0
-                explanation = parts[1] if len(parts) > 1 else "No explanation provided."
+                # Map the GPT category to our standard category names
+                mapped_category = CATEGORY_MAPPING.get(category.strip(), None)
+                
+                if mapped_category:
+                    # Extract score and explanation
+                    score = float(parts[0]) if parts[0].isdigit() else 0.0
+                    explanation = parts[1] if len(parts) > 1 else "No explanation provided."
 
-                # Populate scores and explanations
-                scores[category] = score
-                explanations[category] = explanation
+                    # Populate scores and explanations
+                    scores[mapped_category] = score
+                    explanations[mapped_category] = explanation
 
         # Ensure we have values for all categories
-        required_categories = ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability"]
-        for category in required_categories:
+        for category in CATEGORY_MAPPING.values():
             if category not in scores:
                 scores[category] = 0.0
                 explanations[category] = "No explanation provided."
@@ -104,8 +117,8 @@ def analyze_comment(row):
         logging.error(f"Error parsing response: {e}")
         # Return zeros and default explanations in case of an exception
         return (
-            {category: 0.0 for category in ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability"]},
-            {category: "No explanation provided." for category in ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability"]}
+            {category: 0.0 for category in CATEGORY_MAPPING.values()},
+            {category: "No explanation provided." for category in CATEGORY_MAPPING.values()}
         )
 
 def process_csv_files():
