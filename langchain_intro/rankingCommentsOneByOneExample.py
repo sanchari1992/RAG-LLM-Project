@@ -59,32 +59,32 @@ def analyze_comment(row):
     Example 1:
     Comment: "Alabama Psychiatry and Counseling, Mellanie Herard, 4, 2024, love Dr. Whitt. 5 stars rating solely based on appointment having future appointments Dr. Rabbani."
     Scores:
-    Ranking: 5
-    Friendliness: 4
-    General Rating: 4
-    Flexibility: 4
-    Ease: 4
-    Affordability: 0
+    5
+    4
+    4
+    4
+    4
+    0
 
     Example 2:
     Comment: "I had a terrible experience with the scheduling. The staff was rude, and I waited for over an hour."
     Scores:
-    Ranking: 1
-    Friendliness: 1
-    General Rating: 1
-    Flexibility: 1
-    Ease: 1
-    Affordability: 0
+    1
+    1
+    1
+    1
+    1
+    0
 
     Example 3:
     Comment: "The service was great, and they offered flexible timings which helped me a lot."
     Scores:
-    Ranking: 5
-    Friendliness: 5
-    General Rating: 5
-    Flexibility: 5
-    Ease: 5
-    Affordability: 4
+    5
+    5
+    5
+    5
+    5
+    4
 
     Respond with only the numbers for each category, one per line, or "0" if the information about the category is not obtained from the comment.
 
@@ -99,19 +99,22 @@ def analyze_comment(row):
         # Split response by newlines and clean whitespace
         scores = response.content.strip().split('\n')
         
+        # Filter out any non-numeric lines in the response
+        scores = [score for score in scores if score.isnumeric()]
+
         # Ensure we have exactly 6 scores
-        if len(scores) != 6:
+        if len(scores) < 6:
             logging.warning("Unexpected number of scores received. Filling with zeros.")
             scores += ['0'] * (6 - len(scores))  # Fill missing scores with 0
 
         # Convert scores to float
         processed_scores = {
-            "Ranking": float(scores[0]) if scores[0] else 0.0,
-            "Friendliness": float(scores[1]) if scores[1] else 0.0,
-            "General Rating": float(scores[2]) if scores[2] else 0.0,
-            "Flexibility": float(scores[3]) if scores[3] else 0.0,
-            "Ease": float(scores[4]) if scores[4] else 0.0,
-            "Affordability": float(scores[5]) if scores[5] else 0.0
+            "Ranking": float(scores[0]) if len(scores) > 0 else 0.0,
+            "Friendliness": float(scores[1]) if len(scores) > 1 else 0.0,
+            "General Rating": float(scores[2]) if len(scores) > 2 else 0.0,
+            "Flexibility": float(scores[3]) if len(scores) > 3 else 0.0,
+            "Ease": float(scores[4]) if len(scores) > 4 else 0.0,
+            "Affordability": float(scores[5]) if len(scores) > 5 else 0.0
         }
         return processed_scores
     except Exception as e:
