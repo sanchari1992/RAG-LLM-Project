@@ -49,22 +49,44 @@ def analyze_comment(row):
     Please rate the following comment on a scale of 1 to 5 for these categories:
     - Ranking (1 to 5)
     - Friendliness (1 to 5)
-    - General rating (1 to 5) You can just accept the numeral in the Rating column for this comment and pass it on
+    - General rating (1 to 5) (Accept the numeral in the Rating column for this comment and pass it on)
     - Flexibility in scheduling (1 to 5)
     - Ease of scheduling (1 to 5)
     - Affordability (1 to 5)
 
-    Respond with only the numbers for each category, one per line, or "0" if the information about the category is not obtained from the comment.
-    For example, for the comment:
-    Alabama Psychiatry and Counseling,Mellanie Herard,4,2024,love Dr. Whitt 5 stars rating solely based appointment having future appointments Dr. Rabbani
-    The corresponding numbers returned from GPT might be
-    5
-    4
-    4
-    4
-    4
-    0
+    Here are some examples of comments and their corresponding scores:
 
+    Example 1:
+    Comment: "Alabama Psychiatry and Counseling, Mellanie Herard, 4, 2024, love Dr. Whitt. 5 stars rating solely based on appointment having future appointments Dr. Rabbani."
+    Scores:
+    Ranking: 5
+    Friendliness: 4
+    General Rating: 4
+    Flexibility: 4
+    Ease: 4
+    Affordability: 0
+
+    Example 2:
+    Comment: "I had a terrible experience with the scheduling. The staff was rude, and I waited for over an hour."
+    Scores:
+    Ranking: 1
+    Friendliness: 1
+    General Rating: 1
+    Flexibility: 1
+    Ease: 1
+    Affordability: 0
+
+    Example 3:
+    Comment: "The service was great, and they offered flexible timings which helped me a lot."
+    Scores:
+    Ranking: 5
+    Friendliness: 5
+    General Rating: 5
+    Flexibility: 5
+    Ease: 5
+    Affordability: 4
+
+    Respond with only the numbers for each category, one per line, or "0" if the information about the category is not obtained from the comment.
 
     Comment: "{formatted_comment}"
     """
