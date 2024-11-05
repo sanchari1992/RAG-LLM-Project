@@ -8,17 +8,22 @@ PROCESSED_CSV_FOLDER = os.getenv("PROCESSED_CSV_FOLDER")
 
 def add_average_row_to_csv(file_path):
     """
-    Add a row with averages to the CSV file.
+    Add a row with averages for specific columns to the CSV file.
     """
+    # Read the CSV file
     df = pd.read_csv(file_path)
     
-    # Calculate the averages of the numeric columns and round them to two decimal places
-    averages = df.mean(numeric_only=True).round(2)
+    # Select only the columns needed for averaging
+    numeric_columns = ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability"]
+    df_numeric = df[numeric_columns]
     
-    # Create a new DataFrame for the average row
+    # Calculate averages for the selected columns and round them to two decimal places
+    averages = df_numeric.mean().round(2)
+    
+    # Create a new DataFrame for the average row with "Name" set to "Average"
     average_row = pd.DataFrame({
-        "Name": ["Average"],  # Name is set to "Average"
-        **{col: [averages[col]] for col in averages.index}  # Average values for other columns
+        "Name": ["Average"],
+        **{col: [averages[col]] for col in numeric_columns}
     })
     
     # Append the average row to the original DataFrame
