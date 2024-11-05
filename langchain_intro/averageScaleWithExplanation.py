@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
-PROCESSED_CSV_FOLDER = os.getenv("PROCESSED_CSV_FOLDER")
+PROCESSED_CSV_FOLDER = os.getenv("PROCESSED_EXPLANATION_CSV_FOLDER")
 
 def add_average_row_to_csv(file_path):
     """
