@@ -1,6 +1,7 @@
 import logging
 import os
 import pandas as pd
+import time
 from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
@@ -41,7 +42,7 @@ def format_comment(row):
 def analyze_comment(row):
     """
     Send a formatted comment to ChatGPT and get scores for ranking, friendliness,
-    general ratings, flexibility, ease, and affordability.
+    general ratings, flexibility, ease, and affordability, along with response time.
     """
     formatted_comment = format_comment(row)
     
@@ -55,23 +56,17 @@ def analyze_comment(row):
     - Affordability (1 to 5)
 
     Respond with only the numbers for each category, one per line, or "0" if the information about the category is not obtained from the comment.
-    For example, for the comment:
-    Alabama Psychiatry and Counseling,Mellanie Herard,4,2024,love Dr. Whitt 5 stars rating solely based appointment having future appointments Dr. Rabbani
-    The corresponding numbers returned from GPT might be
-    5
-    4
-    4
-    4
-    4
-    0
-
-
     Comment: "{formatted_comment}"
     """
     
     try:
-        # Sending the prompt and logging the response
+        # Measure response time
+        start_time = time.time()
         response = chat([HumanMessage(content=prompt)])
+        end_time = time.time()
+        
+        # Calculate and log response time
+        response_time = end_time - start_time
         logging.debug(f"GPT Response:\n{response.content}")
 
         # Split response by newlines and clean whitespace
@@ -89,7 +84,8 @@ def analyze_comment(row):
             "General Rating": float(scores[2]) if scores[2] else 0.0,
             "Flexibility": float(scores[3]) if scores[3] else 0.0,
             "Ease": float(scores[4]) if scores[4] else 0.0,
-            "Affordability": float(scores[5]) if scores[5] else 0.0
+            "Affordability": float(scores[5]) if scores[5] else 0.0,
+            "Response Time": response_time
         }
         return processed_scores
     except Exception as e:
@@ -100,7 +96,8 @@ def analyze_comment(row):
             "General Rating": 0.0,
             "Flexibility": 0.0,
             "Ease": 0.0,
-            "Affordability": 0.0
+            "Affordability": 0.0,
+            "Response Time": 0.0
         }
 
 def process_csv_files():
@@ -121,7 +118,8 @@ def process_csv_files():
                 "General Rating": [],
                 "Flexibility": [],
                 "Ease": [],
-                "Affordability": []
+                "Affordability": [],
+                "Response Time": []
             }
             
             for _, row in df.iterrows():
@@ -135,6 +133,7 @@ def process_csv_files():
                 scores_data["Flexibility"].append(scores.get("Flexibility"))
                 scores_data["Ease"].append(scores.get("Ease"))
                 scores_data["Affordability"].append(scores.get("Affordability"))
+                scores_data["Response Time"].append(scores.get("Response Time"))
             
             # Save scores to a new CSV
             new_df = pd.DataFrame(scores_data)
