@@ -75,8 +75,8 @@ def analyze_comment(row):
         response = chat([HumanMessage(content=prompt)])
         end_time = time.time()
         
-        # Calculate and log response time
-        response_time = end_time - start_time
+        # Calculate and log response time, rounded to two decimal places
+        response_time = round(end_time - start_time, 2)
         logging.debug(f"GPT Response:\n{response.content}")
 
         # Split response by newlines and clean whitespace
@@ -95,7 +95,7 @@ def analyze_comment(row):
             "Flexibility": float(scores[3]) if scores[3] else 0.0,
             "Ease": float(scores[4]) if scores[4] else 0.0,
             "Affordability": float(scores[5]) if scores[5] else 0.0,
-            "Response Time": response_time
+            "Response Time": response_time  # Rounded response time
         }
         return processed_scores
     except Exception as e:
