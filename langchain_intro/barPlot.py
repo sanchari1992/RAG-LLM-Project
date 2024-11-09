@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Load the CSV file
-df = pd.read_csv("your_file.csv")
+df = pd.read_csv("./averages/average.csv")
 
 # Set up the bar graph
 def create_bar_graph(df):
