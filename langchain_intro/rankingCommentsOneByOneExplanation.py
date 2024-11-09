@@ -1,6 +1,7 @@
 import logging
 import os
 import pandas as pd
+import time
 from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
@@ -51,7 +52,7 @@ def format_comment(row):
 def analyze_comment(row):
     """
     Send a formatted comment to ChatGPT and get scores and explanations for ranking, friendliness,
-    general ratings, flexibility, ease, and affordability.
+    general ratings, flexibility, ease, and affordability, along with the response time.
     """
     formatted_comment = format_comment(row)
     
@@ -75,9 +76,13 @@ def analyze_comment(row):
     Comment: "{formatted_comment}"
     """
     
+    start_time = time.time()  # Start timer
     try:
         # Sending the prompt and logging the response
         response = chat([HumanMessage(content=prompt)])
+        end_time = time.time()  # End timer
+        response_time = round(end_time - start_time, 2)  # Calculate response time in seconds, rounded to 2 decimal places
+        
         logging.debug(f"GPT Response:\n{response.content}")
 
         # Split response by newlines and clean whitespace
@@ -111,14 +116,15 @@ def analyze_comment(row):
                 scores[category] = 0.0
                 explanations[category] = "No explanation provided."
 
-        return scores, explanations
+        return scores, explanations, response_time
 
     except Exception as e:
         logging.error(f"Error parsing response: {e}")
         # Return zeros and default explanations in case of an exception
         return (
             {category: 0.0 for category in CATEGORY_MAPPING.values()},
-            {category: "No explanation provided." for category in CATEGORY_MAPPING.values()}
+            {category: "No explanation provided." for category in CATEGORY_MAPPING.values()},
+            0.0  # Default response time in case of error
         )
 
 def process_csv_files():
@@ -145,19 +151,21 @@ def process_csv_files():
                 "Ease": [],
                 "Ease Explanation": [],
                 "Affordability": [],
-                "Affordability Explanation": []
+                "Affordability Explanation": [],
+                "Response Time (s)": []
             }
             
             for _, row in df.iterrows():
                 scores_data["Name"].append(row["Name"])
-                scores, explanations = analyze_comment(row)
+                scores, explanations, response_time = analyze_comment(row)
                 
-                # Append each score and explanation to their respective lists
+                # Append each score, explanation, and response time to their respective lists
                 for category in scores:
                     scores_data[category].append(scores[category])
                     scores_data[f"{category} Explanation"].append(explanations[category])
+                scores_data["Response Time (s)"].append(response_time)
             
-            # Save scores and explanations to a new CSV
+            # Save scores, explanations, and response times to a new CSV
             new_df = pd.DataFrame(scores_data)
             new_file_path = os.path.join(OUTPUT_FOLDER, f"processed_{filename}")
             new_df.to_csv(new_file_path, index=False)
