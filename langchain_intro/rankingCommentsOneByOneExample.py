@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
 import shutil
+import time
 
 # Set up logging configuration
 logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -41,7 +42,7 @@ def format_comment(row):
 def analyze_comment(row):
     """
     Send a formatted comment to ChatGPT and get scores for ranking, friendliness,
-    general ratings, flexibility, ease, and affordability.
+    general ratings, flexibility, ease, and affordability, along with response time.
     """
     formatted_comment = format_comment(row)
     
@@ -92,8 +93,13 @@ def analyze_comment(row):
     """
     
     try:
-        # Sending the prompt and logging the response
+        # Measure response time
+        start_time = time.time()
         response = chat([HumanMessage(content=prompt)])
+        end_time = time.time()
+        
+        # Calculate and round response time to two decimal places
+        response_time = round(end_time - start_time, 2)
         logging.debug(f"GPT Response:\n{response.content}")
 
         # Split response by newlines and clean whitespace
@@ -114,7 +120,8 @@ def analyze_comment(row):
             "General Rating": float(scores[2]) if len(scores) > 2 else 0.0,
             "Flexibility": float(scores[3]) if len(scores) > 3 else 0.0,
             "Ease": float(scores[4]) if len(scores) > 4 else 0.0,
-            "Affordability": float(scores[5]) if len(scores) > 5 else 0.0
+            "Affordability": float(scores[5]) if len(scores) > 5 else 0.0,
+            "Response Time": response_time  # Rounded response time
         }
         return processed_scores
     except Exception as e:
@@ -125,7 +132,8 @@ def analyze_comment(row):
             "General Rating": 0.0,
             "Flexibility": 0.0,
             "Ease": 0.0,
-            "Affordability": 0.0
+            "Affordability": 0.0,
+            "Response Time": 0.0
         }
 
 def process_csv_files():
@@ -146,7 +154,8 @@ def process_csv_files():
                 "General Rating": [],
                 "Flexibility": [],
                 "Ease": [],
-                "Affordability": []
+                "Affordability": [],
+                "Response Time": []
             }
             
             for _, row in df.iterrows():
@@ -160,6 +169,7 @@ def process_csv_files():
                 scores_data["Flexibility"].append(scores.get("Flexibility"))
                 scores_data["Ease"].append(scores.get("Ease"))
                 scores_data["Affordability"].append(scores.get("Affordability"))
+                scores_data["Response Time"].append(scores.get("Response Time"))
             
             # Save scores to a new CSV
             new_df = pd.DataFrame(scores_data)
