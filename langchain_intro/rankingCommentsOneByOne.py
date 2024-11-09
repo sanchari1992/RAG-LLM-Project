@@ -55,6 +55,16 @@ def analyze_comment(row):
     - Ease of scheduling (1 to 5)
     - Affordability (1 to 5)
 
+    For example, for the comment:
+    Alabama Psychiatry and Counseling,Mellanie Herard,4,2024,love Dr. Whitt 5 stars rating solely based appointment having future appointments Dr. Rabbani
+    The corresponding numbers returned from GPT might be
+    5
+    4
+    4
+    4
+    4
+    0
+
     Respond with only the numbers for each category, one per line, or "0" if the information about the category is not obtained from the comment.
     Comment: "{formatted_comment}"
     """
