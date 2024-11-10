@@ -26,11 +26,16 @@ def extract_averages(folder_path, file_name):
     file_path = os.path.join(folder_path, file_name)
     df = pd.read_csv(file_path)
     
+    # Skip the 'average' row if it exists (or any other non-relevant row)
+    if 'Average' in df['Name'].values:
+        df = df[df['Name'] != 'Average']  # Remove the 'average' row
+    
     # Print columns to verify column names
     print(f"Columns in {file_name}:", df.columns.tolist())
     
     # Get the last row, drop any columns with NaN values, and only keep relevant columns
-    last_row = df.iloc[-1].dropna()
+    last_row = df.iloc[-1].dropna(subset=columns_to_plot)
+    
     existing_columns = [col for col in columns_to_plot if col in last_row.index]
     return last_row[existing_columns].astype(float)
 
