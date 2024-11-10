@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 PROCESSED_CSV_FOLDER = './processed_csvs'
 EXAMPLE_CSV_FOLDER = './example_csvs'
 EXPLANATION_CSV_FOLDER = './explanation_csvs'
+PROCESSED_CSVS_LUMP_FOLDER = './processed_csvs_lump'  # Add this folder
 
 # Names of the files to compare (same file names across folders)
 file_names = [
@@ -36,7 +37,8 @@ def extract_averages(folder_path, file_name):
 data = {
     'Processed': [],
     'Example': [],
-    'Explanation': []
+    'Explanation': [],
+    'Lump': []  # For processed_csvs_lump
 }
 
 # Extract averages from each folder
@@ -44,22 +46,26 @@ for file_name in file_names:
     data['Processed'].append(extract_averages(PROCESSED_CSV_FOLDER, file_name))
     data['Example'].append(extract_averages(EXAMPLE_CSV_FOLDER, file_name))
     data['Explanation'].append(extract_averages(EXPLANATION_CSV_FOLDER, file_name))
+    data['Lump'].append(extract_averages(PROCESSED_CSVS_LUMP_FOLDER, file_name))  # Extract for lump folder
 
 # Convert the list of averages to DataFrames
 processed_df = pd.DataFrame(data['Processed'], index=file_names)
 example_df = pd.DataFrame(data['Example'], index=file_names)
 explanation_df = pd.DataFrame(data['Explanation'], index=file_names)
+lump_df = pd.DataFrame(data['Lump'], index=file_names)  # DataFrame for Lump folder
 
 # Calculate the mean averages across centers for each approach
 processed_mean = processed_df.mean()
 example_mean = example_df.mean()
 explanation_mean = explanation_df.mean()
+lump_mean = lump_df.mean()  # Calculate mean for Lump
 
 # Combine the averages for plotting
 averages_df = pd.DataFrame({
     'Processed': processed_mean,
     'Example': example_mean,
-    'Explanation': explanation_mean
+    'Explanation': explanation_mean,
+    'Lump': lump_mean  # Add Lump averages
 })
 
 # Plotting the bar graphs for each metric
