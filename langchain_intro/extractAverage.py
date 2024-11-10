@@ -17,7 +17,7 @@ file_names = [
 ]
 
 # Columns to plot for general processing (excluding Explanation columns)
-columns_to_plot = ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability", "Response Time (s)"]
+columns_to_plot = ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability", "Response Time"]
 
 # Function to extract average values from the last row of each file
 def extract_averages(file_path, columns_to_consider):
@@ -25,9 +25,12 @@ def extract_averages(file_path, columns_to_consider):
     # Print columns to verify column names
     print(f"Columns in {file_path}: {df.columns.tolist()}")
     
-    # Get the last row, drop any columns with NaN values, and only keep relevant columns
-    last_row = df.iloc[-1].dropna()
+    # Ensure the "Average" row is the last row and contains the relevant columns
+    last_row = df.iloc[-1].dropna()  # Drop NaN values, so only columns with actual data are kept
+    # Only keep the relevant columns if they exist in the last row
     existing_columns = [col for col in columns_to_consider if col in last_row.index]
+    
+    # Return the averages as floats, for consistency
     return last_row[existing_columns].astype(float)
 
 # Function to process each folder and save average rows to file for general folders
