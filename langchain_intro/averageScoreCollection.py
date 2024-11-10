@@ -26,15 +26,20 @@ def extract_averages(folder_path, file_name):
     file_path = os.path.join(folder_path, file_name)
     df = pd.read_csv(file_path)
     
-    # Skip the 'average' row if it exists (or any other non-relevant row)
+    # Skip the 'average' row if it exists
     if 'Average' in df['Name'].values:
         df = df[df['Name'] != 'Average']  # Remove the 'average' row
     
     # Print columns to verify column names
     print(f"Columns in {file_name}:", df.columns.tolist())
     
-    # Drop rows with NaN in the relevant columns, then get the last row
-    df_cleaned = df[columns_to_plot].dropna()
+    # Check if all required columns exist in the file
+    missing_columns = [col for col in columns_to_plot if col not in df.columns]
+    if missing_columns:
+        print(f"Warning: The following columns are missing in {file_name}: {missing_columns}")
+    
+    # Filter only the existing columns and drop NaN values
+    df_cleaned = df[[col for col in columns_to_plot if col in df.columns]].dropna()
     
     # Get the last row after cleaning
     last_row = df_cleaned.iloc[-1]
@@ -42,6 +47,7 @@ def extract_averages(folder_path, file_name):
     # Ensure we only extract the columns we care about
     existing_columns = [col for col in columns_to_plot if col in last_row.index]
     return last_row[existing_columns].astype(float)
+
 
 # Dictionary to store the averages for each dataset
 data = {
