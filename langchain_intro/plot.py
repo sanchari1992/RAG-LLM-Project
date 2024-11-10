@@ -23,7 +23,14 @@ columns_to_plot = ["Ranking", "Friendliness", "General Rating", "Flexibility", "
 def extract_averages(folder_path, file_name):
     file_path = os.path.join(folder_path, file_name)
     df = pd.read_csv(file_path)
-    return df.iloc[-1][columns_to_plot].astype(float)
+    
+    # Print columns to verify column names
+    print(f"Columns in {file_name}:", df.columns.tolist())
+    
+    # Get the last row, drop any columns with NaN values, and only keep relevant columns
+    last_row = df.iloc[-1].dropna()
+    existing_columns = [col for col in columns_to_plot if col in last_row.index]
+    return last_row[existing_columns].astype(float)
 
 # Dictionary to store the averages for each dataset
 data = {
