@@ -109,17 +109,6 @@ review_template_str = """You are restricted to using ONLY the database entries p
 Do not answer any questions based on your own knowledge or any external sources.  Use only the following context to answer questions.
 Look for trends in the comments, such as whether they are generally positive, negative, or neutral regarding specific aspects of the services, staff, or scheduling options. 
  Return whatever information you get in the first try itself. No need to refine further for a better answer.
-Try to categorize this returned information on a scale of 0 to 5 in terms of the question asked:
-- 0: No information at all
-- 1: Very Poor
-- 2: Poor
-- 3: Average
-- 4: Good
-- 5: Excellent
-
-Respond with only the numbers for each category, one per line, or "0" if a category is not mentioned in the comment.
-
-For example, if returned information is "The feedback for counseling center C is generally friendly.", return '4'.
 
 {context}
 """
@@ -182,17 +171,10 @@ def ask_question():
         question = data.get("question", "")
         result = mybot_agent_executor({"input": question})
 
-        # Check and format the response to ensure it is within the range of 1 to 5 or "0"
-        ratings = result["output"].strip().splitlines()
-        formatted_ratings = []
+        # Simply return the response from GPT, no formatting necessary
+        response = result['output'].strip()
 
-        for rating in ratings:
-            if rating.isdigit() and 1 <= int(rating) <= 5:
-                formatted_ratings.append(rating)
-            else:
-                formatted_ratings.append("0")  # Assign "0" for invalid ratings
-
-        return jsonify({"answer": "\n".join(formatted_ratings)})
+        return jsonify({"answer": response})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
