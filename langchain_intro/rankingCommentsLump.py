@@ -1,6 +1,7 @@
 import os
 import csv
 import logging
+import time  # Import time module to track response times
 from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage
@@ -74,8 +75,16 @@ def analyze_comments_batch(batch):
     {formatted_comments}
     """
     try:
+        # Start timing the GPT response
+        start_time = time.time()
+        
         # Sending the batch prompt and logging the response
         response = chat([HumanMessage(content=prompt)])
+        
+        # Calculate response time per row
+        response_time = time.time() - start_time
+        response_time_per_row = response_time / len(batch)
+
         logging.debug(f"GPT Batch Response:\n{response.content}")
 
         # Parse response into structured data
@@ -88,6 +97,7 @@ def analyze_comments_batch(batch):
             if line.startswith("Comment"):
                 # If current_score is populated, append it to scores_data
                 if current_score:
+                    current_score["Response Time"] = response_time_per_row  # Add response time per row
                     scores_data.append(current_score)
                 # Reset for the new comment
                 current_score = {"Name": batch[len(scores_data)]["Name"]}  # Get name by index
@@ -102,8 +112,9 @@ def analyze_comments_batch(batch):
                         score = 0.0
                     current_score[category] = score
 
-        # Don't forget to append the last score after exiting the loop
+        # Append the last comment score and add response time
         if current_score:
+            current_score["Response Time"] = response_time_per_row
             scores_data.append(current_score)
 
         return scores_data
@@ -120,6 +131,7 @@ def analyze_comments_batch(batch):
                 "Flexibility": 0.0,
                 "Ease": 0.0,
                 "Affordability": 0.0,
+                "Response Time": 0.0,  # Add default 0 response time in case of error
             }
             for row in batch
         ]
@@ -143,6 +155,7 @@ def process_csv_files():
                         "Flexibility",
                         "Ease",
                         "Affordability",
+                        "Response Time",  # New field for response time per row
                     ]
                     writer = csv.DictWriter(output_file, fieldnames=fieldnames)
                     writer.writeheader()
@@ -153,15 +166,11 @@ def process_csv_files():
                         if len(batch) == BATCH_SIZE:
                             scores_data = analyze_comments_batch(batch)
                             writer.writerows(scores_data)
-                            print('Scores Data')
-                            print(scores_data)
                             batch.clear()  # Clear the batch after processing
 
                     # Process any remaining comments in the last batch
                     if batch:
                         scores_data = analyze_comments_batch(batch)
-                        print('Scores Data Outside')
-                        print(scores_data)
                         writer.writerows(scores_data)
 
                 logging.info(f"Processed data saved to: {output_file_path}")
