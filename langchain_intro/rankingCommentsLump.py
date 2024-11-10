@@ -81,9 +81,9 @@ def analyze_comments_batch(batch):
         # Sending the batch prompt and logging the response
         response = chat([HumanMessage(content=prompt)])
         
-        # Calculate response time per row
+        # Calculate response time per row, rounded to two decimal places
         response_time = time.time() - start_time
-        response_time_per_row = response_time / len(batch)
+        response_time_per_row = round(response_time / len(batch), 2)
 
         logging.debug(f"GPT Batch Response:\n{response.content}")
 
