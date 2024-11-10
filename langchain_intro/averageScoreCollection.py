@@ -1,5 +1,3 @@
-# gather_averages.py
-
 import os
 import pandas as pd
 
@@ -26,28 +24,13 @@ def extract_averages(folder_path, file_name):
     file_path = os.path.join(folder_path, file_name)
     df = pd.read_csv(file_path)
     
-    # Skip the 'average' row if it exists
-    if 'Average' in df['Name'].values:
-        df = df[df['Name'] != 'Average']  # Remove the 'average' row
-    
     # Print columns to verify column names
     print(f"Columns in {file_name}:", df.columns.tolist())
     
-    # Check if all required columns exist in the file
-    missing_columns = [col for col in columns_to_plot if col not in df.columns]
-    if missing_columns:
-        print(f"Warning: The following columns are missing in {file_name}: {missing_columns}")
-    
-    # Filter only the existing columns and drop NaN values
-    df_cleaned = df[[col for col in columns_to_plot if col in df.columns]].dropna()
-    
-    # Get the last row after cleaning
-    last_row = df_cleaned.iloc[-1]
-    
-    # Ensure we only extract the columns we care about
+    # Get the last row, drop any columns with NaN values, and only keep relevant columns
+    last_row = df.iloc[-1].dropna()
     existing_columns = [col for col in columns_to_plot if col in last_row.index]
     return last_row[existing_columns].astype(float)
-
 
 # Dictionary to store the averages for each dataset
 data = {
@@ -84,9 +67,7 @@ averages_df = pd.DataFrame({
     'Lump': lump_mean  # Add Lump averages
 })
 
-# Round the values to two decimal places
-averages_df = averages_df.round(2)
-
-averages_df.to_csv('average_scores.csv', index=True)
+# Save the averages to a CSV file
+averages_df.to_csv('average_scores.csv')
 
 print("Averages saved to 'average_scores.csv'")
