@@ -1,4 +1,3 @@
-Name,Ranking,Friendliness,General Rating,Flexibility,Ease,Affordability,Response Time
 ground_truth_Alabama_Psychiatry_Dataset,2,1,2.8,2,4,1,0
 ground_truth_Birmingham_Anxiety_Dataset,3,5,4.2,0.8,4,0,0
 ground_truth_Eastside_Mental_Health_Dataset,1,2.5,2.9,2,2,0,0

@@ -30,9 +30,8 @@ lump_df = process_averages_file(PROCESSED_CSVS_LUMP_AVERAGES_FILE)
 
 # Function to plot the data for each mental health center
 def plot_data_for_center(center_name, ground_truth_df, example_df, processed_df, explanation_df, lump_df):
-    # Extract data for the specific mental health center by matching the full name from ground_truth
-    ground_truth_name = f'ground_truth_{center_name}_Dataset'  # Full name in ground truth
-    center_gt = ground_truth_df[ground_truth_df['Name'] == ground_truth_name]
+    # Extract data for the specific mental health center
+    center_gt = ground_truth_df[ground_truth_df['Name'] == f'ground_truth_{center_name}']
     
     if center_gt.empty:
         print(f"Ground truth not found for {center_name}")
