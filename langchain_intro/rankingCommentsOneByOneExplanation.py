@@ -152,7 +152,7 @@ def process_csv_files():
                 "Ease Explanation": [],
                 "Affordability": [],
                 "Affordability Explanation": [],
-                "Response Time (s)": []
+                "Response Time": []
             }
             
             for _, row in df.iterrows():
@@ -163,7 +163,7 @@ def process_csv_files():
                 for category in scores:
                     scores_data[category].append(scores[category])
                     scores_data[f"{category} Explanation"].append(explanations[category])
-                scores_data["Response Time (s)"].append(response_time)
+                scores_data["Response Time"].append(response_time)
             
             # Save scores, explanations, and response times to a new CSV
             new_df = pd.DataFrame(scores_data)
