@@ -13,6 +13,7 @@ columns_to_plot = ["Ranking", "Friendliness", "General Rating", "Flexibility", "
 # Function to read and process the average CSV files
 def process_averages_file(file_path):
     df = pd.read_csv(file_path, header=None)
+    # Adjusting the column names to match the 7 columns in your CSV files
     df.columns = ['File', 'Affordability', 'Ease', 'Flexibility', 'Friendliness', 'General Rating', 'Ranking', 'Response Time']
     df.set_index('File', inplace=True)
     return df
