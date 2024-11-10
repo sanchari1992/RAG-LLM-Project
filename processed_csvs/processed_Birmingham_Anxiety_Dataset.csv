@@ -1,31 +1,30 @@
-Name,Ranking,Friendliness,General Rating,Flexibility,Ease,Affordability
-Julie Brasfield,1.0,0.0,0.0,0.0,0.0,0.0
-Katie Heacock,5.0,5.0,5.0,0.0,0.0,0.0
-Erin Isbell,1.0,1.0,1.0,1.0,1.0,1.0
-Pat Walker,1.0,0.0,1.0,1.0,1.0,1.0
-Red Peter Panda,2.0,1.0,2.0,1.0,1.0,1.0
-Michelle Brown,5.0,0.0,5.0,0.0,0.0,0.0
-Tracy Ann Martin,5.0,0.0,5.0,0.0,0.0,0.0
-Nikki B,5.0,0.0,5.0,0.0,0.0,0.0
-Madison Griggs,5.0,0.0,5.0,0.0,0.0,0.0
-Michelle Watts,5.0,5.0,5.0,0.0,0.0,0.0
-Sarah Mintz,5.0,0.0,5.0,0.0,0.0,0.0
-Kristin Landham,5.0,0.0,5.0,0.0,0.0,0.0
-"krdcostume ""Krdcostume""",1.0,3.0,0.0,0.0,0.0,0.0
-JOANNE BERNARD,5.0,0.0,5.0,0.0,0.0,0.0
-Ben Lighter,5.0,5.0,5.0,4.0,4.0,0.0
-Ashley Burchfield,4.0,5.0,4.0,0.0,0.0,0.0
-Jessica Raines,5.0,0.0,5.0,0.0,0.0,0.0
-Leah Simmons,5.0,5.0,5.0,0.0,0.0,0.0
-Tyler Nolan,1.0,1.0,1.0,0.0,0.0,0.0
-Shaun Ray,5.0,0.0,5.0,5.0,5.0,0.0
-Gloria Phillips,5.0,5.0,5.0,5.0,5.0,5.0
-Izzy Dennis,5.0,0.0,5.0,0.0,0.0,0.0
-Olivia Kent,5.0,5.0,5.0,0.0,0.0,0.0
-Colette Rubright,5.0,0.0,5.0,0.0,0.0,0.0
-Keshia Padlo,5.0,5.0,5.0,0.0,0.0,0.0
-Hannah Bell,5.0,5.0,5.0,0.0,0.0,0.0
-lydia lacruz,5.0,0.0,5.0,0.0,0.0,0.0
-Cumberland Computer Services,5.0,5.0,5.0,0.0,0.0,0.0
-Bayley Carden,5.0,5.0,5.0,0.0,0.0,0.0
-Average,4.17,2.1,4.1,0.59,0.59,0.28
+Name,Ranking,Friendliness,General Rating,Flexibility,Ease,Affordability,Response Time
+Julie Brasfield,1.0,2.0,1.0,1.0,1.0,1.0,0.65
+Katie Heacock,5.0,5.0,0.0,0.0,0.0,0.0,1.52
+Erin Isbell,1.0,0.0,1.0,1.0,1.0,1.0,7.02
+Pat Walker,1.0,0.0,0.0,0.0,0.0,1.0,0.78
+Red Peter Panda,2.0,2.0,2.0,1.0,1.0,1.0,3.0
+Michelle Brown,4.0,5.0,4.0,0.0,0.0,0.0,0.46
+Tracy Ann Martin,5.0,0.0,0.0,0.0,0.0,0.0,0.43
+Nikki B,5.0,0.0,5.0,0.0,0.0,0.0,2.36
+Madison Griggs,4.0,4.0,0.0,5.0,5.0,0.0,0.75
+Michelle Watts,5.0,4.0,0.0,0.0,4.0,0.0,0.5
+Sarah Mintz,5.0,0.0,5.0,0.0,0.0,0.0,0.41
+Kristin Landham,5.0,0.0,0.0,0.0,0.0,0.0,0.43
+"krdcostume ""Krdcostume""",1.0,1.0,1.0,1.0,1.0,1.0,1.64
+JOANNE BERNARD,5.0,5.0,0.0,0.0,0.0,0.0,0.93
+Ben Lighter,5.0,5.0,0.0,0.0,0.0,0.0,0.39
+Ashley Burchfield,5.0,0.0,0.0,0.0,0.0,0.0,0.4
+Jessica Raines,5.0,0.0,0.0,0.0,0.0,0.0,0.45
+Leah Simmons,5.0,0.0,0.0,0.0,0.0,0.0,0.44
+Tyler Nolan,1.0,1.0,0.0,0.0,0.0,0.0,0.4
+Shaun Ray,5.0,4.0,0.0,5.0,5.0,0.0,2.49
+Gloria Phillips,5.0,4.0,4.0,4.0,5.0,4.0,0.59
+Izzy Dennis,5.0,0.0,0.0,0.0,0.0,0.0,1.25
+Olivia Kent,5.0,5.0,0.0,0.0,0.0,0.0,0.37
+Colette Rubright,5.0,4.0,0.0,0.0,0.0,0.0,0.38
+Keshia Padlo,4.0,5.0,0.0,0.0,0.0,0.0,0.42
+Hannah Bell,5.0,5.0,0.0,0.0,0.0,0.0,0.39
+lydia lacruz,5.0,0.0,0.0,0.0,0.0,0.0,0.42
+Cumberland Computer Services,4.0,5.0,4.0,0.0,0.0,0.0,0.42
+Bayley Carden,5.0,4.0,0.0,0.0,0.0,0.0,0.35
