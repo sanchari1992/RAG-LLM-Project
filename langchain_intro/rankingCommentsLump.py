@@ -174,6 +174,35 @@ def process_csv_files():
                         writer.writerows(scores_data)
 
                 logging.info(f"Processed data saved to: {output_file_path}")
+                
+                # Modify column name from 'Rating' to 'General Rating'
+                modify_column_name(output_file_path)
+
+def modify_column_name(file_path):
+    """
+    Modify the column name 'Rating' to 'General Rating' in the processed CSV file.
+    """
+    temp_file_path = file_path + ".tmp"
+    
+    with open(file_path, mode="r", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
+        fieldnames = reader.fieldnames
+
+        # Modify the 'Rating' column to 'General Rating'
+        if 'Rating' in fieldnames:
+            fieldnames[fieldnames.index('Rating')] = 'General Rating'
+        
+        with open(temp_file_path, mode="w", newline="", encoding="utf-8") as temp_file:
+            writer = csv.DictWriter(temp_file, fieldnames=fieldnames)
+            writer.writeheader()
+            
+            # Write rows with the new column name
+            for row in reader:
+                writer.writerow(row)
+
+    # Replace original file with the modified one
+    shutil.move(temp_file_path, file_path)
+    logging.info(f"Column 'Rating' has been renamed to 'General Rating' in: {file_path}")
 
 # Run the processing function
 process_csv_files()
