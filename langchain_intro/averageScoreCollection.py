@@ -68,6 +68,9 @@ averages_df = pd.DataFrame({
 })
 
 # Save the averages to a CSV file
-averages_df.to_csv('average_scores.csv')
+averages_df = averages_df.round(2)
+
+# Save the averages to a CSV file without the index column
+averages_df.to_csv('average_scores.csv', index=True)
 
 print("Averages saved to 'average_scores.csv'")
