@@ -72,7 +72,4 @@ averages_df = pd.DataFrame({
 # Round the values to two decimal places
 averages_df = averages_df.round(2)
 
-# Save the averages to a CSV file without the index column
-averages_df.to_csv('average_scores.csv', index=False)
-
 print("Averages saved to 'average_scores.csv'")
