@@ -1,0 +1,34 @@
+Details about file:
+Prompts for testing time weightage put to comments
+*****
+P1."What is the general feedback about the therapists at Birmingham Anxiety and Trauma Therapy?"
+(A) Without Comment Weightage:
+"The feedback about the therapists is mixed. Some reviewers mention that the therapists are helpful and professional, while others have had negative experiences with certain therapists. For instance, there are reviews that mention issues with unprofessionalism, like billing problems, while others highlight positive experiences with staff."
+(B) With Comment Weightage:
+"Based on the most recent reviews, therapists like Angelica Bellman and Rachel Lawley are highly praised, with multiple 5-star reviews highlighting their professionalism, care, and ability to help clients. On the other hand, there are negative reviews from 2023 mentioning unprofessionalism and billing issues. The weight of the recent positive reviews (2024) suggests that the therapists are highly regarded overall."
+
+P2."What are the main pros and cons of Birmingham Anxiety and Trauma Therapy?"
+(A) Without Comment Weightage:
+"Pros include the helpfulness of therapists and the peaceful atmosphere at the center. Cons include issues with insurance billing and technical difficulties with the online portal, as mentioned in some reviews."
+(B) With Comment Weightage:
+"Recent reviews emphasize the pros, such as the professionalism of therapists like Rachel Lawley and Angelica Bellman, with many 5-star ratings praising their care. However, older reviews (2023) mention issues with insurance billing and technical problems with the portal. The more recent reviews (2024) carry a higher weight, indicating that the overall experience is improving."
+
+P3."How does the quality of customer service at Birmingham Anxiety and Trauma Therapy compare?"
+(A) Without Comment Weightage:
+"Customer service seems to vary. Some reviews note that the staff is friendly and professional, while others mention poor experiences, such as lack of communication or issues with appointment scheduling."
+(B) With Comment Weightage:
+"Recent reviews (2024) emphasize excellent customer service, with multiple positive mentions of the receptionist and staff providing a welcoming atmosphere. However, older reviews (2021) highlight some issues with unprofessional communication and billing problems, which are given less weight compared to the recent positive reviews."
+
+P4."What do clients think about the affordability of the services?"
+(A) Without Comment Weightage:
+"Affordability is mentioned in a few reviews. Some clients mention the cost of therapy as being high, while others do not seem to have an issue with it. There are mixed opinions on whether the services are worth the cost."
+(B) With Comment Weightage:
+"Reviews from 2024 tend to focus on the quality of therapy and customer service rather than pricing, with many clients feeling the services are worth the cost. Older reviews mention concerns about high fees and payment issues, but the weight of recent reviews suggests that clients are more satisfied with the value of the services offered."
+
+P5."What improvements do clients suggest for Birmingham Anxiety and Trauma Therapy?"
+(A) Without Comment Weightage:
+"Some clients suggest improving the online portal for scheduling and addressing billing issues. There are a few mentions of improving communication with clients and making the process more streamlined."
+(B) With Comment Weightage:
+"The most recent reviews from 2024 focus on the positive aspects of therapy, with little mention of the online portal or billing issues. However, reviews from 2023 and 2022 raise concerns about these issues. Given the weight of the recent reviews, it's clear that these problems may be less prominent now, but older clients still suggest improvements to communication and the online system."
+
+*****

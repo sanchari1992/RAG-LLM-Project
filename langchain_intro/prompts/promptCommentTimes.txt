@@ -1,0 +1,9 @@
+Details about file:
+Prompts for testing time weightage put to comments
+*****
+P1."What is the general feedback about the therapists at Birmingham Anxiety and Trauma Therapy?"
+P2."What are the main pros and cons of Birmingham Anxiety and Trauma Therapy?"
+P3."How does the quality of customer service at Birmingham Anxiety and Trauma Therapy compare?"
+P4."What do clients think about the affordability of the services?"
+P5."What improvements do clients suggest for Birmingham Anxiety and Trauma Therapy?"
+*****
