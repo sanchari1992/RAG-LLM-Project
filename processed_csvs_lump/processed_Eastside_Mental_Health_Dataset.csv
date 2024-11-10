@@ -1,14 +1,14 @@
-Name,Ranking,Friendliness,Rating,Flexibility,Ease,Affordability
-Siame7474,1.0,1.0,0.0,1.0,1.0,1.0
-mike ensley,5.0,5.0,5.0,5.0,5.0,0.0
-Carla Clayton,2.0,2.0,0.0,2.0,2.0,0.0
-Jerrilyn Conlon,1.0,1.0,0.0,1.0,1.0,0.0
-Cassandra Moore,5.0,5.0,5.0,5.0,5.0,0.0
-Mikey Childers (Mikey),1.0,1.0,0.0,1.0,1.0,0.0
-Football is King,1.0,1.0,0.0,1.0,1.0,0.0
-Love kordei,4.0,4.0,0.0,4.0,4.0,0.0
-Shaquita tables,4.0,4.0,0.0,4.0,4.0,0.0
-Ashley Adams,5.0,5.0,5.0,5.0,5.0,0.0
-Dustin F,1.0,1.0,0.0,1.0,1.0,0.0
-Miguel Gabriel,5.0,5.0,5.0,5.0,5.0,0.0
-Average,2.92,2.92,1.67,2.92,2.92,0.08
+Name,Ranking,Friendliness,Rating,Flexibility,Ease,Affordability,Response Time
+Siame7474,1.0,1.0,0.0,1.0,1.0,1.0,0.48
+mike ensley,5.0,5.0,5.0,5.0,5.0,5.0,0.48
+Carla Clayton,2.0,2.0,0.0,1.0,2.0,0.0,0.48
+Jerrilyn Conlon,1.0,1.0,0.0,1.0,1.0,1.0,0.48
+Cassandra Moore,5.0,5.0,5.0,5.0,5.0,5.0,0.48
+Mikey Childers (Mikey),1.0,1.0,0.0,1.0,1.0,1.0,0.48
+Football is King,1.0,1.0,0.0,1.0,1.0,1.0,0.48
+Love kordei,4.0,4.0,0.0,4.0,4.0,0.0,0.48
+Shaquita tables,4.0,4.0,0.0,4.0,4.0,0.0,0.48
+Ashley Adams,5.0,5.0,5.0,5.0,5.0,5.0,0.48
+Dustin F,1.0,1.0,0.0,1.0,1.0,1.0,0.48
+Miguel Gabriel,5.0,5.0,5.0,5.0,5.0,5.0,0.48
+Average,2.92,2.92,1.67,2.83,2.92,2.08,0.48

@@ -1,15 +1,15 @@
-Name,Ranking,Friendliness,Rating,Flexibility,Ease,Affordability
-Dominique Webb,5.0,5.0,0.0,5.0,5.0,0.0
-Rio DeJaneiro,1.0,1.0,0.0,0.0,0.0,0.0
-"LaQuita ""Nikki"" Densmore",5.0,5.0,5.0,5.0,5.0,0.0
-vickie jones,5.0,5.0,5.0,5.0,5.0,0.0
-Milea Hanner,5.0,5.0,5.0,5.0,5.0,0.0
-Kendal Smith,5.0,5.0,0.0,5.0,5.0,0.0
-Aiden Lipp,5.0,5.0,0.0,5.0,5.0,0.0
-Anthony Moss,5.0,5.0,0.0,5.0,5.0,0.0
-Nicole Knighton,1.0,1.0,0.0,1.0,1.0,0.0
-Shantrell Scott,5.0,5.0,5.0,5.0,5.0,0.0
-Tiffany Young,5.0,5.0,0.0,5.0,5.0,0.0
-ProudHBCU Grad,4.0,5.0,0.0,0.0,0.0,0.0
-LifeWith Mymy,5.0,5.0,0.0,5.0,5.0,0.0
-Average,4.31,4.38,1.54,3.92,3.92,0.0
+Name,Ranking,Friendliness,Rating,Flexibility,Ease,Affordability,Response Time
+Dominique Webb,5.0,5.0,0.0,0.0,0.0,0.0,0.41
+Rio DeJaneiro,1.0,1.0,0.0,1.0,1.0,0.0,0.41
+"LaQuita ""Nikki"" Densmore",5.0,5.0,5.0,5.0,5.0,0.0,0.41
+vickie jones,5.0,5.0,0.0,0.0,0.0,0.0,0.41
+Milea Hanner,5.0,5.0,0.0,0.0,0.0,0.0,0.41
+Kendal Smith,5.0,5.0,0.0,0.0,0.0,0.0,0.41
+Aiden Lipp,5.0,5.0,0.0,0.0,0.0,0.0,0.41
+Anthony Moss,5.0,5.0,0.0,0.0,0.0,0.0,0.41
+Nicole Knighton,1.0,1.0,0.0,1.0,1.0,0.0,0.41
+Shantrell Scott,5.0,5.0,0.0,0.0,0.0,0.0,0.41
+Tiffany Young,5.0,5.0,0.0,0.0,0.0,0.0,0.41
+ProudHBCU Grad,4.0,5.0,0.0,0.0,0.0,0.0,0.41
+LifeWith Mymy,5.0,5.0,0.0,0.0,0.0,0.0,0.41
+Average,4.31,4.38,0.38,0.54,0.54,0.0,0.41
