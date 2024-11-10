@@ -14,7 +14,7 @@ def add_average_row_to_csv(file_path):
     df = pd.read_csv(file_path)
     
     # Specify only the columns needed for averaging
-    numeric_columns = ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability", "Response Time (s)"]
+    numeric_columns = ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability", "Response Time"]
     
     # Calculate averages for the selected numeric columns and round them to two decimal places
     averages = df[numeric_columns].mean().round(2)
