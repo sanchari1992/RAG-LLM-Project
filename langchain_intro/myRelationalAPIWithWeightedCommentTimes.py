@@ -18,6 +18,7 @@ from langchain.agents import (
     AgentExecutor,
 )
 from langchain import hub
+import datetime
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -49,6 +50,7 @@ def truncate_review(review, max_words=100):
         return " ".join(words[:max_words]) + "..."
     return review
 
+# Modify the fetch_reviews_from_db function to include weights based on the year
 def fetch_reviews_from_db(question, max_reviews_per_table=5):
     cursor = mysql_connection.cursor(dictionary=True)
 
@@ -62,10 +64,14 @@ def fetch_reviews_from_db(question, max_reviews_per_table=5):
     tokens_per_word = 1.3
     max_tokens = 16000  # Stay below the limit
 
+    # Get the current year and last year for weighting
+    current_year = datetime.datetime.now().year
+    last_year = current_year - 1
+
     # Query each table for matching reviews
     for table in tables:
         query = f"""
-            SELECT Comment FROM {table}
+            SELECT Comment, `Review Year` FROM {table}
             WHERE MATCH(Comment) AGAINST (%s IN NATURAL LANGUAGE MODE)
             LIMIT {max_reviews_per_table}
         """
@@ -74,11 +80,22 @@ def fetch_reviews_from_db(question, max_reviews_per_table=5):
 
         # Add reviews to the context, but truncate if too long
         for review in reviews:
+            review_year = review['Review Year']
             truncated_review = truncate_review(review['Comment'], max_words=50)
+
+            # Calculate weight based on the review year
+            if review_year == current_year:
+                weight = 1
+            elif review_year == last_year:
+                weight = 0.7
+            else:
+                weight = 0.2
+
             review_token_count = int(len(truncated_review.split()) * tokens_per_word)
 
             if token_count + review_token_count < max_tokens:
-                context += truncated_review + " "
+                # Add weighted review to context
+                context += f"[Weight: {weight}] {truncated_review} "
                 token_count += review_token_count
             else:
                 break  # Stop if we exceed the token limit
