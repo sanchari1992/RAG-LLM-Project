@@ -8,26 +8,24 @@ PROCESSED_CSV_FOLDER = os.getenv("PROCESSED_EXPLANATION_CSV_FOLDER")
 
 def add_average_row_to_csv(file_path):
     """
-    Add a row with averages for specific columns to the CSV file.
+    Add a row with averages for specific columns to the CSV file, leaving non-numeric columns empty in the average row.
     """
     # Read the CSV file
     df = pd.read_csv(file_path)
     
-    # Select only the columns needed for averaging
+    # Specify only the columns needed for averaging
     numeric_columns = ["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability", "Response Time (s)"]
-    df_numeric = df[numeric_columns]
     
-    # Calculate averages for the selected columns and round them to two decimal places
-    averages = df_numeric.mean().round(2)
+    # Calculate averages for the selected numeric columns and round them to two decimal places
+    averages = df[numeric_columns].mean().round(2)
     
-    # Create a new DataFrame for the average row with "Name" set to "Average"
-    average_row = pd.DataFrame({
-        "Name": ["Average"],
-        **{col: [averages[col]] for col in numeric_columns}
-    })
-    
-    # Append the average row to the original DataFrame
-    df_with_average = pd.concat([df, average_row], ignore_index=True)
+    # Prepare a dictionary for the average row, setting non-numeric columns to empty values
+    average_row = {col: "" for col in df.columns}  # Start with empty values for all columns
+    average_row.update({"Name": "Average"})        # Set "Name" column to "Average"
+    average_row.update(averages.to_dict())         # Add calculated averages to numeric columns
+
+    # Append the average row to the DataFrame
+    df_with_average = pd.concat([df, pd.DataFrame([average_row])], ignore_index=True)
     
     # Save the modified DataFrame back to the CSV file
     df_with_average.to_csv(file_path, index=False)
