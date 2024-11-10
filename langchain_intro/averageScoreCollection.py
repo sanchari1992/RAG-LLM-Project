@@ -33,9 +33,13 @@ def extract_averages(folder_path, file_name):
     # Print columns to verify column names
     print(f"Columns in {file_name}:", df.columns.tolist())
     
-    # Get the last row, drop any columns with NaN values, and only keep relevant columns
-    last_row = df.iloc[-1].dropna(subset=columns_to_plot)
+    # Drop rows with NaN in the relevant columns, then get the last row
+    df_cleaned = df[columns_to_plot].dropna()
     
+    # Get the last row after cleaning
+    last_row = df_cleaned.iloc[-1]
+    
+    # Ensure we only extract the columns we care about
     existing_columns = [col for col in columns_to_plot if col in last_row.index]
     return last_row[existing_columns].astype(float)
 
