@@ -1,0 +1,22 @@
+Responses: Time: 11:59:24 Date: 2024-11-11
+*****
+P1.""What is the general feedback about the therapists at Birmingham Anxiety and Trauma Therapy?""
+AP1."The feedback about the therapists at Birmingham Anxiety and Trauma Therapy is mixed. Some clients have positive comments about specific therapists like Pam Pierce, Brandy Smith, and LaKendra Grimes, praising their knowledge, compassion, and professionalism. However, there are also negative comments about the billing process, scheduling issues, and experiences with certain psychiatrists like Dr. Rabbani and Dr. Khan. Overall, there is a mix of positive and negative experiences shared by clients of Birmingham Anxiety and Trauma Therapy."
+Response Time: 4.16 seconds
+*****
+P2.""What are the main pros and cons of Birmingham Anxiety and Trauma Therapy?""
+AP2."The main pros of Birmingham Anxiety and Trauma Therapy include therapists' warmth, knowledge, professionalism, effective anxiety management, and helpful recommendations. On the other hand, some cons include billing issues, unprofessional staff, and clients feeling judged or unsafe during sessions."
+Response Time: 2.81 seconds
+*****
+P3.""How does the quality of customer service at Birmingham Anxiety and Trauma Therapy compare?""
+AP3."The quality of customer service at Birmingham Anxiety and Trauma Therapy has received mixed reviews. Some clients have praised specific therapists for their knowledge and compassion, while others have mentioned issues with rude receptionists, poor communication, and scheduling problems."
+Response Time: 2.87 seconds
+*****
+P4.""What do clients think about the affordability of the services?""
+AP4."There is no specific mention of the affordability of the services in the comments provided by the clients."
+Response Time: 1.80 seconds
+*****
+P5.""What improvements do clients suggest for Birmingham Anxiety and Trauma Therapy?""
+AP5."Clients suggest that Birmingham Anxiety and Trauma Therapy should improve communication, provide better information about services, and enhance the scheduling process. Some clients found the lack of communication frustrating, while others appreciated a quick response from the management. Additionally, there were comments about the need for better handling of appointments and scheduling to ensure a smoother experience for clients."
+Response Time: 3.05 seconds
+*****
