@@ -71,7 +71,7 @@ def fetch_reviews_from_db(question, max_reviews_per_table=5):
     # Query each table for matching reviews
     for table in tables:
         query = f"""
-            SELECT Comment, `Review Year` FROM {table}
+            SELECT Comment, `Review_Year` FROM {table}
             WHERE MATCH(Comment) AGAINST (%s IN NATURAL LANGUAGE MODE)
             LIMIT {max_reviews_per_table}
         """
@@ -80,7 +80,7 @@ def fetch_reviews_from_db(question, max_reviews_per_table=5):
 
         # Add reviews to the context, but truncate if too long
         for review in reviews:
-            review_year = review['Review Year']
+            review_year = review['Review_Year']
             truncated_review = truncate_review(review['Comment'], max_words=50)
 
             # Calculate weight based on the review year
@@ -142,7 +142,7 @@ tools = [
         description="""Useful when you need to answer questions from the SQL database
         about mental health counseling centers - their ratings, rankings, staff, affordability, properties etc based on the reviews in the database.
         There are five relations on five different counseling centers in Birmingham, Alabama.
-        The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review Year', and 'Comment'.
+        The reviews include fields like 'Counseling Center', 'Name', 'Rating', 'Review_Year', and 'Comment'.
         Pass the entire question as input to the tool. For example,
         if the question is "What do people think of Center A?",
         the input should be "What do people think of Center A?"
