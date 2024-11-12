@@ -1,0 +1,34 @@
+Responses: Time: 10:29:12 Date: 2024-11-12
+*****
+P1.""What is the general feedback about the therapists at Birmingham Anxiety and Trauma Therapy?""
+AP1."The general feedback about the therapists at Birmingham Anxiety and Trauma Therapy is mixed. Some clients had positive experiences and felt comfortable and cared for by the therapists, while others had negative experiences and expressed feeling hurt, unsafe, and dissatisfied with the therapist's approach."
+Response Time: 3.67 seconds
+*****
+P2.""What are the main pros and cons of Birmingham Anxiety and Trauma Therapy?""
+AP2."Based on the reviews for Birmingham Anxiety and Trauma Therapy, here are the main pros and cons:
+
+Pros:
+1. Positive experiences with therapists like Angelica Bellman.
+2. Satisfied clients like Nikki B and Tracy Ann Martin.
+3. Offers therapy services for anxiety and trauma.
+
+Cons:
+1. Issues with scheduling and understanding of complex trauma.
+2. Negative experiences reported by clients like Tyler Nolan and Julie Brasfield.
+3. Dissatisfaction with group therapy sessions, therapists, and billing process.
+
+Overall, the center has a mix of positive and negative feedback, with some clients having positive experiences with specific therapists while others have encountered challenges with scheduling and therapy sessions."
+Response Time: 4.16 seconds
+*****
+P3.""How does the quality of customer service at Birmingham Anxiety and Trauma Therapy compare?""
+AP3."The quality of customer service at Birmingham Anxiety and Trauma Therapy has mixed reviews. Some reviewers had a great experience and praised the friendly demeanor of the staff, while others expressed dissatisfaction with feeling unheard and experiencing issues with billing and insurance."
+Response Time: 3.34 seconds
+*****
+P4.""What do clients think about the affordability of the services?""
+AP4."Clients seem to have significant concerns about the billing practices and affordability of the services at both Alabama Psychiatry and Counseling and Birmingham Anxiety and Trauma Therapy. Multiple clients have expressed frustration over unexpected demands for payment despite assurances from the office staff and insurance coverage. One client mentioned being asked for $1,742 despite claims being paid, while another mentioned being asked to pay $600 for treatment after being assured of a referral. These comments suggest that clients find the services to be unaffordable due to billing discrepancies and unexpected charges, leading to feelings of concern and distress."
+Response Time: 4.64 seconds
+*****
+P5.""What improvements do clients suggest for Birmingham Anxiety and Trauma Therapy?""
+AP5."Clients generally seem to have positive feedback about Birmingham Anxiety and Trauma Therapy, with comments expressing satisfaction with the care received and the therapists' dedication. There are no specific suggestions for improvements provided in the database entries."
+Response Time: 2.65 seconds
+*****
