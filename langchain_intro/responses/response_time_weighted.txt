@@ -1,0 +1,22 @@
+Responses: Time: 11:54:25 Date: 2024-11-11
+*****
+P1.""What is the general feedback about the therapists at Birmingham Anxiety and Trauma Therapy?""
+AP1."The feedback about the therapists at Birmingham Anxiety and Trauma Therapy is mixed. Some clients have positive experiences with therapists like Pam Pierce and Dr. Paulk, while there are negative reviews about therapists like Dr. Rabbani and Dr. Khan. It seems that clients have had varying experiences with different therapists at this practice."
+Response Time: 3.35 seconds
+*****
+P2.""What are the main pros and cons of Birmingham Anxiety and Trauma Therapy?""
+AP2."Based on the reviews, the main pros of Birmingham Anxiety and Trauma Therapy include therapists helping clients on their journey to finding fulfillment and happiness. However, the main cons include clients feeling judged, criticized, or not properly cared for during their sessions."
+Response Time: 2.49 seconds
+*****
+P3.""How does the quality of customer service at Birmingham Anxiety and Trauma Therapy compare?""
+AP3."The quality of customer service at Birmingham Anxiety and Trauma Therapy has received mixed reviews. Some customers have praised the customer service as excellent, refreshing, and friendly, while others have criticized it for being terrible with rude receptionists and consistently bad service."
+Response Time: 2.68 seconds
+*****
+P4.""What do clients think about the affordability of the services?""
+AP4."There is no specific mention of the affordability of the services in the comments provided by clients."
+Response Time: 2.24 seconds
+*****
+P5.""What improvements do clients suggest for Birmingham Anxiety and Trauma Therapy?""
+AP5."Clients suggest that Birmingham Anxiety and Trauma Therapy needs to improve communication, specifically in terms of following up on voicemails and emails, as well as scheduling appointments. Some clients have found the lack of communication frustrating and hope that the office improves in this aspect."
+Response Time: 2.57 seconds
+*****
