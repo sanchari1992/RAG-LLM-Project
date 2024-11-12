@@ -1,0 +1,22 @@
+Responses: Time: 10:04:40 Date: 2024-11-12
+*****
+P1.""What is the general feedback about the therapists at Birmingham Anxiety and Trauma Therapy?""
+AP1."The general feedback about the therapists at Birmingham Anxiety and Trauma Therapy is mixed. Some clients have positive comments about specific therapists like Dr. Whitt and Dr. Rabbani, mentioning their listening skills, understanding, and effectiveness in treatment. However, there are also negative comments about therapists missing appointments, billing issues, and concerns about confidentiality."
+Response Time: 4.19 seconds
+*****
+P2.""What are the main pros and cons of Birmingham Anxiety and Trauma Therapy?""
+AP2."I'm sorry, but I don't have any information about Birmingham Anxiety and Trauma Therapy in the database. If you have any other questions or need assistance with something else, feel free to ask!"
+Response Time: 2.07 seconds
+*****
+P3.""How does the quality of customer service at Birmingham Anxiety and Trauma Therapy compare?""
+AP3."Based on the reviews, the quality of customer service at Birmingham Anxiety and Trauma Therapy seems to vary. Some clients have positive experiences, mentioning compassion, understanding, and helpful staff members. However, there are also negative comments regarding billing practices, missed appointments, and concerns about confidentiality. Overall, the reviews suggest a mixed quality of customer service at Birmingham Anxiety and Trauma Therapy."
+Response Time: 3.09 seconds
+*****
+P4.""What do clients think about the affordability of the services?""
+AP4."Clients have mixed opinions about the affordability of the services at Alabama Psychiatry and Counseling. Some clients have expressed concerns about billing practices and unexpected charges, while others have not mentioned affordability as an issue."
+Response Time: 2.23 seconds
+*****
+P5.""What improvements do clients suggest for Birmingham Anxiety and Trauma Therapy?""
+AP5."Clients have suggested improvements for Birmingham Anxiety and Trauma Therapy, including concerns about recent changes in management and billing practices, mishandling of billing, missed appointments, issues with telehealth appointments, and unauthorized charges."
+Response Time: 3.08 seconds
+*****
