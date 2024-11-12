@@ -1,0 +1,22 @@
+Responses: Time: 09:56:12 Date: 2024-11-12
+*****
+P1.""What is the general feedback about the therapists at Birmingham Anxiety and Trauma Therapy?""
+AP1."The general feedback about the therapists at Birmingham Anxiety and Trauma Therapy is mixed. Some clients have positive experiences with therapists like Dr. Whitt and Dr. Rabbani, mentioning their listening skills, understanding, and effective treatment plans. However, there are also negative comments about therapists missing appointments, billing issues, and concerns about confidentiality and professionalism."
+Response Time: 4.19 seconds
+*****
+P2.""What are the main pros and cons of Birmingham Anxiety and Trauma Therapy?""
+AP2."It seems that I don't have information on Birmingham Anxiety and Trauma Therapy. Would you like to know more about Alabama Psychiatry and Counseling instead?"
+Response Time: 2.71 seconds
+*****
+P3.""How does the quality of customer service at Birmingham Anxiety and Trauma Therapy compare?""
+AP3."The quality of customer service at Birmingham Anxiety and Trauma Therapy seems to vary based on the reviews. Some clients have positive experiences, mentioning compassion and helpful staff members, while others have negative experiences, citing concerns about billing practices and confidentiality issues."
+Response Time: 3.35 seconds
+*****
+P4.""What do clients think about the affordability of the services?""
+AP4."There is no specific mention of the affordability of the services in the reviews."
+Response Time: 2.03 seconds
+*****
+P5.""What improvements do clients suggest for Birmingham Anxiety and Trauma Therapy?""
+AP5."Clients have suggested improvements for Birmingham Anxiety and Trauma Therapy, including concerns about recent changes in management and billing practices, mishandling of billing, issues with appointments being missed or cancelled without notice, and problems with confidentiality and professionalism."
+Response Time: 2.62 seconds
+*****
