@@ -46,8 +46,8 @@ def apply_year_weight(reviews):
     weighted_reviews = []
 
     for review in reviews:
-        review_text = review['document']  # or however the review text is accessed in Chroma
-        review_year = review['metadata'].get('Year', current_year)  # Access review year from metadata, default to current year if missing
+        review_text = review.page_content  # Access the review text
+        review_year = review.metadata.get('Year', current_year)  # Access review year from metadata, default to current year if missing
         
         # Determine the weight
         if review_year == current_year:
@@ -98,7 +98,7 @@ output_parser = StrOutputParser()
 
 # Step 5: Create the review chain, incorporating the weighted context function
 def create_weighted_review_context(question):
-    reviews = reviews_retriever.get_relevant_documents(question)  # Use get_relevant_documents instead of retrieve
+    reviews = reviews_retriever.get_relevant_documents(question)
     weighted_context = apply_year_weight(reviews)
     return weighted_context
 
