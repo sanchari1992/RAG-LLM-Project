@@ -47,7 +47,7 @@ def apply_year_weight(reviews):
 
     for review in reviews:
         review_text = review['document']  # or however the review text is accessed in Chroma
-        review_year = review['metadata'].get('Review Year', current_year)  # Access review year from metadata, default to current year if missing
+        review_year = review['metadata'].get('Year', current_year)  # Access review year from metadata, default to current year if missing
         
         # Determine the weight
         if review_year == current_year:
