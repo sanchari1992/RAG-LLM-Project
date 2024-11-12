@@ -98,7 +98,7 @@ output_parser = StrOutputParser()
 
 # Step 5: Create the review chain, incorporating the weighted context function
 def create_weighted_review_context(question):
-    reviews = reviews_retriever.retrieve({"query": question})
+    reviews = reviews_retriever.get_relevant_documents(question)  # Use get_relevant_documents instead of retrieve
     weighted_context = apply_year_weight(reviews)
     return weighted_context
 
