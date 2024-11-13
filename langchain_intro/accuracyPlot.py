@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Load the average_scores_combined.csv file
 df = pd.read_csv('average_scores_combined.csv')
@@ -25,5 +26,18 @@ accuracy_df = accuracy_df.round(2)
 # Save the accuracy DataFrame to a new file called accuracy.csv
 accuracy_df.to_csv('accuracy.csv', index=False)
 
-# Print the result for verification
-print(accuracy_df)
+# Plotting accuracy as a bar chart
+# Set the index to "Data Loading" for easier plotting
+accuracy_df.set_index("Data Loading", inplace=True)
+
+# Plot each column as a bar grouped by "Data Loading"
+ax = accuracy_df.plot(kind="bar", figsize=(10, 6))
+plt.title("Accuracy of Different Data Loading Methods")
+plt.xlabel("Data Loading Method")
+plt.ylabel("Accuracy")
+plt.xticks(rotation=45)
+plt.legend(title="Metrics")
+plt.tight_layout()
+
+# Show plot
+plt.show()
