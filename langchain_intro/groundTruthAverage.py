@@ -1,25 +1,22 @@
 import pandas as pd
 
-# Load the CSV file
-file_path = './ground_truth.csv'
-df = pd.read_csv(file_path, header=None)
+# Load the ground_truth.csv file
+ground_truth_df = pd.read_csv('ground_truth.csv', header=None)
+# Assign column names for better readability
+ground_truth_df.columns = ["Dataset", "Affordability", "Ease", "Flexibility", "Friendliness", "General Rating", "Ranking", "Response Time"]
 
-# Set column names for better readability
-df.columns = ["Dataset", "Affordability", "Ease", "Flexibility", "Friendliness", "General Rating", "Ranking", "Response Time"]
+# Calculate the averages for each column (excluding the first column)
+ground_truth_averages = ground_truth_df.iloc[:, 1:].mean().round(2)
 
-# Calculate the average of each column (excluding the first column)
-averages = df.iloc[:, 1:].mean()
+# Load the average_scores_combined.csv file
+average_scores_combined_df = pd.read_csv('average_scores_combined.csv')
 
-# Create a new DataFrame for the averages
-average_row = pd.DataFrame([["ground_truth"] + averages.tolist()], columns=df.columns)
+# Append the Ground Truth averages as a new row to the DataFrame
+new_row = pd.DataFrame([["Ground Truth"] + ground_truth_averages.tolist()], columns=average_scores_combined_df.columns)
+average_scores_combined_df = pd.concat([average_scores_combined_df, new_row], ignore_index=True)
 
-# Append the average row to the original DataFrame
-df_with_average = pd.concat([df, average_row], ignore_index=True)
+# Save the updated DataFrame back to average_scores_combined.csv
+average_scores_combined_df.to_csv('average_scores_combined.csv', index=False)
 
-# Save to a new CSV or print the output
-print(df_with_average)
-# Optionally, save to a new CSV file
-df_with_average.to_csv('ground_truth_with_averages.csv', index=False)
-
-# Print the average row for reference
-print(average_row)
+# Print the updated DataFrame
+print(average_scores_combined_df)
