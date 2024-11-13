@@ -12,9 +12,9 @@ logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(levelname)s -
 
 # Load environment variables
 load_dotenv()
-CSV_DATA_FOLDER = os.getenv("CSV_DATA_FOLDER")
+CSV_DATA_FOLDER = os.getenv("CLEANED_CSV_FOLDER")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-OUTPUT_FOLDER = "unprocessed_lump_rated_csvs"
+OUTPUT_FOLDER = "processed_lump_rated_csvs"
 
 # Set up ChatOpenAI instance with your API key
 chat = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-3.5-turbo")
