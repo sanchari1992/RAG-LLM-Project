@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
-PROCESSED_CSV_FOLDER = os.getenv("PROCESSED_CSV_FOLDER")
+RATED_CSV_FOLDER = os.getenv("RATED_CSV_FOLDER")
 
 def add_average_row_to_csv(file_path):
     """
@@ -32,9 +32,9 @@ def process_csv_files():
     """
     Process all CSV files in the specified directory to add average rows.
     """
-    for filename in os.listdir(PROCESSED_CSV_FOLDER):
+    for filename in os.listdir(RATED_CSV_FOLDER):
         if filename.endswith(".csv"):
-            file_path = os.path.join(PROCESSED_CSV_FOLDER, filename)
+            file_path = os.path.join(RATED_CSV_FOLDER, filename)
             add_average_row_to_csv(file_path)
 
 # Run the function to process CSV files
