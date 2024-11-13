@@ -1,76 +1,101 @@
-# RAG-LLM-Project
+# RAG-LLM Project
 
-Flow of operation:
+This project explores the use of various database structures and prompting techniques with GPT-based models to generate insights from mental health counseling reviews. The project is organized into multiple folders and scripts, each with specific tasks, from data cleaning to API implementation.
 
-1. Folders:
-data
-Unprocessed data collected from Google reviews.
+## Project Structure
 
-Code:
-clean_data.py
+### 1. Data Processing
 
-cleaned_data
-Processed data from above data.
+#### Folders
+- **data**: Contains unprocessed review data collected from Google reviews.
+- **cleaned_data**: Contains processed data output by the `clean_data.py` script.
 
-2. Load to GPT
-a. One at a time
-rankingCommentsOneByOne.py
+#### Scripts
+- **clean_data.py**: Cleans raw data files from the `data` folder and outputs processed files to the `cleaned_data` folder.
 
-b. Lump
-rankingCommentsLump.py
+### 2. Loading Data to GPT
 
-c. One at a time with example in prompt
-rankingCommentsOneByOneExample.py
+This step processes and formats review comments to be loaded to GPT in different configurations.
 
-d. One at a time with explanation providing
-rankingCommentsOneByOneExplanation.py
+#### Methods
+- **One at a Time**: Processes each comment individually.
+  - **Script**: `rankingCommentsOneByOne.py`
+  
+- **Lump**: Processes all comments as a single, concatenated input.
+  - **Script**: `rankingCommentsLump.py`
+  
+- **One at a Time with Example in Prompt**: Each comment is processed individually, with an example included in the prompt to guide GPT’s response.
+  - **Script**: `rankingCommentsOneByOneExample.py`
+  
+- **One at a Time with Explanation Provided**: Each comment is processed individually, with an additional explanatory context provided in the prompt.
+  - **Script**: `rankingCommentsOneByOneExplanation.py`
 
-3. Calculate averages of the rows
-For files without explanation, update input folder name and use:
-averageScale.py
+### 3. Calculate Averages
 
-For files without explanation, update input folder name and use:
-averageScaleWithExplanation.py
+These scripts calculate average scores from GPT responses and organize them for analysis.
 
-File: ground_truth.csv
-Contains all ground truth values
+#### Steps
+1. **Calculate Row Averages**:
+   - **Script**: `averageScale.py` (for files without explanations)
+   - **Script**: `averageScaleWithExplanation.py` (for files with explanations)
+   
+2. **Ground Truth Values**:
+   - **File**: `ground_truth.csv` - Contains ground truth values for comparison.
 
-To gather all averages together:
-Use averageScoreCollection.py
+3. **Collect Averages**:
+   - **Script**: `averageScoreCollection.py` - Collects all averages into a single file, `average_scores_combined.csv`.
+   
+4. **Accuracy and Response Time Analysis**:
+   - **Accuracy Plot**:
+     - **Script**: `accuracyPlot.py` - Adds ground truth values to `average_scores_combined.csv` and calculates accuracy.
+   - **Response Time Plot**:
+     - **Script**: `responsePlot.py` - Plots response times for different approaches.
 
-Returns:
-average_scores_combined.csv
+### 4. Load Data to Databases
 
-Add ground truth to it and plot accuracy:
-accuracyPlot.py
+Scripts for loading the cleaned data to various databases.
 
-Plot response times
-responsePlot.py
+#### Database Loading Scripts
+- **MySQL**: Loads data to a relational database.
+  - **Script**: `load_csv_to_mysql.py`
+  
+- **MongoDB**:
+  - **Standard**: Loads data to MongoDB.
+    - **Script**: `load_csv_to_mongo.py`
+  - **Grouped**: Loads data grouped by above average, average, and below average ratings.
+    - **Script**: `load_csv_to_mongo_grouped.py`
+    
+- **ChromaDB**: Loads data into a Chroma vector database.
+  - **Script**: `load_csv_to_chroma.py`
 
+### 5. Graded Responses API
 
+Runs API bots to get graded responses (from 0 to 5) based on database queries.
 
-3. Load to databases
+#### API Bots for Graded Responses
+- **Relational Database**: `myChatbotRelational.py`
+- **Document Database**: `myChatbotDocument.py`
+- **Document Database (Grouped)**: `myChatbotDocument_Grouped.py`
+- **Vector Database**: `myChatbotVector.py`
 
-load_csv_to_mysql.py
-load_csv_to_mongo.py
-load_csv_to_mongo_grouped.py (Loads data grouped by above average, average, and below average ratings)
-load_csv_to_chroma.py
+### 6. Full Responses API (No Weighting)
 
-4. Run corresponding API bots (to get graded responses between 0 to 5)
+Runs API bots to return full-text responses from the database, without weighting based on comment timing.
 
-myChatbotRelational.py
-myChatbotDocument.py
-myChatbotDocument_Grouped.py
-myChatbotVector.py
+#### API Bots for Full Responses
+- **Relational Database**: `myRelationalAPIWithoutWeightedCommentTimes.py`
+- **Document Database**: `myDocumentAPIWithoutWeightedCommentTimes.py`
+- **Vector Database**: `myVectorAPIWithoutWeightedCommentTimes.py`
 
-5. Run corresponding API bots with full responses
+### 7. Full Responses API (With Weighting Based on Comment Timing)
 
-myRelationalAPIWithoutWeightedCommentTimes.py
-myDocumentAPIWithoutWeightedCommentTimes.py
-myVectorAPIWithoutWeightedCommentTimes.py
+Runs API bots to return full-text responses from the database, applying weights based on the timing of each comment.
 
-6. Run corresponding API bots with full responses for weights given to when comment was posted
+#### API Bots for Weighted Responses
+- **Relational Database**: `myRelationalAPIWithWeightedCommentTimes.py`
+- **Document Database**: `myDocumentAPIWithWeightedCommentTimes.py`
+- **Vector Database**: `myVectorAPIWithWeightedCommentTimes.py`
 
-myRelationalAPIWithWeightedCommentTimes.py
-myDocumentAPIWithWeightedCommentTimes.py
-myVectorAPIWithWeightedCommentTimes.py
+---
+
+Each step in this project enables different insights and comparisons between various database structures, data loading methods, and GPT-based prompt configurations.
