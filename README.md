@@ -48,6 +48,7 @@ These scripts calculate average scores from GPT responses and organize them for 
 4. **Accuracy and Response Time Analysis**:
    - **Accuracy Plot**:
      - **Script**: `accuracyPlot.py` - Adds ground truth values to `average_scores_combined.csv` and calculates accuracy.
+     - **Script**: `accuracyPlot1.py` - Calculate overall accuracy based on ground truth for one at a time and lump for both processed and unprocessed data and plots it.
    - **Response Time Plot**:
      - **Script**: `responsePlot.py` - Plots response times for different approaches.
 
