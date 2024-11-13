@@ -18,7 +18,7 @@ average_scores_combined_df.rename(columns={'Unnamed: 0': 'Data Loading'}, inplac
 new_row = pd.DataFrame([["Ground Truth"] + ground_truth_averages.tolist()], columns=average_scores_combined_df.columns)
 
 # Insert the new row as the second row in the DataFrame
-average_scores_combined_df = pd.concat([average_scores_combined_df.iloc[:1], new_row, average_scores_combined_df.iloc[1:]], ignore_index=True)
+average_scores_combined_df = pd.concat([average_scores_combined_df.iloc[:0], new_row, average_scores_combined_df.iloc[0:]], ignore_index=True)
 
 # Save the updated DataFrame back to average_scores_combined.csv
 average_scores_combined_df.to_csv('average_scores_combined.csv', index=False)
