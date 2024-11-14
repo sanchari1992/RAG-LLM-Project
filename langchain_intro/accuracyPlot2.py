@@ -22,29 +22,30 @@ def calculate_overall_average(folder_path):
         file_path = os.path.join(folder_path, file_name)
         df = pd.read_csv(file_path)
 
-        # Ensure necessary columns are present; if not, skip this file
+        # Check if both "Ranking" and "Friendliness" columns exist
         if "Ranking" not in df.columns or "Friendliness" not in df.columns:
             print(f"Skipping {file_name} due to missing columns.")
             continue
 
-        # For files with explanations, filter out the explanation columns
-        if "Explanation" in df.columns[1]:  # Assuming explanation columns follow main columns
-            df = df[["Ranking", "Friendliness", "Rating", "Flexibility", "Ease", "Affordability"]]
-        else:
-            # Only keep the necessary columns
-            df = df[["Ranking", "Friendliness", "General Rating", "Flexibility", "Ease", "Affordability"]]
+        # Handle files with "Rating" or "General Rating" columns
+        rating_column = "General Rating" if "General Rating" in df.columns else "Rating"
+        necessary_columns = ["Ranking", "Friendliness", rating_column, "Flexibility", "Ease", "Affordability"]
+
+        # Filter to keep only necessary columns if present
+        filtered_df = df[necessary_columns].copy()
 
         # Check if 'Name' column exists to filter for the "Average" row
         if 'Name' in df.columns:
-            avg_row = df[df["Name"] == "Average"].iloc[:, 1:]
+            avg_row = filtered_df[df["Name"] == "Average"]
         else:
-            avg_row = df.mean(axis=0)
+            avg_row = filtered_df.mean(axis=0)
 
+        # Calculate mean if "Average" row is present
         if not avg_row.empty:
-            # Calculate mean of relevant columns for "Average" row or entire DataFrame
+            # For rows containing "Average," calculate the row mean
             overall_avg = avg_row.mean(axis=1).values[0] if 'Name' in df.columns else avg_row.mean()
             overall_averages.append(overall_avg)
-    
+
     # Return the mean of all files in the folder
     return sum(overall_averages) / len(overall_averages) if overall_averages else 0
 
