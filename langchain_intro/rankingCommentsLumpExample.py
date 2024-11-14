@@ -71,13 +71,13 @@ def analyze_comments_batch(batch):
 
     If any information is missing, respond with "0" for that category. 
 
-    Here are some examples of a comment and its corresponding score returned:
+    Here are some examples of a comment from the batch and its corresponding score returned:
 
     Example 1:
     Comment: "Alabama Psychiatry and Counseling, Mellanie Herard, 4, 2024, love Dr. Whitt. 5 stars rating solely based on appointment having future appointments Dr. Rabbani."
     Returned data:
 
-    Comment #: 1
+    Comment 1:
     Ranking 5
     Friendliness 4
     Rating 4
@@ -89,7 +89,7 @@ def analyze_comments_batch(batch):
     Comment: "I had a terrible experience with the scheduling. The staff was rude, and I waited for over an hour."
     Returned data:
 
-    Comment #: 2
+    Comment 2:
     Ranking 1
     Friendliness 1
     Rating 1
@@ -101,7 +101,7 @@ def analyze_comments_batch(batch):
     Comment: "The service was great, and they offered flexible timings which helped me a lot."
     Returned data:
 
-    Comment #: 3
+    Comment 3:
     Ranking 5
     Friendliness 5
     Rating 5
