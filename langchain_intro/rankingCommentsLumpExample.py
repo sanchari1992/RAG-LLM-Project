@@ -71,37 +71,43 @@ def analyze_comments_batch(batch):
 
     If any information is missing, respond with "0" for that category. 
 
-    Here are some examples of comments and their corresponding scores:
+    Here are some examples of a comment and its corresponding score returned:
 
     Example 1:
     Comment: "Alabama Psychiatry and Counseling, Mellanie Herard, 4, 2024, love Dr. Whitt. 5 stars rating solely based on appointment having future appointments Dr. Rabbani."
-    Scores:
-    5
-    4
-    4
-    4
-    4
-    0
+    Returned data:
+
+    Comment #: 1
+    Ranking 5
+    Friendliness 4
+    Rating 4
+    Flexibility 4
+    Ease 4
+    Affordability 0
 
     Example 2:
     Comment: "I had a terrible experience with the scheduling. The staff was rude, and I waited for over an hour."
-    Scores:
-    1
-    1
-    1
-    1
-    1
-    0
+    Returned data:
+
+    Comment #: 2
+    Ranking 1
+    Friendliness 1
+    Rating 1
+    Flexibility 1
+    Ease 1
+    Affordability 1
 
     Example 3:
     Comment: "The service was great, and they offered flexible timings which helped me a lot."
-    Scores:
-    5
-    5
-    5
-    5
-    5
-    4
+    Returned data:
+
+    Comment #: 3
+    Ranking 5
+    Friendliness 5
+    Rating 5
+    Flexibility 5
+    Ease 5
+    Affordability 4
 
     Comments:
     {formatted_comments}
