@@ -55,8 +55,8 @@ accuracy_scores = {
 labels = list(accuracy_scores.keys())
 accuracy_values = list(accuracy_scores.values())
 
-# Create a figure and apply a professional style
-plt.style.use("seaborn-whitegrid")
+# Use a built-in Matplotlib style
+plt.style.use("ggplot")
 plt.figure(figsize=(12, 8))
 
 # Create the bar plot
