@@ -75,12 +75,34 @@ accuracy_scores = {
 labels = list(accuracy_scores.keys())
 accuracy_values = list(accuracy_scores.values())
 
-plt.figure(figsize=(12, 6))
-plt.bar(labels, accuracy_values, color="skyblue")
-plt.xlabel("Data Loading Method")
-plt.ylabel("Accuracy")
-plt.title("Accuracy Based on Ground Truth")
-plt.ylim(0, 1)  # Accuracy ranges from 0 to 1
-plt.xticks(rotation=45)
+# Use ggplot style for better aesthetics
+plt.style.use("ggplot")
+plt.figure(figsize=(12, 8))
+
+# Create the bar plot
+bars = plt.bar(labels, accuracy_values, color=["#4c72b0", "#55a868", "#c44e52", "#8172b3", "#64b5f6", "#ff7043"], alpha=0.85, edgecolor="black")
+
+# Add title and labels with enhanced fonts
+plt.title("Accuracy Based on Ground Truth", fontsize=16, fontweight="bold", pad=20)
+plt.xlabel("Data Loading Method", fontsize=14, labelpad=10)
+plt.ylabel("Accuracy", fontsize=14, labelpad=10)
+
+# Add gridlines for better readability
+plt.grid(axis="y", linestyle="--", alpha=0.7)
+
+# Annotate accuracy values on top of the bars
+for bar in bars:
+    yval = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width() / 2, yval + 0.02, f"{yval:.2f}", ha="center", fontsize=12, fontweight="medium")
+
+# Set axis limits and ticks
+plt.ylim(0, 1.1)  # Extend slightly beyond 1 for better visibility of annotations
+plt.xticks(rotation=45, fontsize=12)
+plt.yticks(fontsize=12)
+
+# Save the figure as a high-resolution image
 plt.tight_layout()
+plt.savefig("accuracy_plot2.png", dpi=300)  # Save as PNG for high-quality research paper graphics
+
+# Display the plot
 plt.show()
