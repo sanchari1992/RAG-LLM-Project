@@ -55,9 +55,9 @@ plt.legend(loc="upper left", fontsize=16)
 
 # Add value annotations
 for i, v in enumerate(unprocessed_values):
-    plt.text(x[i] - width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=8)
+    plt.text(x[i] - width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=12)
 for i, v in enumerate(processed_values):
-    plt.text(x[i] + width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=8)
+    plt.text(x[i] + width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=12)
 
 plt.tight_layout()
 plt.show()

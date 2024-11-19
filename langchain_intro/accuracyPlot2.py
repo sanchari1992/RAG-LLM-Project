@@ -109,9 +109,9 @@ plt.grid(axis="y", linestyle="--", alpha=0.7)
 
 # Annotate accuracy values on top of the bars
 for i, v in enumerate(unprocessed_values):
-    plt.text(x[i] - width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=10, fontweight="medium")
+    plt.text(x[i] - width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=12, fontweight="medium")
 for i, v in enumerate(processed_values):
-    plt.text(x[i] + width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=10, fontweight="medium")
+    plt.text(x[i] + width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=12, fontweight="medium")
 
 # Set axis limits and ticks
 # plt.ylim(0, 1.1)  # Extend slightly beyond 1 for better visibility of annotations
