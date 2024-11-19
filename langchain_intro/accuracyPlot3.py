@@ -22,7 +22,7 @@ def calculate_aggregate(row):
 
 # Calculate aggregate for the ground truth file
 ground_truth_df = pd.read_csv(ground_truth_file, header=None)
-ground_truth_aggregate = calculate_aggregate(ground_truth_df.iloc[:, 1:].sum(axis=1))
+ground_truth_aggregate = round(calculate_aggregate(ground_truth_df.iloc[:, 1:].sum(axis=1)), 2)
 
 # Dictionary to store results
 aggregates = {"ground_truth": ground_truth_aggregate}
@@ -47,9 +47,9 @@ for folder in folders:
 
     # Average the folder aggregate if files exist
     if file_count > 0:
-        aggregates[folder] = folder_aggregate / file_count
+        aggregates[folder] = round(folder_aggregate / file_count, 2)
     else:
-        aggregates[folder] = 0
+        aggregates[folder] = 0.00
 
 # Save results to a CSV file
 output_file = "aggregates_batches.csv"
