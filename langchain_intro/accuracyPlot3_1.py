@@ -42,8 +42,8 @@ width = 0.35  # Width of bars
 
 # Plotting
 plt.figure(figsize=(10, 6))
-plt.bar(x - width / 2, unprocessed_values, width, label="Unprocessed", color="skyblue")
-plt.bar(x + width / 2, processed_values, width, label="Processed", color="orange")
+plt.bar(x - width / 2, unprocessed_values, width, label="Unprocessed", color="#4c72b0", alpha=0.85, edgecolor="black")
+plt.bar(x + width / 2, processed_values, width, label="Processed", color="#55a868", alpha=0.85, edgecolor="black")
 
 # Add labels, title, and legend
 plt.xlabel("Prompting Method")
