@@ -90,7 +90,7 @@ width = 0.35  # Width of bars
 
 # Plotting
 # plt.style.use("ggplot")
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(10, 6))
 
 # Create the grouped bar plot
 plt.bar(x - width / 2, unprocessed_values, width, label="Unprocessed", color="#4c72b0", alpha=0.85, edgecolor="black")
