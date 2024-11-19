@@ -1,0 +1,12 @@
+Dataset,Average Value
+ground_truth,2.43
+unprocessed_oneatatime_rated_csvs,1.53
+unprocessed_lump10_rated_csvs,2.05
+unprocessed_lump25_rated_csvs,2.29
+unprocessed_lump_rated_csvs,2.76
+unprocessed_lump100_rated_csvs,2.82
+processed_oneatatime_rated_csvs,1.47
+processed_lump10_rated_csvs,1.98
+processed_lump25_rated_csvs,2.51
+processed_lump_rated_csvs,2.53
+processed_lump100_rated_csvs,2.3
