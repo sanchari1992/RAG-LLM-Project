@@ -17,11 +17,11 @@ data["Accuracy"] = data["Average Value"].apply(lambda x: calculate_accuracy(x, g
 
 # Group datasets for easier plotting
 datasets = {
-    "One At A Time": ["unprocessed_oneatatime_rated_csvs", "processed_oneatatime_rated_csvs"],
-    "Lump 10": ["unprocessed_lump10_rated_csvs", "processed_lump10_rated_csvs"],
-    "Lump 25": ["unprocessed_lump25_rated_csvs", "processed_lump25_rated_csvs"],
-    "Lump": ["unprocessed_lump_rated_csvs", "processed_lump_rated_csvs"],
-    "Lump 100": ["unprocessed_lump100_rated_csvs", "processed_lump100_rated_csvs"],
+    "Batch Size: 1": ["unprocessed_oneatatime_rated_csvs", "processed_oneatatime_rated_csvs"],
+    "Batch Size: 10": ["unprocessed_lump10_rated_csvs", "processed_lump10_rated_csvs"],
+    "Batch Size: 25": ["unprocessed_lump25_rated_csvs", "processed_lump25_rated_csvs"],
+    "Batch Size: 50": ["unprocessed_lump_rated_csvs", "processed_lump_rated_csvs"],
+    "Batch Size: 100": ["unprocessed_lump100_rated_csvs", "processed_lump100_rated_csvs"],
 }
 
 # Prepare the bar plot
