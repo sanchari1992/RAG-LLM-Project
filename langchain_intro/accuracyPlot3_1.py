@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Read the data
-data = pd.read_csv("averages.csv")
+data = pd.read_csv("averages_batches.csv")
 
 # Set ground truth as the baseline
 ground_truth_value = data[data["Dataset"] == "ground_truth"]["Average Value"].values[0]
