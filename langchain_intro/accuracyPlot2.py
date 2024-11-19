@@ -89,7 +89,7 @@ x = np.arange(len(labels))  # Label locations
 width = 0.35  # Width of bars
 
 # Plotting
-plt.style.use("ggplot")
+# plt.style.use("ggplot")
 plt.figure(figsize=(12, 8))
 
 # Create the grouped bar plot
@@ -98,8 +98,11 @@ plt.bar(x + width / 2, processed_values, width, label="Processed", color="#55a86
 
 # Add title and labels with enhanced fonts
 plt.title("Accuracy Comparison for Prompting Methods", fontsize=16, fontweight="bold", pad=20)
-plt.xlabel("Prompting Method", fontsize=14, labelpad=10)
-plt.ylabel("Accuracy", fontsize=14, labelpad=10)
+plt.xlabel("Prompting Method")
+plt.ylabel("Accuracy")
+plt.xticks(x, labels, rotation=45)
+plt.ylim(0, 1)
+plt.legend(loc="upper left")
 
 # Add gridlines for better readability
 plt.grid(axis="y", linestyle="--", alpha=0.7)
@@ -111,14 +114,13 @@ for i, v in enumerate(processed_values):
     plt.text(x[i] + width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=10, fontweight="medium")
 
 # Set axis limits and ticks
-plt.ylim(0, 1.1)  # Extend slightly beyond 1 for better visibility of annotations
-plt.xticks(x, labels, fontsize=12)
-plt.yticks(fontsize=12)
-plt.legend(loc="upper left", fontsize=12)
+# plt.ylim(0, 1.1)  # Extend slightly beyond 1 for better visibility of annotations
+# plt.xticks(x, labels, fontsize=12)
+# plt.yticks(fontsize=12)
+# plt.legend(loc="upper left", fontsize=12)
 
 # Save the figure as a high-resolution image
 plt.tight_layout()
-plt.savefig("accuracy_grouped_plot.png", dpi=300)  # Save as PNG for high-quality research paper graphics
 
 # Display the plot
 plt.show()
