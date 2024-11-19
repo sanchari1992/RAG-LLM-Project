@@ -16,20 +16,20 @@ folders = [
     "processed_lump100_rated_csvs",
 ]
 
-# Function to calculate the aggregate of a row
-def calculate_aggregate(row):
-    return row.sum()
+# Function to calculate the average of a row
+def calculate_average(row):
+    return row.mean()
 
-# Calculate aggregate for the ground truth file
+# Calculate average for the ground truth file
 ground_truth_df = pd.read_csv(ground_truth_file, header=None)
-ground_truth_aggregate = round(calculate_aggregate(ground_truth_df.iloc[:, 1:].sum(axis=1)), 2)
+ground_truth_average = round(calculate_average(ground_truth_df.iloc[:, 1:].mean(axis=1)), 2)
 
 # Dictionary to store results
-aggregates = {"ground_truth": ground_truth_aggregate}
+averages = {"ground_truth": ground_truth_average}
 
-# Calculate aggregates for each folder
+# Calculate averages for each folder
 for folder in folders:
-    folder_aggregate = 0
+    folder_average = 0
     folder_path = os.path.join(folder)
     file_count = 0
 
@@ -42,18 +42,20 @@ for folder in folders:
                 # Ensure "Average" row exists
                 avg_row = df[df["Name"] == "Average"]
                 if not avg_row.empty:
-                    folder_aggregate += calculate_aggregate(avg_row.iloc[:, 1:-1].sum(axis=1))
+                    # Calculate the average of the "Average" row (excluding Response Time)
+                    row_average = avg_row.iloc[:, 1:-1].mean(axis=1).values[0]
+                    folder_average += row_average
                     file_count += 1
 
-    # Average the folder aggregate if files exist
+    # Average the folder's results if files exist
     if file_count > 0:
-        aggregates[folder] = round(folder_aggregate / file_count, 2)
+        averages[folder] = round(folder_average / file_count, 2)
     else:
-        aggregates[folder] = 0.00
+        averages[folder] = 0.00
 
 # Save results to a CSV file
-output_file = "aggregates_batches.csv"
-results_df = pd.DataFrame(list(aggregates.items()), columns=["Dataset", "Aggregate Value"])
+output_file = "averages_batches.csv"
+results_df = pd.DataFrame(list(averages.items()), columns=["Dataset", "Average Value"])
 results_df.to_csv(output_file, index=False)
 
-print(f"Aggregates saved to {output_file}")
+print(f"Averages saved to {output_file}")
