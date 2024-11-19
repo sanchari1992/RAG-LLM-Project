@@ -48,7 +48,7 @@ plt.bar(x + width / 2, processed_values, width, label="Processed", color="#55a86
 # Add labels, title, and legend
 plt.xlabel("Prompting Method with Differing Batch Sizes")
 plt.ylabel("Accuracy")
-plt.title("Accuracy Comparison for Batch Prompting Methods with Different Batch Sizes")
+# plt.title("Accuracy Comparison for Batch Prompting Methods with Different Batch Sizes")
 plt.xticks(x, labels, rotation=45)
 plt.ylim(0, 1)
 plt.legend(loc="upper left")

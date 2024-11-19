@@ -97,7 +97,7 @@ plt.bar(x - width / 2, unprocessed_values, width, label="Unprocessed", color="#4
 plt.bar(x + width / 2, processed_values, width, label="Processed", color="#55a868", alpha=0.85, edgecolor="black")
 
 # Add title and labels with enhanced fonts
-plt.title("Accuracy Comparison for Different Prompting Methods", fontsize=16, fontweight="bold", pad=20)
+# plt.title("Accuracy Comparison for Different Prompting Methods", fontsize=16, fontweight="bold", pad=20)
 plt.xlabel("Prompting Method")
 plt.ylabel("Accuracy")
 plt.xticks(x, labels, rotation=45)
