@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Paths to folders
 folders = {
@@ -67,42 +68,57 @@ plotdata_df.to_csv("plotdata2.csv", index=False)
 # Calculate accuracy based on ground truth
 ground_truth_avg = overall_averages["Ground Truth"]
 accuracy_scores = {
-    label: min(1, avg / ground_truth_avg) if ground_truth_avg != 0 else 0
+    label: max(0, 1 - abs(avg - ground_truth_avg) / ground_truth_avg)
     for label, avg in overall_averages.items() if label != "Ground Truth"
 }
 
-# Plot accuracy as a bar graph
-labels = list(accuracy_scores.keys())
-accuracy_values = list(accuracy_scores.values())
+# Group datasets for better visualization
+labels = ["Lump", "Examples", "Explanation"]
+unprocessed_values = [
+    accuracy_scores["Unprocessed Lump"],
+    accuracy_scores["Unprocessed Lump Example"],
+    accuracy_scores["Unprocessed Lump Explanation"],
+]
+processed_values = [
+    accuracy_scores["Processed Lump"],
+    accuracy_scores["Processed Lump Example"],
+    accuracy_scores["Processed Lump Explanation"],
+]
 
-# Use ggplot style for better aesthetics
+x = np.arange(len(labels))  # Label locations
+width = 0.35  # Width of bars
+
+# Plotting
 plt.style.use("ggplot")
 plt.figure(figsize=(12, 8))
 
-# Create the bar plot
-bars = plt.bar(labels, accuracy_values, color=["#4c72b0", "#55a868", "#c44e52", "#8172b3", "#64b5f6", "#ff7043"], alpha=0.85, edgecolor="black")
+# Create the grouped bar plot
+plt.bar(x - width / 2, unprocessed_values, width, label="Unprocessed", color="#4c72b0", alpha=0.85, edgecolor="black")
+plt.bar(x + width / 2, processed_values, width, label="Processed", color="#55a868", alpha=0.85, edgecolor="black")
 
 # Add title and labels with enhanced fonts
-plt.title("Accuracy Based on Ground Truth", fontsize=16, fontweight="bold", pad=20)
-plt.xlabel("Data Loading Method", fontsize=14, labelpad=10)
+plt.title("Accuracy Comparison for Prompting Methods", fontsize=16, fontweight="bold", pad=20)
+plt.xlabel("Prompting Method", fontsize=14, labelpad=10)
 plt.ylabel("Accuracy", fontsize=14, labelpad=10)
 
 # Add gridlines for better readability
 plt.grid(axis="y", linestyle="--", alpha=0.7)
 
 # Annotate accuracy values on top of the bars
-for bar in bars:
-    yval = bar.get_height()
-    plt.text(bar.get_x() + bar.get_width() / 2, yval + 0.02, f"{yval:.2f}", ha="center", fontsize=12, fontweight="medium")
+for i, v in enumerate(unprocessed_values):
+    plt.text(x[i] - width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=10, fontweight="medium")
+for i, v in enumerate(processed_values):
+    plt.text(x[i] + width / 2, v + 0.02, f"{v:.2f}", ha="center", fontsize=10, fontweight="medium")
 
 # Set axis limits and ticks
 plt.ylim(0, 1.1)  # Extend slightly beyond 1 for better visibility of annotations
-plt.xticks(rotation=45, fontsize=12)
+plt.xticks(x, labels, fontsize=12)
 plt.yticks(fontsize=12)
+plt.legend(loc="upper left", fontsize=12)
 
 # Save the figure as a high-resolution image
 plt.tight_layout()
-plt.savefig("accuracy_plot2.png", dpi=300)  # Save as PNG for high-quality research paper graphics
+plt.savefig("accuracy_grouped_plot.png", dpi=300)  # Save as PNG for high-quality research paper graphics
 
 # Display the plot
 plt.show()
