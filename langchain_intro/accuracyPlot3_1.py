@@ -26,8 +26,16 @@ datasets = {
 
 # Prepare the bar plot
 labels = list(datasets.keys())
-unprocessed_values = [data[data["Dataset"] == d]["Accuracy"].values[0] for d in sum(datasets.values(), []) if "unprocessed" in d]
-processed_values = [data[data["Dataset"] == d]["Accuracy"].values[0] for d in sum(datasets.values(), []) if "processed" in d]
+unprocessed_values = []
+processed_values = []
+
+for group in datasets.values():
+    unprocessed = data[data["Dataset"] == group[0]]["Accuracy"].values
+    processed = data[data["Dataset"] == group[1]]["Accuracy"].values
+    
+    # Ensure that values exist for the datasets
+    unprocessed_values.append(unprocessed[0] if len(unprocessed) > 0 else 0)
+    processed_values.append(processed[0] if len(processed) > 0 else 0)
 
 x = np.arange(len(labels))  # Label locations
 width = 0.35  # Width of bars
