@@ -73,7 +73,7 @@ accuracy_scores = {
 }
 
 # Group datasets for better visualization
-labels = ["Lump", "Examples", "Explanation"]
+labels = ["Batch", "Batch with Examples", "Batch with Explanation"]
 unprocessed_values = [
     accuracy_scores["Unprocessed Lump"],
     accuracy_scores["Unprocessed Lump Example"],
@@ -97,7 +97,7 @@ plt.bar(x - width / 2, unprocessed_values, width, label="Unprocessed", color="#4
 plt.bar(x + width / 2, processed_values, width, label="Processed", color="#55a868", alpha=0.85, edgecolor="black")
 
 # Add title and labels with enhanced fonts
-plt.title("Accuracy Comparison for Prompting Methods", fontsize=16, fontweight="bold", pad=20)
+plt.title("Accuracy Comparison for Different Prompting Methods", fontsize=16, fontweight="bold", pad=20)
 plt.xlabel("Prompting Method")
 plt.ylabel("Accuracy")
 plt.xticks(x, labels, rotation=45)
