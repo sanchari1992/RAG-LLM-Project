@@ -46,12 +46,12 @@ plt.bar(x - width / 2, unprocessed_values, width, label="Unprocessed", color="#4
 plt.bar(x + width / 2, processed_values, width, label="Processed", color="#55a868", alpha=0.85, edgecolor="black")
 
 # Add labels, title, and legend
-plt.xlabel("Prompting Method with Differing Batch Sizes")
-plt.ylabel("Accuracy")
+plt.xlabel("Prompting Method with Differing Batch Sizes", fontsize=16)
+plt.ylabel("Accuracy", fontsize=16)
 # plt.title("Accuracy Comparison for Batch Prompting Methods with Different Batch Sizes")
-plt.xticks(x, labels, rotation=45)
+plt.xticks(x, labels, rotation=45, fontsize=16)
 plt.ylim(0, 1)
-plt.legend(loc="upper left")
+plt.legend(loc="upper left", fontsize=16)
 
 # Add value annotations
 for i, v in enumerate(unprocessed_values):

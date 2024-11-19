@@ -98,11 +98,11 @@ plt.bar(x + width / 2, processed_values, width, label="Processed", color="#55a86
 
 # Add title and labels with enhanced fonts
 # plt.title("Accuracy Comparison for Different Prompting Methods", fontsize=16, fontweight="bold", pad=20)
-plt.xlabel("Prompting Method")
-plt.ylabel("Accuracy")
-plt.xticks(x, labels, rotation=45)
+plt.xlabel("Prompting Method", fontsize=16)
+plt.ylabel("Accuracy", fontsize=16)
+plt.xticks(x, labels, rotation=45, fontsize=16)
 plt.ylim(0, 1)
-plt.legend(loc="upper left")
+plt.legend(loc="upper left", fontsize=16)
 
 # Add gridlines for better readability
 plt.grid(axis="y", linestyle="--", alpha=0.7)
